@@ -6,6 +6,50 @@
 
 # Backup files
 *~
+.#*
+*#
 
 # Undo-tree save-files
 *.~undo-tree
+
+# Python environments
+.python-environments/*
+
+# Auto-save-list?
+auto-save-list/*
+
+# Eide
+eide/*
+
+# Elpa
+elpa
+elpa-*
+
+# Eshell
+eshell/history
+eshell/lastdir
+
+# GitHub / Magithub
+magithub
+
+# IDO
+ido.last
+
+# Projectile
+projectile-bookmarks.eld
+projectile.cache
+
+# Helm
+helm-adaptive-history
+
+# Misc
+games
+request
+url
+var
+tramp
+network-security.data
+ac-comphist.dat
+
+# For later use
+private.el
