@@ -50,6 +50,9 @@ var
 tramp
 network-security.data
 ac-comphist.dat
+.emacs.desktop
+abbrev_defs
+recentf
 
 # For later use
 private.el
