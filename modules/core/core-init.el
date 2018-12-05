@@ -22,3 +22,5 @@
 (load "undo-tree-conf.el")
 ;; Very Large Files settings
 (load "vlf-conf.el")
+;; Version Control Settings
+(load "version-control.el")

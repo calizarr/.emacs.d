@@ -14,6 +14,11 @@
   (define-key company-active-map [tab] nil)
   (define-key company-active-map (kbd "TAB") nil))
 
+(use-package company-quickhelp
+  :ensure)
+
+(use-package company-jedi
+  :ensure)
 
 (add-hook 'after-init-hook 'global-company-mode)
 ;; Basic usage.

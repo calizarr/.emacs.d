@@ -81,8 +81,6 @@
 
 ;; Making a previous window command
 (global-set-key (kbd "C-x p") (kbd "C-u -1 C-x o"))
-;; Setting C-x g to be magit-status
-(global-set-key (kbd "C-x g") (quote magit-status))
 
 ;; Add a beacon!
 (use-package beacon
