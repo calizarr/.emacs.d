@@ -1,8 +1,5 @@
 ;; Dired mode settings
 
-(use-package dired+
-  :ensure)
-
 (add-hook 'dired-load-hook
 	  (lambda ()
 	    (load "dired-x")
