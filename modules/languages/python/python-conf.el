@@ -9,3 +9,6 @@
 (add-hook 'python-mode-hook
           #'(lambda ()
               (yas-activate-extra-mode 'python-mode)))
+
+(use-package pyenv-mode
+  :ensure)
