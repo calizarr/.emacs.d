@@ -16,3 +16,8 @@
 
 (use-package fish-mode
   :ensure)
+
+;; Remove shell command echo
+(defun my-comint-init ()
+  (setq comint-process-echoes t))
+(add-hook 'comint-mode-hook 'my-comint-init)
