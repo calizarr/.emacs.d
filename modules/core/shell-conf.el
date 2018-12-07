@@ -13,3 +13,6 @@
   (add-hook 'eshell-mode-hook 'helm-eshell-hist-key)
   (add-hook 'eshell-mode-hook 'helm-eshell-hist)
   )
+
+(use-package fish-mode
+  :ensure)

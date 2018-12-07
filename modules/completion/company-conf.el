@@ -20,6 +20,9 @@
 (use-package company-jedi
   :ensure)
 
+(use-package helm-company
+  :ensure)
+
 (add-hook 'after-init-hook 'global-company-mode)
 ;; Basic usage.
 (with-eval-after-load 'company

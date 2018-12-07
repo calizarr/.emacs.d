@@ -57,6 +57,7 @@
 (add-to-list 'load-path "~/.emacs.d/modules/languages/scala")
 (add-to-list 'load-path "~/.emacs.d/modules/projects")
 (add-to-list 'load-path "~/.emacs.d/modules/http")
+(add-to-list 'load-path "~/.emacs.d/modules/infrastructure")
 
 ;; Load Individual Modules
 (load "core/core-init")
@@ -66,6 +67,7 @@
 (load "scala/scala-init")
 (load "projects/projects-init")
 (load "http/http-init")
+(load "infrastructure/infra-init.el")
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

@@ -1,0 +1,2 @@
+(use-package helpful
+  :ensure)

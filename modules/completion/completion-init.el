@@ -6,3 +6,6 @@
 ;; (load "helm-ido-like-conf.el")
 ;; Add in helm settings
 (load "helm-conf.el")
+
+;; Add in yasnippet settings
+(load "yasnippet-conf.el")

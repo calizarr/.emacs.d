@@ -1,4 +1,8 @@
 ;; Dired mode settings
+
+(use-package dired+
+  :ensure)
+
 (add-hook 'dired-load-hook
 	  (lambda ()
 	    (load "dired-x")
@@ -11,3 +15,5 @@
             ;; Set dired-x buffer-local variables here.  For example:
             ;; (dired-omit-mode 1)
             ))
+
+

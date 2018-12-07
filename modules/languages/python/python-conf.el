@@ -1,5 +1,8 @@
 ;; (setq python-shell-completion-native-enable nil)
 
+(use-package sphinx-mode
+  :ensure)
+
 (add-hook 'python-mode-hook (lambda ()
                               (require 'sphinx-doc)
                               (sphinx-doc-mode t)))
@@ -12,3 +15,4 @@
 
 (use-package pyenv-mode
   :ensure)
+
