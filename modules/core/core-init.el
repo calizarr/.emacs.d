@@ -26,3 +26,5 @@
 (load "version-control.el")
 ;; Load More Helpful Help Settings
 (load "help-conf.el")
+;; Load String Manipulation Packages
+(load "string-manipulation.el")

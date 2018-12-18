@@ -27,7 +27,7 @@
  '(ido-vertical-mode t)
  '(package-selected-packages
    (quote
-    (prodigy know-your-http-well company page-break-lines pyenv-mode pyenv-mode-auto sphinx-doc sphinx-mode helm-company beacon request restclient-helm auto-yasnippet helm-projectile helm helpful eshell-mode smex company-restclient restclient nyan-mode ido-grid-mode pcre2el f dockerfile-mode calfw vlf magit yasnippet-snippets dashboard company-quickhelp company-jedi ido-yes-or-no ido-vertical-mode ido-completing-read+ auto-complete neotree e2wm e2wm-R persp-projectile zoom pretty-mode elscreen doremi stan-mode dirtree fish-mode eimp dired+ expand-region smartparens popup-imenu goto-chg highlight-symbol flx-ido undo-tree projectile ensime elpy csv-mode use-package exec-path-from-shell)))
+    (js2-mode rainbow-mode web-mode tide prodigy know-your-http-well company page-break-lines pyenv-mode pyenv-mode-auto sphinx-doc sphinx-mode helm-company beacon request restclient-helm auto-yasnippet helm-projectile helm helpful eshell-mode smex company-restclient restclient nyan-mode ido-grid-mode pcre2el f dockerfile-mode calfw vlf magit yasnippet-snippets dashboard company-quickhelp company-jedi ido-yes-or-no ido-vertical-mode ido-completing-read+ auto-complete neotree e2wm e2wm-R persp-projectile zoom pretty-mode elscreen doremi stan-mode dirtree fish-mode eimp dired+ expand-region smartparens popup-imenu goto-chg highlight-symbol flx-ido undo-tree projectile ensime elpy csv-mode use-package exec-path-from-shell)))
  '(pop-up-frames nil)
  '(sbt:ansi-support t)
  '(sbt:prefer-nested-projects t)
@@ -41,6 +41,7 @@
 (add-to-list 'load-path "~/.emacs.d/modules/languages")
 (add-to-list 'load-path "~/.emacs.d/modules/languages/python")
 (add-to-list 'load-path "~/.emacs.d/modules/languages/scala")
+(add-to-list 'load-path "~/.emacs.d/modules/languages/javascript")
 (add-to-list 'load-path "~/.emacs.d/modules/projects")
 (add-to-list 'load-path "~/.emacs.d/modules/http")
 (add-to-list 'load-path "~/.emacs.d/modules/infrastructure")
@@ -51,6 +52,7 @@
 (load "completion/completion-init")
 (load "python/python-init")
 (load "scala/scala-init")
+(load "javascript/frontend-init")
 (load "projects/projects-init")
 (load "http/http-init")
 (load "infrastructure/infra-init.el")
