@@ -28,3 +28,7 @@
 (load "help-conf.el")
 ;; Load String Manipulation Packages
 (load "string-manipulation.el")
+;; Load Indentation Mode Packages
+(load "indentation-conf.el")
+;; Load other editing conf files (YAML, etc)
+(load "editing-conf.el")
