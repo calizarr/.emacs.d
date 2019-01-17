@@ -1,12 +1,14 @@
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+;; Projectile Configurations
 (use-package projectile
   :demand
   :init (setq projectile-use-git-grep t)
   :config (projectile-global-mode t)
   :bind (("s-f" . projectile-find-file)
          ("s-F" . projectile-grep)))
+
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 
 
 (defun projectile-discover-projects-in-directory (directory)
