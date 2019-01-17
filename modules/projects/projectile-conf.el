@@ -1,4 +1,6 @@
-
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
 (use-package projectile
   :demand
   :init (setq projectile-use-git-grep t)
@@ -25,3 +27,9 @@ at the top level of DIRECTORY."
      subdirs)))
 
 (push "*.mypy_cache" projectile-globally-ignored-directories)
+
+(use-package helm-projectile
+  :demand
+  :ensure t
+  :config (helm-projectile-on)
+  )

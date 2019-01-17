@@ -18,9 +18,3 @@
   :demand
   :ensure t
   )
-
-(use-package helm-projectile
-  :demand
-  :ensure t
-  :config (helm-projectile-on)
-  )
