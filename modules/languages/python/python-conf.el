@@ -3,6 +3,9 @@
 (use-package sphinx-mode
   :ensure)
 
+(use-package sphinx-doc
+  :ensure)
+
 (add-hook 'python-mode-hook (lambda ()
                               (require 'sphinx-doc)
                               (sphinx-doc-mode t)))
