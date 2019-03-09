@@ -170,12 +170,6 @@
 (defvar last-main nil "last called main method")
 
 ;; New function to open all files after ensime loads then close them
-(defun process-ensime-file (f)
-  (save-excursion
-    (find-file f)))
-    (sleep-for 5)
-    (kill-buffer (current-buffer))))
-
 (defun ensime-open-all-files-keep-buffers (dir)
   "Open all .scala files for ensime"
 (mapc (lambda (f) (save-excursion (find-file f)))
@@ -185,7 +179,7 @@
   (mapc (lambda (f)
           (save-excursion
             (find-file f)
-            (sleep-for 5)
+            (sleep-for 10)
             (kill-buffer (current-buffer))))
         (directory-files-recursively dir ".scala$")))
 
