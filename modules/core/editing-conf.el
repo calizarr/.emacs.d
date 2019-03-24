@@ -12,10 +12,13 @@
                                 "/usr/local/bin/pandoc"
                                 " --from=markdown --to=html"
                                 " --standalone --mathjax --highlight-style=pygments")))
-
 ;; Pandoc Mode
 (use-package pandoc-mode
   :ensure t
   :config
   (add-hook 'markdown-mode-hook 'pandoc-mode)
   (add-hook 'pandoc-mode-hook 'pandoc-load-default-settings))
+
+;; Add powershell-mode
+(use-package powershell
+  :ensure t)
