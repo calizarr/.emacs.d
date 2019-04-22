@@ -28,11 +28,20 @@ at the top level of DIRECTORY."
              (projectile-add-known-project (projectile-project-root))))))
      subdirs)))
 
-(push "*.mypy_cache" projectile-globally-ignored-directories)
-(push ".bloop" projectile-globally-ignored-directories)
+
 
 (use-package helm-projectile
   :demand
   :ensure t
   :config (helm-projectile-on)
   )
+
+;; Needed to use `.projectile` ignores or the globally ignored section above
+(setq projectile-indexing-method 'hybrid)
+(setq projectile-enable-caching t)
+
+(push "*.mypy_cache" projectile-globally-ignored-directories)
+(push "*.bloop" projectile-globally-ignored-directories)
+
+;; Opens project root when using projectile-switch-project (C-c p p)
+(setq projectile-switch-project-action #'projectile-dired)

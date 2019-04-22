@@ -3,14 +3,25 @@
   :init (global-flycheck-mode))
 
 (use-package lsp-mode
- :init (setq lsp-prefer-flymake nil))
+  :ensure
+  :pin melpa
+  :init (setq lsp-prefer-flymake nil))
 
 (use-package lsp-ui
+  :ensure
+  :pin melpa
   :hook (lsp-mode . lsp-ui-mode))
+
+(use-package helm-lsp
+  :ensure t)
 
 (use-package lsp-scala
   :after scala-mode
   :demand t
   ;; Optional - enable lsp-scala automatically in scala files
-  ;; :hook (scala-mode . lsp)
+  :hook (scala-mode . lsp)
   )
+
+(use-package company-lsp
+  :ensure t)
+(push 'company-lsp company-backends)

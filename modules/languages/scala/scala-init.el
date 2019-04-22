@@ -2,4 +2,4 @@
 (load "scalafmt-conf.el")
 (load "metals-conf.el")
 (load "scala-mode-conf.el")
-(load "ensime-conf.el")
+;; (load "ensime-conf.el")
