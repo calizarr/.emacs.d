@@ -17,9 +17,9 @@
 (require 'ensime-eldoc)
 
 ;; Add hook for ensime when in scala-mode
-;; (add-hook 'scala-mode-hook
-;;           (lambda ()
-;;             (ensime-mode)))
+(add-hook 'scala-mode-hook
+          (lambda ()
+            (ensime-mode)))
 
 ;; When entering ensime-mode, consider also the snippets in the
 ;; snippet table "scala-mode"
@@ -66,13 +66,13 @@
 ;; New function to open all files after ensime loads then close them
 (defun ensime-open-all-files-keep-buffers (dir)
   "Recursively open all .scala files for ensime in DIR."
-  (interactive "Directory to search for all scala filesD")
+  (interactive "DDirectory to search for all scala files: ")
   (mapc (lambda (f) (save-excursion (find-file f)))
         (directory-files-recursively dir ".scala$")))
 
 (defun ensime-open-all-files-close-buffers (dir)
   "Recursively open all .scala files for ensime in DIR."
-  (interactive "Directory to search for all scala filesD")
+  (interactive "DDirectory to search for all scala files: ")
   (mapc (lambda (f)
           (save-excursion
             (find-file f)
