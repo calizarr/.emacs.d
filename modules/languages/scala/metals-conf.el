@@ -25,3 +25,7 @@
 (use-package company-lsp
   :ensure t)
 (push 'company-lsp company-backends)
+
+;; Printing server I/O for debugging
+;; (setq 'lsp-print-io t)
+

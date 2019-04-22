@@ -7,7 +7,7 @@
   :init (with-eval-after-load 'python (elpy-enable))
   )
 
-(elpy-enable)
+;; (elpy-enable)
 
 ;; (require package)
 ;; (add-to-list 'package-archives

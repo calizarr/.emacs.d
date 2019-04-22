@@ -4,14 +4,17 @@
 ;; Markdown Mode
 (use-package markdown-mode
   :ensure t
+  :pin melpa
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command (concat
-                                "/usr/local/bin/pandoc"
-                                " --from=markdown --to=html"
-                                " --standalone --mathjax --highlight-style=pygments")))
+  ;; :init (setq markdown-command (concat
+  ;;                               "/usr/local/bin/pandoc"
+  ;;                               " --from=markdown --to=html"
+  ;;                               " --standalone --mathjax --highlight-style=pygments"))
+  )
+
 ;; Pandoc Mode
 (use-package pandoc-mode
   :ensure t
