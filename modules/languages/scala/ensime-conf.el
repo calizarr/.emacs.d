@@ -1,7 +1,7 @@
 ;; modes
 ;; (electric-indent-mode 0)
 
-;; ENSIME Packge 
+;; ENSIME Packge
 (use-package ensime
   :ensure t
   :pin melpa-stable
@@ -39,11 +39,14 @@
 ;;     (ansi-color-apply-on-region (point-min) (point-max))))
 
 (defun ensime-router (subcmd)
-  (interactive)
-  "Execute the sbt `run' command for the project."
+  "Execute the sbt `run' command for the project with SUBCMD."
+  (interactive "M\nSubcommand to run:")
   (sbt:command (concat "run " subcmd)))
 
+(defvar last-main nil "Last called main method.")
+
 (defun ensime-sbt-do-run-main (&optional args)
+  "It will run a main command with ARGS as given."
   (interactive)
   (let* ((impl-class
             (or (ensime-top-level-class-closest-to-point)
@@ -53,19 +56,23 @@
     (setq last-main command)
     (sbt:command (concat command args))))
 
+
 (defun ensime-sbt-do-run-last-main ()
+  "It will run the last run main command."
   (interactive)
   (sbt:command last-main))
 
-(defvar last-main nil "last called main method")
 
 ;; New function to open all files after ensime loads then close them
 (defun ensime-open-all-files-keep-buffers (dir)
-  "Open all .scala files for ensime"
-(mapc (lambda (f) (save-excursion (find-file f)))
+  "Recursively open all .scala files for ensime in DIR."
+  (interactive "Directory to search for all scala filesD")
+  (mapc (lambda (f) (save-excursion (find-file f)))
         (directory-files-recursively dir ".scala$")))
 
 (defun ensime-open-all-files-close-buffers (dir)
+  "Recursively open all .scala files for ensime in DIR."
+  (interactive "Directory to search for all scala filesD")
   (mapc (lambda (f)
           (save-excursion
             (find-file f)
