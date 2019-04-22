@@ -21,13 +21,11 @@
  '(display-line-numbers t)
  '(ediff-window-setup-function (quote ediff-setup-windows-plain))
  '(eide-custom-color-theme (quote dark))
- '(ensime-sbt-command "nil")
- '(ensime-startup-notification nil)
  '(ido-grid-mode t)
  '(ido-vertical-mode t)
  '(package-selected-packages
    (quote
-    (lsp-scala lsp-ui lsp-mode powershell elisp-lint pandoc-mode markdown-mode yaml-mode highlight-indent-guides flycheck js2-mode rainbow-mode web-mode tide prodigy know-your-http-well company page-break-lines pyenv-mode pyenv-mode-auto sphinx-doc sphinx-mode helm-company beacon request restclient-helm auto-yasnippet helm-projectile helm helpful eshell-mode smex company-restclient restclient nyan-mode ido-grid-mode pcre2el f dockerfile-mode calfw vlf magit yasnippet-snippets dashboard company-quickhelp company-jedi ido-yes-or-no ido-vertical-mode ido-completing-read+ auto-complete neotree e2wm e2wm-R persp-projectile zoom pretty-mode elscreen doremi stan-mode dirtree fish-mode eimp dired+ expand-region smartparens popup-imenu goto-chg highlight-symbol flx-ido undo-tree projectile ensime elpy csv-mode use-package exec-path-from-shell)))
+    (markdown-mode ensime lsp-scala lsp-ui lsp-mode powershell elisp-lint pandoc-mode yaml-mode highlight-indent-guides flycheck js2-mode rainbow-mode web-mode tide prodigy know-your-http-well company page-break-lines pyenv-mode pyenv-mode-auto sphinx-doc sphinx-mode helm-company beacon request restclient-helm auto-yasnippet helm-projectile helm helpful eshell-mode smex company-restclient restclient nyan-mode ido-grid-mode pcre2el f dockerfile-mode calfw vlf magit yasnippet-snippets dashboard company-quickhelp company-jedi ido-yes-or-no ido-vertical-mode ido-completing-read+ auto-complete neotree e2wm e2wm-R persp-projectile zoom pretty-mode elscreen doremi stan-mode dirtree fish-mode eimp dired+ expand-region smartparens popup-imenu goto-chg highlight-symbol flx-ido undo-tree projectile elpy csv-mode use-package exec-path-from-shell)))
  '(pop-up-frames nil)
  '(sbt:ansi-support t)
  '(sbt:prefer-nested-projects t)
@@ -69,3 +67,9 @@
 ;;  '(company-tooltip ((t (:inherit default :background "#32e339873bbd"))))
 ;;  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
 ;;  '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

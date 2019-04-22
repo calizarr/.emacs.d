@@ -29,6 +29,7 @@ at the top level of DIRECTORY."
      subdirs)))
 
 (push "*.mypy_cache" projectile-globally-ignored-directories)
+(push ".bloop" projectile-globally-ignored-directories)
 
 (use-package helm-projectile
   :demand
