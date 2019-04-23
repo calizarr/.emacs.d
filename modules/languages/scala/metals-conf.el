@@ -32,23 +32,26 @@
 ;; Install Metals Binary if not existing
 
 (defun install-metals ()
-  (if (not (file-exists-p "/usr/local/bin/metals-emacs"))
-      (if (not (string-equal system-type "windows-nt"))
+  "This will install metals hopefully easily."
+  (let
+      ((args (string-join '(
+                            "--java-opt \"-Xss4m\""
+                            "--java-opt \"-Xms100m\""
+                            "--java-opt \"-Dmetals.client=emacs\""
+                            "org.scalameta:metals_2.12:0.5.0"
+                            "-r bintray:scalacenter/releases"
+                            "-r sonatype:snapshots"
+                            "-o /usr/local/bin/metals-emacs -f") " "))
+       (command "java -noverify -jar coursier bootstrap"))
+    (if (not (file-exists-p "/usr/local/bin/metals-emacs"))
+        (if (not (string-equal system-type "windows-nt"))
+            (progn
+              (shell-command (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier")))
+              (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
+              (shell-command (format "bash -c %s" (shell-quote-argument (concat command " " args)))))
           (progn
-            (shell-command (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier")))
-            (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
-            (shell-command (format "bash -c %s" (shell-quote-argument "
-./coursier bootstrap \
-  --java-opt -Xss4m \
-  --java-opt -Xms100m \
-  --java-opt -Dmetals.client=emacs \
-  org.scalameta:metals_2.12:0.5.0 \
-  -r bintray:scalacenter/releases \
-  -r sonatype:snapshots \
-  -o /usr/local/bin/metals-emacs -f"))))
-        (progn
-          (shell-command "curl -o coursier https://git.io/coursier")
-          (shell-command "java -noverify -jar coursier bootstrap --java-opt -Xss4m --java-opt -Xms100m --java-opt -Dmetals.client=emacs org.scalameta:metals_2.12:0.5.0 -r bintray:scalacenter/releases -r sonatype:snapshots -o /usr/local/bin/metals-emacs -f")))
-    (message "metals-emacs binary already exists")))
+            (shell-command (format "powershell %s" "curl -o coursier https://git.io/coursier"))
+            (shell-command (concat command " " args))))
+      (message "metals-emacs binary already exists"))))
 
 (install-metals)
