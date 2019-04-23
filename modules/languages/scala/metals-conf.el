@@ -55,11 +55,13 @@
             (progn
               (shell-command (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier")))
               (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
-              (shell-command (format "bash -c %s" (shell-quote-argument (concat command " " args)))))
+              (shell-command (format "bash -c %s" (shell-quote-argument (concat command " " args))))
+              (shell-command (format "bash -c %s" (shell-quote-argument "rm coursier"))))
           ;; If we're in Windows we use Powershell
           (progn
             (shell-command (format "powershell %s" "curl -o coursier https://git.io/coursier"))
-            (shell-command (concat command " " args))))
+            (shell-command (concat command " " args))
+            (shell-command (format "powershell %s" "rm coursier")))
       ;; Otherwise, we don't do anything if it already exists
       (message "metals-emacs binary already exists"))))
 
