@@ -40,8 +40,10 @@ at the top level of DIRECTORY."
 (defun projectile-setup-indexing ()
   "Check for not windows and then set projectile-indexing appropriately."
   (if (not-windows)
+      ;; Linux/OSX can use hybrid to ignore certain files and enable-caching
       (setq projectile-indexing-method 'hybrid
             projectile-enable-caching t)
+    ;; If Windows has fd and tr, use them
     (if (and (locate-file "fd" exec-path exec-suffixes 1)
              (locate-file "tr" exec-path exec-suffixes 1))
         (setq projectile-indexing-method 'alien
@@ -49,6 +51,7 @@ at the top level of DIRECTORY."
               projectile-git-command "fd . -0 --color never"
               projectile-generic-command "fd . -0 --color never"
               )
+      ;; If it doesn't use the painfully slow native indexing
       (setq projectile-indexing-method 'native
             projectile-enable-caching t))))
 
