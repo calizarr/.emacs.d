@@ -121,3 +121,11 @@
 (use-package expand-region
   :commands 'er/expand-region
   :bind ("C-=" . er/expand-region))
+
+(defun not-windows ()
+  "Check if OS is not windows, return t if not."
+  (not (string-equal system-type "windows-nt")))
+
+(defun is-windows ()
+  "Check if OS is windows, return t if it is."
+  (string-equal system-type "windows-nt"))

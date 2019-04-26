@@ -2,7 +2,7 @@
 (use-package projectile
   :demand
   :init (setq projectile-use-git-grep t)
-  :config (projectile-global-mode t)
+  :config (projectile-mode)
   :bind (("s-f" . projectile-find-file)
          ("s-F" . projectile-grep)))
 
@@ -37,8 +37,18 @@ at the top level of DIRECTORY."
   )
 
 ;; Needed to use `.projectile` ignores or the globally ignored section above
-(setq projectile-indexing-method 'hybrid)
-(setq projectile-enable-caching t)
+(defun projectile-setup-indexing ()
+  (if (not-windows)
+      (setq projectile-indexing-method 'hybrid
+            projectile-enable-caching t))
+  ;; TODO: Add check for "tr" in path and "fd" in path else use native*
+  (setq projectile-indexing-method 'alien
+        projectile-enable-caching nil
+        projectile-git-command "fd . -0 --color never"
+        projectile-generic-command "fd . -0 --color never"
+        ))
+
+(projectile-setup-indexing)
 
 (push "*.mypy_cache" projectile-globally-ignored-directories)
 (push "*.bloop" projectile-globally-ignored-directories)

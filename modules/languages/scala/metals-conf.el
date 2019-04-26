@@ -106,7 +106,7 @@
     ;; Check if it already exists.
     (if (not (file-exists-p "/usr/local/bin/metals-emacs"))
         ;; Check if we're not in Windows
-        (if (not (string-equal system-type "windows-nt"))
+        (if (not-windows)
             (progn
               (shell-command (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier")))
               (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
