@@ -5,12 +5,51 @@
 (use-package lsp-mode
   :ensure
   :pin melpa
+  :bind (("C-c C-v t" . lsp-describe-type-at-point)
+         ("C-c C-r t" . lsp-describe-thing-at-point))
   :init (setq lsp-prefer-flymake nil))
 
+
+
 (use-package lsp-ui
-  :ensure
-  :pin melpa
-  :hook (lsp-mode . lsp-ui-mode))
+  :ensure t
+  :commands lsp-ui-mode
+  :hook (lsp-mode . lsp-ui-mode)
+  :bind (("C-c C-v s" . lsp-ui-sideline-toggle-symbols-info)
+         ("C-c C-v d" . lsp-ui-doc-mode))
+  :config
+  (setq lsp-ui-sideline-enable t
+        lsp-ui-sideline-ignore-duplicate t
+        lsp-ui-sideline-show-code-actions t
+        lsp-ui-sideline-show-diagnostics t
+        lsp-ui-sideline-show-hover nil
+        lsp-ui-flycheck-enable t
+        lsp-ui-flycheck-live-reporting t
+        lsp-ui-peek-enable t
+        lsp-ui-peek-list-width 60
+        lsp-ui-peek-peek-height 25
+        lsp-ui-imenu-enable t
+        lsp-ui-doc-enable t
+        lsp-ui-doc-include-signature t
+        lsp-ui-doc-position 'top
+        lsp-ui-doc-use-childframe t))
+
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :pin melpa
+;;   :hook (lsp-mode . lsp-ui-mode)
+;;   :config
+;;   ;; Current preferred
+;;   (setq lsp-ui-flycheck-enable nil
+;;         lsp-ui-sideline-ignore-duplicate t
+;;         lsp-ui-sideline-show-code-actions t
+;;         lsp-ui-sideline-show-diagnostics t
+;;         lsp-ui-sideline-show-hover nil
+;;         ))
+
+
+;; (setq lsp-printx-io t)
+
 
 (use-package helm-lsp
   :ensure t)
@@ -25,6 +64,22 @@
 (use-package company-lsp
   :ensure t)
 (push 'company-lsp company-backends)
+
+(defun lsp-describe-type-at-point ()
+  "Display the full documentation of the thing at point."
+  (interactive)
+  (let ((contents (-some->> (lsp--text-document-position-params)
+                            (lsp--make-request "textDocument/hover")
+                            (lsp--send-request)
+                            (gethash "contents"))))
+    (if (and contents (not (equal contents "")) )
+        (lsp--info (lsp--render-on-hover-content contents t))
+      (lsp--info "No content at point."))))
+
+(defun lsp-scala-add-type-annotation ()
+  "Add type annotation to the val at point."
+  (interactive)
+  (lsp-describe-thing-at-point))
 
 ;; Printing server I/O for debugging
 ;; (setq 'lsp-print-io t)
@@ -61,7 +116,7 @@
           (progn
             (shell-command (format "powershell %s" "curl -o coursier https://git.io/coursier"))
             (shell-command (concat command " " args))
-            (shell-command (format "powershell %s" "rm coursier")))
+            (shell-command (format "powershell %s" "rm coursier"))))
       ;; Otherwise, we don't do anything if it already exists
       (message "metals-emacs binary already exists"))))
 

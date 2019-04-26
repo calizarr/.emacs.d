@@ -11,7 +11,10 @@
          )
   :init (require 'helm-config)
   :init
-  (setq helm-autoresize-mode 1)
+  (setq helm-autoresize-mode 1
+        helm-mode-fuzzy-match t
+        helm-completion-in-region-fuzzy-match t
+        )
   :config (helm-mode 1))
 
 (use-package dash
