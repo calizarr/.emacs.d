@@ -38,15 +38,19 @@ at the top level of DIRECTORY."
 
 ;; Needed to use `.projectile` ignores or the globally ignored section above
 (defun projectile-setup-indexing ()
+  "Check for not windows and then set projectile-indexing appropriately."
   (if (not-windows)
       (setq projectile-indexing-method 'hybrid
-            projectile-enable-caching t))
-  ;; TODO: Add check for "tr" in path and "fd" in path else use native*
-  (setq projectile-indexing-method 'alien
-        projectile-enable-caching nil
-        projectile-git-command "fd . -0 --color never"
-        projectile-generic-command "fd . -0 --color never"
-        ))
+            projectile-enable-caching t)
+    (if (and (locate-file "fd" exec-path exec-suffixes 1)
+             (locate-file "tr" exec-path exec-suffixes 1))
+        (setq projectile-indexing-method 'alien
+              projectile-enable-caching nil
+              projectile-git-command "fd . -0 --color never"
+              projectile-generic-command "fd . -0 --color never"
+              )
+      (setq projectile-indexing-method 'native
+            projectile-enable-caching t))))
 
 (projectile-setup-indexing)
 
