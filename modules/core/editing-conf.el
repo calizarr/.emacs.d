@@ -21,6 +21,9 @@
   :config
   (add-hook 'markdown-mode-hook 'pandoc-mode))
 
+;; Protobuf editing mode
+(use-package protobuf-mode
+  :ensure t)
 
 ;; Add powershell-mode
 (use-package powershell

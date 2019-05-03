@@ -62,7 +62,10 @@
   )
 
 (use-package company-lsp
-  :ensure t)
+  :ensure t
+  :pin melpa
+  )
+
 (push 'company-lsp company-backends)
 
 (defun lsp-describe-type-at-point ()
@@ -97,7 +100,7 @@
                             "--java-opt \"-Xss4m\""
                             "--java-opt \"-Xms100m\""
                             "--java-opt \"-Dmetals.client=emacs\""
-                            "org.scalameta:metals_2.12:0.5.0"
+                            "org.scalameta:metals_2.12:0.5.1"
                             "-r bintray:scalacenter/releases"
                             "-r sonatype:snapshots"
                             "-o /usr/local/bin/metals-emacs -f") " "))
