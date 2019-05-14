@@ -10,3 +10,4 @@
 (setq powerline-default-separator-dir '(right . left))
 (setq sml/theme 'light-powerline)
 (sml/setup)
+

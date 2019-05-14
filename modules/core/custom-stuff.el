@@ -59,7 +59,7 @@
 ;; Don't auto-fill paragraphs with spaces
 (auto-fill-mode 0)
 
-;;Show Parentheses!
+;; Show Parentheses!
 (show-paren-mode t)
 
 (use-package smartparens
@@ -126,6 +126,7 @@
   :commands 'er/expand-region
   :bind ("C-=" . er/expand-region))
 
+;; Convenience functions for checking whether we're in windows or not
 (defun not-windows ()
   "Check if OS is not windows, return t if not."
   (not (string-equal system-type "windows-nt")))

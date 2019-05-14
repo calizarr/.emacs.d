@@ -34,22 +34,7 @@
         lsp-ui-doc-position 'top
         lsp-ui-doc-use-childframe t))
 
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :pin melpa
-;;   :hook (lsp-mode . lsp-ui-mode)
-;;   :config
-;;   ;; Current preferred
-;;   (setq lsp-ui-flycheck-enable nil
-;;         lsp-ui-sideline-ignore-duplicate t
-;;         lsp-ui-sideline-show-code-actions t
-;;         lsp-ui-sideline-show-diagnostics t
-;;         lsp-ui-sideline-show-hover nil
-;;         ))
-
-
-;; (setq lsp-printx-io t)
-
+;; (setq lsp-print-io t)
 
 (use-package helm-lsp
   :ensure t)
@@ -100,7 +85,7 @@
                             "--java-opt \"-Xss4m\""
                             "--java-opt \"-Xms100m\""
                             "--java-opt \"-Dmetals.client=emacs\""
-                            "org.scalameta:metals_2.12:0.5.1"
+                            "org.scalameta:metals_2.12:0.5.2"
                             "-r bintray:scalacenter/releases"
                             "-r sonatype:snapshots"
                             "-o /usr/local/bin/metals-emacs -f") " "))
@@ -122,5 +107,9 @@
             (shell-command (format "powershell %s" "rm coursier"))))
       ;; Otherwise, we don't do anything if it already exists
       (message "metals-emacs binary already exists"))))
+
+;; (defun metals-jdk8 ()
+;;   "Find java 8 home and change lsp-scala-server-command to use it directly"
+;;   (executable-find 
 
 (install-metals)

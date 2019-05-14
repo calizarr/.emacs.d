@@ -8,8 +8,6 @@
 (load "dired-conf.el")
 ;; Removing emacs *-bars
 (load "remove-bars.el")
-;; Adding neotree
-(load "neotree.el")
 ;; Calendar Framework
 (load "calendar-conf.el")
 ;; Window resizing shortcuts
@@ -32,3 +30,5 @@
 (load "indentation-conf.el")
 ;; Load other editing conf files (YAML, etc)
 (load "editing-conf.el")
+;; Load in treemacs
+(load "treemacs-conf.el")
