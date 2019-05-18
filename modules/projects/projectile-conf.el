@@ -67,8 +67,3 @@ at the top level of DIRECTORY."
 
 ;; Opens project root when using projectile-switch-project (C-c p p)
 (setq projectile-switch-project-action #'projectile-dired)
-
-;; (defun projectile-get-ext-command() ""
-;;        (concat "C:\\usr\\local\\bin\\es.exe -r "
-;;                (concat (replace-regexp-in-string "/" "\\\\" default-directory t t)
-;;                        ".+[^\\\\]\\.[^\\\\]+$ | tr '\\n' '\\0'")))
