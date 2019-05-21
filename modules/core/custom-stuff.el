@@ -5,8 +5,7 @@
  package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                     ("org" . "http://orgmode.org/elpa/")
                     ("melpa" . "http://melpa.org/packages/")
-                    ("melpa-stable" . "http://stable.melpa.org/packages/")
-                    ("elpy" . "https://jorgenschaefer.github.io/packages/"))
+                    ("melpa-stable" . "http://stable.melpa.org/packages/"))
  package-archive-priorities '(("melpa-stable" . 1)))
 
 ;; (package-initialize)
@@ -134,3 +133,6 @@
 (defun is-windows ()
   "Check if OS is windows, return t if it is."
   (string-equal system-type "windows-nt"))
+
+;; Remove auto-fill mode
+(auto-fill-mode nil)

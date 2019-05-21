@@ -108,8 +108,16 @@
       ;; Otherwise, we don't do anything if it already exists
       (message "metals-emacs binary already exists"))))
 
-;; (defun metals-jdk8 ()
-;;   "Find java 8 home and change lsp-scala-server-command to use it directly"
-;;   (executable-find 
+(defun metals-jdk8 ()
+  "Find java 8 home and change lsp-scala-server-command to use it directly"
+  (if (string-equal system-type "darwin")
+      (progn
+        (message "We're in motherfucking darwin OSX baby")
+        (let ((jdk8-path (concat (string-trim (shell-command-to-string "/usr/libexec/java_home -v 1.8")) "/bin/java"))
+              (metals-path (string-trim (shell-command-to-string "which metals-emacs"))))
+          (setq lsp-scala-server-command jdk8-path)
+          (setq lsp-scala-server-args (list "-Xss4m" "-Xms100m" "-Dmetals.client=emacs" "-jar" metals-path))))
+    (message "Other operating systems other than OSX not implemented yet")))
 
 (install-metals)
+(metals-jdk8)

@@ -1,10 +1,10 @@
 ;; (setq python-shell-completion-native-enable nil)
 
 (use-package sphinx-mode
-  :ensure)
+  :ensure t)
 
 (use-package sphinx-doc
-  :ensure)
+  :ensure t)
 
 (add-hook 'python-mode-hook (lambda ()
                               (require 'sphinx-doc)
@@ -17,7 +17,8 @@
               (yas-activate-extra-mode 'python-mode)))
 
 (use-package pyenv-mode
-  :ensure)
+  :ensure t
+  :pin melpa)
 
 ;; (defun conda--get-path-prefix (env-dir)
 ;;   "Get a platform-specific path string to utilize the conda env in ENV-DIR.
