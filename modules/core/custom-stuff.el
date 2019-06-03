@@ -56,7 +56,8 @@
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-line-or-region)
 
 ;; Don't auto-fill paragraphs with spaces
-(auto-fill-mode 0)
+(auto-fill-mode -1)
+(remove-hook 'text-mode-hook #'turn-on-auto-fill)
 
 ;; Show Parentheses!
 (show-paren-mode t)
@@ -134,5 +135,3 @@
   "Check if OS is windows, return t if it is."
   (string-equal system-type "windows-nt"))
 
-;; Remove auto-fill mode
-(auto-fill-mode nil)
