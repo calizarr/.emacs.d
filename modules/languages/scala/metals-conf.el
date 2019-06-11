@@ -3,11 +3,13 @@
   :init (global-flycheck-mode))
 
 (use-package lsp-mode
-  :ensure
+  :ensure t
   :pin melpa
   :bind (("C-c C-v t" . lsp-describe-type-at-point)
          ("C-c C-r t" . lsp-describe-thing-at-point))
-  :init (setq lsp-prefer-flymake nil))
+  :hook (scala-mode . lsp)
+  :config (setq lsp-prefer-flymake nil)
+  )
 
 
 
@@ -38,13 +40,6 @@
 
 (use-package helm-lsp
   :ensure t)
-
-(use-package lsp-scala
-  :after scala-mode
-  :demand t
-  ;; Optional - enable lsp-scala automatically in scala files
-  :hook (scala-mode . lsp)
-  )
 
 (use-package company-lsp
   :ensure t
@@ -85,7 +80,7 @@
                             "--java-opt \"-Xss4m\""
                             "--java-opt \"-Xms100m\""
                             "--java-opt \"-Dmetals.client=emacs\""
-                            "org.scalameta:metals_2.12:0.5.2"
+                            "org.scalameta:metals_2.12:0.6.1"
                             "-r bintray:scalacenter/releases"
                             "-r sonatype:snapshots"
                             "-o /usr/local/bin/metals-emacs -f") " "))
@@ -115,8 +110,8 @@
         (message "We're in motherfucking darwin OSX baby")
         (let ((jdk8-path (concat (string-trim (shell-command-to-string "/usr/libexec/java_home -v 1.8")) "/bin/java"))
               (metals-path (string-trim (shell-command-to-string "which metals-emacs"))))
-          (setq lsp-scala-server-command jdk8-path)
-          (setq lsp-scala-server-args (list "-Xss4m" "-Xms100m" "-Dmetals.client=emacs" "-jar" metals-path))))
+          (setq lsp-metals-server-command jdk8-path)
+          (setq lsp-metals-server-args (list "-Xss4m" "-Xms100m" "-Dmetals.client=emacs" "-jar" metals-path))))
     (message "Other operating systems other than OSX not implemented yet")))
 
 (install-metals)

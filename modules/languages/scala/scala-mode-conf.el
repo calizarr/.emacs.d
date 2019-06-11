@@ -6,7 +6,8 @@
   :mode "\\.s\\(cala\\|bt\\)$")
 
 (use-package sbt-mode
-  :pin melpa-stable
+  :ensure t
+  :pin melpa
   :commands sbt-start sbt-command
   :config
   ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31

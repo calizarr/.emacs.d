@@ -57,3 +57,11 @@
   :tags '(cibo insights jake cropnosis)
   :stop-signal 'sigkill
   :kill-process-buffer-on-stop t)
+
+(prodigy-define-service
+  :name "Kubectl -> Sylvester PostGIS"
+  :command "bash"
+  :args '("-c" "while true; do kubectl port-forward -n sylvester-dev svc/sylvester-postgres-dev-postgresql 5432; done")
+  :tags '(cibo sylvester postgis)
+  :stop-signal 'sigkill
+  :kill-process-buffer-on-stop t)
