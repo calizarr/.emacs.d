@@ -11,30 +11,42 @@
   :config (setq lsp-prefer-flymake nil)
   )
 
-
-
 (use-package lsp-ui
   :ensure t
-  :commands lsp-ui-mode
-  :hook (lsp-mode . lsp-ui-mode)
+  :pin melpa
   :bind (("C-c C-v s" . lsp-ui-sideline-toggle-symbols-info)
-         ("C-c C-v d" . lsp-ui-doc-mode))
+         ("C-c C-v d" . lsp-ui-doc-mode)
+         ("C-c M-i" . lsp-ui-imenu))
   :config
-  (setq lsp-ui-sideline-enable t
-        lsp-ui-sideline-ignore-duplicate t
-        lsp-ui-sideline-show-code-actions t
-        lsp-ui-sideline-show-diagnostics t
-        lsp-ui-sideline-show-hover nil
+  (setq lsp-ui-sideline-ignore-duplicate t
         lsp-ui-flycheck-enable t
-        lsp-ui-flycheck-live-reporting t
-        lsp-ui-peek-enable t
-        lsp-ui-peek-list-width 60
-        lsp-ui-peek-peek-height 25
-        lsp-ui-imenu-enable t
-        lsp-ui-doc-enable t
         lsp-ui-doc-include-signature t
-        lsp-ui-doc-position 'top
-        lsp-ui-doc-use-childframe t))
+        ))
+
+
+
+;; (use-package lsp-ui
+;;   :ensure t
+;;   :commands lsp-ui-mode
+;;   :hook (lsp-mode . lsp-ui-mode)
+;;   :bind (("C-c C-v s" . lsp-ui-sideline-toggle-symbols-info)
+;;          ("C-c C-v d" . lsp-ui-doc-mode))
+;;   :config
+;;   (setq lsp-ui-sideline-enable t
+;;         lsp-ui-sideline-ignore-duplicate t
+;;         lsp-ui-sideline-show-code-actions t
+;;         lsp-ui-sideline-show-diagnostics t
+;;         lsp-ui-sideline-show-hover nil
+;;         lsp-ui-flycheck-enable t
+;;         lsp-ui-flycheck-live-reporting nil
+;;         lsp-ui-peek-enable t
+;;         lsp-ui-peek-list-width 60
+;;         lsp-ui-peek-peek-height 25
+;;         lsp-ui-imenu-enable t
+;;         lsp-ui-doc-enable t
+;;         lsp-ui-doc-include-signature t
+;;         lsp-ui-doc-position 'top
+;;         lsp-ui-doc-use-childframe t))
 
 ;; (setq lsp-print-io t)
 
@@ -46,7 +58,7 @@
   :pin melpa
   )
 
-(push 'company-lsp company-backends)
+;; (push 'company-lsp company-backends)
 
 (defun lsp-describe-type-at-point ()
   "Display the full documentation of the thing at point."
@@ -80,7 +92,7 @@
                             "--java-opt \"-Xss4m\""
                             "--java-opt \"-Xms100m\""
                             "--java-opt \"-Dmetals.client=emacs\""
-                            "org.scalameta:metals_2.12:0.6.1"
+                            "org.scalameta:metals_2.12:0.7.0"
                             "-r bintray:scalacenter/releases"
                             "-r sonatype:snapshots"
                             "-o /usr/local/bin/metals-emacs -f") " "))
@@ -103,16 +115,4 @@
       ;; Otherwise, we don't do anything if it already exists
       (message "metals-emacs binary already exists"))))
 
-(defun metals-jdk8 ()
-  "Find java 8 home and change lsp-scala-server-command to use it directly"
-  (if (string-equal system-type "darwin")
-      (progn
-        (message "We're in motherfucking darwin OSX baby")
-        (let ((jdk8-path (concat (string-trim (shell-command-to-string "/usr/libexec/java_home -v 1.8")) "/bin/java"))
-              (metals-path (string-trim (shell-command-to-string "which metals-emacs"))))
-          (setq lsp-metals-server-command jdk8-path)
-          (setq lsp-metals-server-args (list "-Xss4m" "-Xms100m" "-Dmetals.client=emacs" "-jar" metals-path))))
-    (message "Other operating systems other than OSX not implemented yet")))
-
 (install-metals)
-(metals-jdk8)
