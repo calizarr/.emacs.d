@@ -1,12 +1,13 @@
 ;; the package manager
-
 (require 'package)
+
 (setq
  package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                     ("org" . "http://orgmode.org/elpa/")
                     ("melpa" . "http://melpa.org/packages/")
                     ("melpa-stable" . "http://stable.melpa.org/packages/"))
- package-archive-priorities '(("melpa-stable" . 1)))
+ ;; package-archive-priorities '(("melpa-stable" . 1))
+ )
 
 ;; (package-initialize)
 
@@ -31,6 +32,8 @@
  make-backup-files nil
  column-number-mode t
  scroll-error-top-bottom t
+ ;; Show Parentheses!
+ show-paren-mode t 
  show-paren-delay 0.5
  use-package-always-ensure t
  sentence-end-double-space nil)
@@ -41,8 +44,13 @@
  tab-width 4
  c-basic-offset 4)
 
-;; global keybindings
+;; Global unset keybindings
 (global-unset-key (kbd "C-z"))
+(global-unset-key (kbd "C-x C-z"))
+
+;; Global set keybindings
+;; Making a previous window command
+(global-set-key (kbd "C-x p") (kbd "C-u -1 C-x o"))
 
 ;; Comment out / uncomment region
 (defun comment-or-uncomment-line-or-region ()
@@ -55,12 +63,28 @@
   )
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-line-or-region)
 
+;; Contextually hungry C-<backspace>
+(defun contextual-backspace ()
+  "Hungry whitespace or delete word depending on context."
+  (interactive)
+  (if (looking-back "[[:space:]\n]\\{2,\\}" (- (point) 2))
+      (while (looking-back "[[:space:]\n]" (- (point) 1))
+        (delete-char -1))
+    (cond
+     ((and (boundp 'smartparens-strict-mode)
+           smartparens-strict-mode)
+      (sp-backward-kill-word 1))
+     ((and (boundp 'subword-mode) 
+           subword-mode)
+      (subword-backward-kill 1))
+     (t
+      (backward-kill-word 1)))))
+
+(global-set-key (kbd "C-<backspace>") 'contextual-backspace)
+
 ;; Don't auto-fill paragraphs with spaces
 (auto-fill-mode -1)
 (remove-hook 'text-mode-hook #'turn-on-auto-fill)
-
-;; Show Parentheses!
-(show-paren-mode t)
 
 (use-package smartparens
   :diminish smartparens-mode
@@ -93,33 +117,11 @@
 (when (fboundp 'winner-mode)
   (winner-mode 1))
 
-;; Making a previous window command
-(global-set-key (kbd "C-x p") (kbd "C-u -1 C-x o"))
-
 ;; Add a beacon!
 (use-package beacon
   :demand
   :ensure t
   :config (beacon-mode 1))
-
-;; Contextually hungry C-<backspace>
-(defun contextual-backspace ()
-  "Hungry whitespace or delete word depending on context."
-  (interactive)
-  (if (looking-back "[[:space:]\n]\\{2,\\}" (- (point) 2))
-      (while (looking-back "[[:space:]\n]" (- (point) 1))
-        (delete-char -1))
-    (cond
-     ((and (boundp 'smartparens-strict-mode)
-           smartparens-strict-mode)
-      (sp-backward-kill-word 1))
-     ((and (boundp 'subword-mode) 
-           subword-mode)
-      (subword-backward-kill 1))
-     (t
-      (backward-kill-word 1)))))
-
-(global-set-key (kbd "C-<backspace>") 'contextual-backspace)
 
 ;; Expand-region style
 (use-package expand-region

@@ -6,3 +6,5 @@
 ;; (ido-mode 1)
 ;; (ido-ubiquitous-mode 1)
 ;; (ido-yes-or-no-mode 1)
+;; (ido-grid-mode t)
+;; (ido-vertical-mode t)

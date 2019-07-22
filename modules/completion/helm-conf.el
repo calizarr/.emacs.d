@@ -11,9 +11,10 @@
          )
   :init (require 'helm-config)
   :init
-  (setq helm-autoresize-mode 1
-        helm-mode-fuzzy-match t
+  (setq helm-mode-fuzzy-match t
         helm-completion-in-region-fuzzy-match t
+        helm-split-window-inside-p t
+        helm-display-line-numbers-mode t
         )
   :config (helm-mode 1))
 
