@@ -23,31 +23,6 @@
         lsp-ui-doc-include-signature t
         ))
 
-
-
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode
-;;   :hook (lsp-mode . lsp-ui-mode)
-;;   :bind (("C-c C-v s" . lsp-ui-sideline-toggle-symbols-info)
-;;          ("C-c C-v d" . lsp-ui-doc-mode))
-;;   :config
-;;   (setq lsp-ui-sideline-enable t
-;;         lsp-ui-sideline-ignore-duplicate t
-;;         lsp-ui-sideline-show-code-actions t
-;;         lsp-ui-sideline-show-diagnostics t
-;;         lsp-ui-sideline-show-hover nil
-;;         lsp-ui-flycheck-enable t
-;;         lsp-ui-flycheck-live-reporting nil
-;;         lsp-ui-peek-enable t
-;;         lsp-ui-peek-list-width 60
-;;         lsp-ui-peek-peek-height 25
-;;         lsp-ui-imenu-enable t
-;;         lsp-ui-doc-enable t
-;;         lsp-ui-doc-include-signature t
-;;         lsp-ui-doc-position 'top
-;;         lsp-ui-doc-use-childframe t))
-
 ;; (setq lsp-print-io t)
 
 (use-package helm-lsp

@@ -5,7 +5,14 @@
 ;; Scala-Mode package
 ;; Enable scala-mode and sbt-mode
 (use-package scala-mode
-  :mode "\\.s\\(cala\\|bt\\)$")
+  :mode "\\.s\\(cala\\|bt\\)$"
+  :hook ((scala-mode . show-paren-mode)
+         (scala-mode . smartparens-mode)
+         (scala-mode . yas-minor-mode)
+         (scala-mode . company-mode)
+         (scala-mode . scala-mode:goto-start-of-code)
+         )
+  )
 
 (use-package sbt-mode
   :ensure t
@@ -47,15 +54,14 @@
 (bind-key "s-{" 'sp-rewrap-sexp smartparens-mode-map)
 
 ;; Hooks for scala-mode
-(add-hook 'scala-mode-hook
-          (lambda ()
-            (show-paren-mode)
-            (smartparens-mode)
-            (yas-minor-mode)
-            (company-mode)
-            (scala-mode:goto-start-of-code)
-            ;; (ensime-mode -1)
-             ))
+;; (add-hook 'scala-mode-hook
+;;           (lambda ()
+;;             (show-paren-mode)
+;;             (smartparens-mode)
+;;             (yas-minor-mode)
+;;             (company-mode)
+;;             (scala-mode:goto-start-of-code)
+;;              ))
 
-;; Adding ,.sc files to scala mode
+;; Adding .sc files to scala mode
 (add-to-list 'auto-mode-alist '("\\.\\(scala\\|sc\\|sbt\\)\\'" . scala-mode))

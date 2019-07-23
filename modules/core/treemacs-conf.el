@@ -76,6 +76,8 @@
   :after treemacs magit
   :ensure t)
 
-;; (use-package lsp-treemacs
-;;   :defer t
-;;   :after treemacs lsp-mode lsp-ui company-lsp)
+(use-package lsp-treemacs
+  :ensure t
+  :pin melpa
+  :defer t
+  :after treemacs lsp-mode lsp-ui company-lsp)
