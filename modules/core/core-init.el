@@ -32,3 +32,5 @@
 (load "editing-conf.el")
 ;; Load in treemacs
 (load "treemacs-conf.el")
+;; Load syntax checking (flycheck)
+(load "syntax-checking-conf.el")
