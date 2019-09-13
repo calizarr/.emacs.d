@@ -8,6 +8,8 @@
   :commands yas-minor-mode
   :config (yas-reload-all))
 
+(require 'yasnippet)
+
 (use-package yasnippet-snippets
   :ensure t
   :pin melpa
