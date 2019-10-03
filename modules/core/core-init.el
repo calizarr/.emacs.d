@@ -6,8 +6,6 @@
 (load "dashboard-conf.el")
 ;; Load Dired settings
 (load "dired-conf.el")
-;; Removing emacs *-bars
-(load "remove-bars.el")
 ;; Calendar Framework
 (load "calendar-conf.el")
 ;; Window resizing shortcuts
@@ -34,3 +32,7 @@
 (load "treemacs-conf.el")
 ;; Load syntax checking (flycheck)
 (load "syntax-checking-conf.el")
+;; Load org-mode keybindings
+(load "./org-conf.el")
+;; Load mobility conf / movement around buffers
+(load "./mobility-conf.el")

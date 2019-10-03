@@ -3,7 +3,7 @@
   :demand
   :ensure t)
 
-(setq dashboard-banner-logo-title "Welcome back Cesar!")
+(setq dashboard-banner-logo-title "Welcome back calizarr!")
 
 (setq dashboard-items '((recents  . 5)
                         (bookmarks . 5)
