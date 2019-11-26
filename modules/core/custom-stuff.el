@@ -35,7 +35,7 @@
  column-number-mode t
  scroll-error-top-bottom t
  ;; Show Parentheses!
- show-paren-mode t 
+ show-paren-mode t
  show-paren-delay 0.5
  use-package-always-ensure t
  sentence-end-double-space nil)
@@ -76,7 +76,7 @@
      ((and (boundp 'smartparens-strict-mode)
            smartparens-strict-mode)
       (sp-backward-kill-word 1))
-     ((and (boundp 'subword-mode) 
+     ((and (boundp 'subword-mode)
            subword-mode)
       (subword-backward-kill 1))
      (t
@@ -143,3 +143,7 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
+
+(defun is-linux ()
+  "Check if OS is linux, return t if it is."
+  (string-equal system-type "gnu/linuxgnu/linux"))

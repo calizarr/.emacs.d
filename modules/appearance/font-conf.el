@@ -8,3 +8,8 @@
     (progn
       (set-face-attribute 'default nil :font "DejaVu Sans Mono for Powerline-10")
       (set-frame-font "DejaVu Sans Mono for Powerline-10" nil t)))
+
+(if (is-linux)
+    (progn
+      (set-face-attribute 'default nil :font "DejaVu Sans Mono for Powerline-10")
+      (set-frame-font "DejaVu Sans Mono for Powerline-10" nil t)))
