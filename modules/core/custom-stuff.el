@@ -139,11 +139,15 @@
   "Check if OS is windows, return t if it is."
   (string-equal system-type "windows-nt"))
 
+(defun is-linux ()
+  "Check if OS is linux, return t if it is."
+  (string-equal system-type "gnu/linuxgnu/linux"))
+
 ;; Getting rid of tool bar mode.
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (toggle-scroll-bar -1)
 
-(defun is-linux ()
-  "Check if OS is linux, return t if it is."
-  (string-equal system-type "gnu/linuxgnu/linux"))
+;; Changing list buffers (C-x C-b) to ibuffer
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
