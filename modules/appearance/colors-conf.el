@@ -49,3 +49,4 @@
 
 (add-hook 'comint-output-filter-functions
           'filter-non-sgr-control-sequences-in-output)
+

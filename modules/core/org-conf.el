@@ -6,3 +6,5 @@
          ("C-x M-n" . org-metaright))
   )
 
+(use-package htmlize
+  :ensure t)

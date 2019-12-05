@@ -65,3 +65,13 @@
   :tags '(cibo sylvester postgis)
   :stop-signal 'sigkill
   :kill-process-buffer-on-stop t)
+
+(prodigy-define-service
+  :name "Bash LSP Docker"
+  :command "docker"
+  :args '("run" "--rm" "--name" "bash-explainshell" "-p" "5000:5000" "chrismwendt/codeintel-bash-with-explainshell")
+  :env '(("EXPLAINSHELL_ENDPOINT" "http://localhost:5000"))
+  :tags '(bash lsp)
+  :stop-signal 'sigint
+  :kill-process-buffer-on-stop t
+  :ready-message "waiting for connections on port")

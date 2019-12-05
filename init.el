@@ -24,7 +24,8 @@
  '(ediff-window-setup-function 'ediff-setup-windows-plain)
  '(eide-custom-color-theme 'dark)
  '(package-selected-packages
-   '(org elpy auto-yasnippet company-lsp groovy-mode company-anaconda protobuf-mode smart-mode-line lsp-mode sbt-mode scala-mode markdown-mode lsp-ui helm-lsp powershell elisp-lint pandoc-mode yaml-mode highlight-indent-guides flycheck js2-mode rainbow-mode web-mode tide prodigy know-your-http-well page-break-lines pyenv-mode pyenv-mode-auto sphinx-doc sphinx-mode helm-company beacon request restclient-helm helm-projectile helm helpful eshell-mode smex company-restclient restclient nyan-mode ido-grid-mode pcre2el f dockerfile-mode calfw vlf magit yasnippet-snippets company-quickhelp company-jedi ido-yes-or-no ido-vertical-mode ido-completing-read+ auto-complete neotree e2wm e2wm-R persp-projectile zoom pretty-mode elscreen doremi stan-mode dirtree fish-mode eimp dired+ expand-region smartparens popup-imenu goto-chg highlight-symbol flx-ido undo-tree projectile csv-mode use-package exec-path-from-shell))
+   (quote
+    (htmlize company-lsp groovy-mode company-anaconda protobuf-mode smart-mode-line lsp-mode sbt-mode scala-mode markdown-mode lsp-ui helm-lsp powershell elisp-lint pandoc-mode yaml-mode highlight-indent-guides flycheck js2-mode rainbow-mode web-mode tide prodigy know-your-http-well company page-break-lines pyenv-mode pyenv-mode-auto sphinx-doc sphinx-mode helm-company beacon request restclient-helm auto-yasnippet helm-projectile helm helpful eshell-mode smex company-restclient restclient nyan-mode ido-grid-mode pcre2el f dockerfile-mode calfw vlf magit yasnippet-snippets dashboard company-quickhelp company-jedi ido-yes-or-no ido-vertical-mode ido-completing-read+ auto-complete neotree e2wm e2wm-R persp-projectile zoom pretty-mode elscreen doremi stan-mode dirtree fish-mode eimp dired+ expand-region smartparens popup-imenu goto-chg highlight-symbol flx-ido undo-tree projectile elpy csv-mode use-package exec-path-from-shell)))
  '(pop-up-frames nil)
  '(undo-outer-limit 999999999999999))
 
@@ -34,6 +35,7 @@
 (add-to-list 'load-path "~/.emacs.d/modules/appearance")
 (add-to-list 'load-path "~/.emacs.d/modules/completion")
 (add-to-list 'load-path "~/.emacs.d/modules/languages")
+(add-to-list 'load-path "~/.emacs.d/modules/languages/lsp")
 (add-to-list 'load-path "~/.emacs.d/modules/languages/python")
 (add-to-list 'load-path "~/.emacs.d/modules/languages/scala")
 (add-to-list 'load-path "~/.emacs.d/modules/languages/javascript")
@@ -46,6 +48,7 @@
 (load "core/core-init")
 (load "appearance/appearance-init")
 (load "completion/completion-init")
+(load "lsp/lsp-init")
 (load "python/python-init")
 (load "scala/scala-init")
 (load "javascript/frontend-init")
