@@ -35,10 +35,11 @@
  column-number-mode t
  scroll-error-top-bottom t
  ;; Show Parentheses!
- show-paren-mode t
  show-paren-delay 0.5
  use-package-always-ensure t
  sentence-end-double-space nil)
+
+(show-paren-mode)
 
 ;; buffer local variables
 (setq-default
