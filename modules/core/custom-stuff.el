@@ -142,7 +142,17 @@
 
 (defun is-linux ()
   "Check if OS is linux, return t if it is."
-  (string-equal system-type "gnu/linuxgnu/linux"))
+  (string-equal system-type "gnu/linux"))
+
+(defun is-wsl ()
+  "Check if OS is a WSL version of Linux, return t if it is."
+  (let ((wsl
+        (with-temp-buffer
+          (insert-file-contents "/proc/version")
+          (re-search-forward "Microsoft" nil t))))
+    (if wsl
+        t
+      nil)))
 
 ;; Getting rid of tool bar mode.
 (tool-bar-mode -1)
