@@ -1,6 +1,11 @@
 ;; SBT-Mode package
-(setq sbt:ansi-support t
-      sbt:prefer-nested-projects t)
+(use-package sbt-mode
+  :ensure t
+  :init
+  (setq
+   sbt:ansi-support t
+   sbt:prefer-nested-projects t)
+  )
 
 ;; Scala-Mode package
 ;; Enable scala-mode and sbt-mode

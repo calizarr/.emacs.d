@@ -17,3 +17,7 @@
   :bind (("C-c o" . ace-window)
          )
   )
+
+(use-package hydra
+  :ensure t)
+

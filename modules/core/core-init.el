@@ -24,10 +24,6 @@
 (load "help-conf.el")
 ;; Load String Manipulation Packages
 (load "string-manipulation.el")
-;; Load Indentation Mode Packages
-(load "indentation-conf.el")
-;; Load other editing conf files (YAML, etc)
-(load "editing-conf.el")
 ;; Load in treemacs
 (load "treemacs-conf.el")
 ;; Load syntax checking (flycheck)
@@ -36,3 +32,5 @@
 (load "./org-conf.el")
 ;; Load mobility conf / movement around buffers
 (load "./mobility-conf.el")
+;; Load other editing conf files (YAML, etc)
+(load "editing-conf.el")
