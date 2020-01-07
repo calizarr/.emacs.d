@@ -18,6 +18,9 @@
          )
   )
 
+(use-package pretty-hydra
+  :ensure t)
+
 (use-package hydra
   :ensure t)
 
