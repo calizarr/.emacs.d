@@ -5,9 +5,11 @@
          ("C-c C-r t" . lsp-describe-thing-at-point)
          (:map lsp-mode-map ("C-c C-l" . hydra-lsp/body))
          )
+  :commands (lsp lsp-deferred)
   :hook
-  (scala-mode . lsp)
-  (sh-mode .lsp)
+  (scala-mode . lsp-deferred)
+  (sh-mode .lsp-deferred)
+  (go-mode . lsp-deferred)
   :config (setq lsp-prefer-flymake nil)
   )
 
@@ -17,6 +19,7 @@
   :bind (("C-c C-v s" . lsp-ui-sideline-toggle-symbols-info)
          ("C-c C-v d" . lsp-ui-doc-mode)
          ("C-c M-i" . lsp-ui-imenu))
+  :commands lsp-ui-mode
   :config
   (setq lsp-ui-sideline-ignore-duplicate t
         lsp-ui-flycheck-enable t
