@@ -14,28 +14,32 @@
 
 (defun install-metals ()
   "This will install metals hopefully easily."
-  (let
+  (let*
       ;; Define the arguments to coursier
-      ((args (string-join '(
+      ((metals-path (convert-standard-filename (expand-file-name ".local/bin/metals-emacs" (getenv "HOME"))))
+       (metals-line (concat "-o " metals-path " -f"))
+       ;; When quoting a list of strings and you need a variable evaluated, use a backtick (`) quote
+       ;; and a comma (,) before the variable you want to evaluate
+       (args (string-join `(
                             "--java-opt \"-Xss4m\""
                             "--java-opt \"-Xms100m\""
                             "--java-opt \"-Dmetals.client=emacs\""
-                            "org.scalameta:metals_2.12:0.7.6"
+                            "org.scalameta:metals_2.12:0.8.0"
                             "-r bintray:scalacenter/releases"
                             "-r sonatype:snapshots"
-                            "-o /usr/local/bin/metals-emacs -f") " "))
+                            ,metals-line)
+                          " "))
        ;; The java command to run the coursier download (OS agnostic)
        (command "java -noverify -jar coursier bootstrap"))
     ;; Check if it already exists.
-    (if (not (file-exists-p "/usr/local/bin/metals-emacs"))
+    (if (not (file-exists-p metals-path))
         ;; Check if we're not in Windows
         (if (not-windows)
             (progn
-              (let ((default-directory "/sudo::"))
                 (shell-command (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier")))
                 (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
                 (shell-command (format "bash -c %s" (shell-quote-argument (concat command " " args))))
-                (shell-command (format "bash -c %s" (shell-quote-argument "rm coursier")))))
+                (shell-command (format "bash -c %s" (shell-quote-argument "rm coursier"))))
           ;; If we're in Windows we use Powershell
           (progn
             (shell-command (format "powershell %s" "curl -o coursier https://git.io/coursier"))
@@ -46,29 +50,29 @@
 
 (install-metals)
 
-(defvar lsp-mode--title "LSP Mode")
+;; (defvar lsp-mode--title "LSP Mode")
 
-(pretty-hydra-define hydra-lsp (:exit t :hint nil :title lsp-mode--title)
-  ("Buffer"
-   (("f" lsp-format-buffer "format")
-    ("m" lsp-ui-imenu "imenu")
-    ("x" lsp-execute-code-action "execute action"))
+;; (pretty-hydra-define hydra-lsp (:exit t :hint nil :title lsp-mode--title)
+;;   ("Buffer"
+;;    (("f" lsp-format-buffer "format")
+;;     ("m" lsp-ui-imenu "imenu")
+;;     ("x" lsp-execute-code-action "execute action"))
 
-   "Server"
-   (("M-s" lsp-describe-session "describe session")
-    ("M-r" lsp-restart-workspace "restart")
-    ("S" lsp-shutdown-workspace "shutdown"))
+;;    "Server"
+;;    (("M-s" lsp-describe-session "describe session")
+;;     ("M-r" lsp-restart-workspace "restart")
+;;     ("S" lsp-shutdown-workspace "shutdown"))
 
-   "Symbol"
-   (("d" lsp-find-declaration "declaration")
-    ("D" lsp-ui-peek-find-definitions "definition")
-    ("R" lsp-ui-peek-find-references "references")
-    ("i" lsp-ui-peek-find-implementation "implementation")
-    ("t" lsp-find-type-definition "type")
-    ("s" lsp-signature-help "signature")
-    ("o" lsp-describe-thing-at-point "documentation")
-    ("r" lsp-rename "rename"))
-   ))
+;;    "Symbol"
+;;    (("d" lsp-find-declaration "declaration")
+;;     ("D" lsp-ui-peek-find-definitions "definition")
+;;     ("R" lsp-ui-peek-find-references "references")
+;;     ("i" lsp-ui-peek-find-implementation "implementation")
+;;     ("t" lsp-find-type-definition "type")
+;;     ("s" lsp-signature-help "signature")
+;;     ("o" lsp-describe-thing-at-point "documentation")
+;;     ("r" lsp-rename "rename"))
+;;    ))
    
 
 ;; ;; Hydra for LSP-mode
