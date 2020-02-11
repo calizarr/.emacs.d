@@ -25,6 +25,7 @@
 ;;          It's platform specific in that it uses the platform's native path separator."
 ;;   (string-trim (shell-command-to-string (format "conda activate \"%s\"" env-dir))))
 
+
 (defun get-conda-root ()
   "Return the unstable _CONDA_ROOT env variable using the stable CONDA_EXE ENV variable."
   (file-name-directory (directory-file-name (file-name-directory (getenv "CONDA_EXE")))))
@@ -39,9 +40,9 @@
 (defun conda-add-env-postactivate-func ()
   "Add environment variables postactivation"
   (setenv "CONDA_SHLVL" "1")
-  (setenv "CONDA_PYTHON_EXE" (convert-standard-filename (subst-char-in-string ?/ ?\\ (concat (get-conda-root) "python.exe"))))
+  ;; (setenv "CONDA_PYTHON_EXE" (convert-standard-filename (subst-char-in-string ?/ ?\\ (concat (get-conda-root) "python.exe"))))
   (setenv "CONDA_PROMPT_MODIFIER" (format "%s%s%s" "(" conda-env-current-name ")"))
-  (setenv "CONDA_PREFIX" (convert-standard-filename (subst-char-in-string ?/ ?\\ (conda-env-location))))
+  ;; (setenv "CONDA_PREFIX" (convert-standard-filename (subst-char-in-string ?/ ?\\ (conda-env-current-dir))))
   (setenv "CONDA_DEFAULT_ENV" conda-env-current-name)
   (setq elpy-rpc-python-command (executable-find "pythonw.exe")))
 
@@ -55,6 +56,7 @@
 
 (if (is-windows)
     (use-package conda
+      :pin melpa
       :ensure t
       :init
       (setq conda-anaconda-home (get-conda-root)
