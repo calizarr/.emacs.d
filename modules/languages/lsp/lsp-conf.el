@@ -10,8 +10,7 @@
   (scala-mode . lsp-deferred)
   (sh-mode .lsp-deferred)
   (go-mode . lsp-deferred)
-  :config (setq lsp-prefer-flymake nil)
-  )
+  :config (setq lsp-prefer-flymake nil))
 
 (use-package lsp-ui
   :ensure t

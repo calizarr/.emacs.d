@@ -7,6 +7,16 @@
   )
 
 ;; Get a general yaml-mode that does not exist in emacs proper
+(use-package yafolding
+  :ensure t)
+
+(defvar yafolding-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<C-S-return>") #'yafolding-hide-parent-element)
+    (define-key map (kbd "<C-M-return>") #'yafolding-toggle-all)
+    (define-key map (kbd "<C-return>") #'yafolding-toggle-element)
+    map))
+
 (use-package yaml-mode
   :ensure t
   :hook (yaml-mode . yafolding-mode)
@@ -37,13 +47,3 @@
 ;; Add powershell-mode
 (use-package powershell
   :ensure t)
-
-(use-package yafolding
-  :ensure t)
-
-(defvar yafolding-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "<C-S-return>") #'yafolding-hide-parent-element)
-    (define-key map (kbd "<C-M-return>") #'yafolding-toggle-all)
-    (define-key map (kbd "<C-return>") #'yafolding-toggle-element)
-    map))
