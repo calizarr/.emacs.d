@@ -38,6 +38,11 @@
   ;;                               " --standalone --mathjax --highlight-style=pygments"))
   )
 
+;; grip-mode
+;; https://github.com/seagle0128/grip-mode
+(use-package grip-mode
+  :ensure t)
+
 ;; Pandoc Mode
 (use-package pandoc-mode
   :ensure t
