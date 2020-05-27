@@ -3,13 +3,14 @@
   :pin melpa
   :bind (("C-c C-v t" . lsp-describe-type-at-point)
          ("C-c C-r t" . lsp-describe-thing-at-point)
-         (:map lsp-mode-map ("C-c C-l" . hydra-lsp/body))
+         ;; (:map lsp-mode-map ("C-c C-l" . hydra-lsp/body))
          )
-  :commands (lsp lsp-deferred)
   :hook
   (scala-mode . lsp-deferred)
   (sh-mode .lsp-deferred)
   (go-mode . lsp-deferred)
+  (terraform-mode . lsp-deferred)
+  :commands (lsp lsp-deferred)
   :config (setq lsp-prefer-flymake nil))
 
 (use-package lsp-ui
@@ -28,12 +29,23 @@
 ;; (setq lsp-print-io t)
 
 (use-package helm-lsp
-  :ensure t)
+  :ensure t
+  :commands helm-lsp-workspace-symbol)
 
 (use-package company-lsp
   :ensure t
+  :pin melpa)
+
+(use-package lsp-treemacs
+  :ensure t
+  :commands lsp-treemacs-errors-list
   :pin melpa
-  )
+  :defer t
+  :after treemacs lsp-mode lsp-ui company-lsp)
+
+(use-package which-key
+  :config
+  (which-key-mode))
 
 ;; (push 'company-lsp company-backends)
 

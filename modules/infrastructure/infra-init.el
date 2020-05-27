@@ -11,8 +11,15 @@
   :ensure t
   :init
   (setq groovy-indent-offset 2))
+
 ;; Load Terraform Mode
 (use-package terraform-mode
-  :ensure t)
+  :ensure t
+  :pin melpa
+  :mode "\\.\\(tf\\|tfvars\\)"
+  :hook
+  (terraform-mode . yas-minor-mode)
+  )
+
 (use-package company-terraform
   :ensure t)
