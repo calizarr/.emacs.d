@@ -24,7 +24,7 @@
                             "--java-opt \"-Xss4m\""
                             "--java-opt \"-Xms100m\""
                             "--java-opt \"-Dmetals.client=emacs\""
-                            "org.scalameta:metals_2.12:0.9.0"
+                            "org.scalameta:metals_2.12:0.9.2"
                             "-r bintray:scalacenter/releases"
                             "-r sonatype:snapshots"
                             ,metals-line)
@@ -32,14 +32,16 @@
        ;; The java command to run the coursier download (OS agnostic)
        (command "java -noverify -jar coursier bootstrap"))
     ;; Check if it already exists.
+    (message (format "The metals-path is:\n %s" metals-path))
     (if (not (file-exists-p metals-path))
         ;; Check if we're not in Windows
         (if (not-windows)
             (progn
-                (shell-command (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier")))
-                (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
-                (shell-command (format "bash -c %s" (shell-quote-argument (concat command " " args))))
-                (shell-command (format "bash -c %s" (shell-quote-argument "rm coursier"))))
+              (message (format "The command that will be used:\n %s" (concat command " " args)))
+              (shell-command (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier")))
+              (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
+              (shell-command (format "bash -c %s" (shell-quote-argument (concat command " " args))))
+              (shell-command (format "bash -c %s" (shell-quote-argument "rm coursier"))))
           ;; If we're in Windows we use Powershell
           (progn
             (shell-command (format "powershell %s" "curl -o coursier https://git.io/coursier"))

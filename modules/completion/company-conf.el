@@ -15,18 +15,22 @@
   (define-key company-active-map (kbd "TAB") nil))
 
 (use-package company-quickhelp
-  :ensure)
+  :ensure t)
 
 (use-package company-jedi
-  :ensure)
+  :ensure t)
 
 (use-package helm-company
-  :ensure)
+  :ensure t)
+
+(use-package company-restclient
+  :ensure t)
 
 (add-hook 'after-init-hook 'global-company-mode)
 ;; Basic usage.
 (with-eval-after-load 'company
-  (add-to-list 'company-backends 'company-jedi))
+  (add-to-list 'company-backends 'company-jedi)
+  (add-to-list 'company-backends 'company-restclient))
 ;; Advanced usage.
 ;; (add-to-list 'company-backends '(company-jedi company-files))
 

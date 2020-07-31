@@ -11,7 +11,13 @@
   (go-mode . lsp-deferred)
   (terraform-mode . lsp-deferred)
   :commands (lsp lsp-deferred)
-  :config (setq lsp-prefer-flymake nil))
+  :config (setq lsp-prefer-flymake nil
+                lsp-modeline-diagnostics-scope :project
+                lsp-headerline-breadcrumb-enable t
+                lsp-headerline-breadcrumb-enable-symbol-numbers t))
+
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
 (use-package lsp-ui
   :ensure t
@@ -32,9 +38,9 @@
   :ensure t
   :commands helm-lsp-workspace-symbol)
 
-(use-package company-lsp
-  :ensure t
-  :pin melpa)
+;; (use-package company-lsp
+;;   :ensure t
+;;   :pin melpa)
 
 (use-package lsp-treemacs
   :ensure t
@@ -42,6 +48,8 @@
   :pin melpa
   :defer t
   :after treemacs lsp-mode lsp-ui company-lsp)
+
+(use-package lsp-metals)
 
 (use-package which-key
   :config
