@@ -52,3 +52,16 @@
 ;; Add powershell-mode
 (use-package powershell
   :ensure t)
+
+;; Giving Windows (Hyper, Alt, and Super) keys
+;; See: https://stackoverflow.com/questions/27418756/is-it-possible-to-make-emacs-interpet-an-fn-key-as-a-modifier-key/27419718#27419718
+;; See: C-x @ C-h
+;; See: C-h i g (elisp) Translation Keymaps RET
+(if (is-windows)
+    (progn
+      (define-key local-function-key-map (kbd "<f13>") 'event-apply-super-modifier)
+      (define-key local-function-key-map (kbd "<f14>") 'event-apply-hyper-modifier)
+      (define-key local-function-key-map (kbd "<f15>") 'event-apply-alt-modifier)
+      (setq w32-lwindow-modifier 'super)
+      (w32-register-hot-key [s-])
+      (setq w32-apps-modifier 'hyper)))
