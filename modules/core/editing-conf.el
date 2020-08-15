@@ -64,5 +64,6 @@
       (define-key local-function-key-map (kbd "<f14>") 'event-apply-hyper-modifier)
       (define-key local-function-key-map (kbd "<f15>") 'event-apply-alt-modifier)
       (setq w32-lwindow-modifier 'super)
+      (setq w32-rwindow-modifier nil)
       (w32-register-hot-key [s-])
       (setq w32-apps-modifier 'hyper)))
