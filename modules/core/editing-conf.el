@@ -67,3 +67,9 @@
       (setq w32-rwindow-modifier nil)
       (w32-register-hot-key [s-])
       (setq w32-apps-modifier 'hyper)))
+
+;; Autohotkey Mode
+(if (is-windows)
+    (use-package ahk-mode
+      :ensure t
+      :pin melpa-stable))
