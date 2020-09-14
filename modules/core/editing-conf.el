@@ -72,4 +72,5 @@
 (if (is-windows)
     (use-package ahk-mode
       :ensure t
-      :pin melpa-stable))
+      :pin melpa-stable
+      :config (setq ahk-indentation 2)))
