@@ -14,10 +14,15 @@
   (add-hook 'eshell-mode-hook 'helm-eshell-hist)
   )
 
-(use-package fish-mode
-  :ensure)
-
 ;; Remove shell command echo
 (defun my-comint-init ()
   (setq comint-process-echoes t))
 (add-hook 'comint-mode-hook 'my-comint-init)
+
+;; Add exec-path-from-shell for OSX
+
+(when (memq window-system '(mac ns x))
+  (use-package exec-path-from-shell
+    :ensure t
+    :pin melpa-stable
+    :commands exec-path-from-shell-initialize))
