@@ -1,5 +1,8 @@
 (setq js-indent-level 2)
 
+(use-package json-navigator
+  :ensure t)
+
 ;; (use-package js2-mode)
 
 ;; (add-hook 'js2-mode-hook #'js2-imenu-extras-mode)
@@ -23,3 +26,4 @@
 ;; (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 
 ;; (use-package indium)
+

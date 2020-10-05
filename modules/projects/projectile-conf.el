@@ -1,14 +1,16 @@
 ;; Projectile Configurations
 (use-package projectile
   :demand
-  :init (setq projectile-use-git-grep t)
+  :init (setq projectile-use-git-grep t
+              ;; Opens project root when using projectile-switch-project (C-c p p)
+              projectile-switch-project-action #'projectile-dired)
   :config (projectile-mode)
   :bind (("s-f" . projectile-find-file)
-         ("s-F" . projectile-grep)))
-
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-(define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+         ("s-F" . projectile-grep))
+  :config
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 
 (defun projectile-discover-projects-in-directory (directory)
@@ -29,9 +31,10 @@ at the top level of DIRECTORY."
      subdirs)))
 
 
-
 (use-package helm-projectile
   :demand
+  :requires helm projectile
+  :after helm projectile
   :ensure t
   :config (helm-projectile-on)
   )
@@ -64,6 +67,3 @@ at the top level of DIRECTORY."
 
 (push "*.mypy_cache" projectile-globally-ignored-directories)
 (push "*.bloop" projectile-globally-ignored-directories)
-
-;; Opens project root when using projectile-switch-project (C-c p p)
-(setq projectile-switch-project-action #'projectile-dired)

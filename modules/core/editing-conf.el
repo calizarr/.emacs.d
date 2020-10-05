@@ -49,6 +49,9 @@
   :config
   (add-hook 'markdown-mode-hook 'pandoc-mode))
 
+;; TODO: Add json parsing modes / navigators etc.
+
+
 ;; Add powershell-mode
 (use-package powershell
   :ensure t)
@@ -74,3 +77,4 @@
       :ensure t
       :pin melpa-stable
       :config (setq ahk-indentation 2)))
+

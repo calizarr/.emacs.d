@@ -12,31 +12,35 @@
   :config
   ;; ;; disables TAB in company-mode, freeing it for yasnippet
   (define-key company-active-map [tab] nil)
-  (define-key company-active-map (kbd "TAB") nil))
+  (define-key company-active-map (kbd "TAB") nil)
+  (add-to-list 'company-backends '(company-jedi company-restclient))
+  (add-to-list 'company-backends 'company-restclient))
 
 (use-package company-quickhelp
-  :ensure t)
+  :ensure t
+  :requires company
+  :after company
+  :config
+  (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 (use-package company-jedi
-  :ensure t)
+  :ensure t
+  :requires company)
 
 (use-package helm-company
-  :ensure t)
+  :ensure t
+  :defer t
+  :requires helm company
+  :after helm company
+  :init
+  ;; Not necessary if using ELPA package
+  (autoload 'helm-company "helm-company")
+  :config
+  (define-key company-mode-map (kbd "C-:") 'helm-company)
+  (define-key company-active-map (kbd "C-:") 'helm-company))
 
 (use-package company-restclient
   :ensure t)
-
-(add-hook 'after-init-hook 'global-company-mode)
-;; Basic usage.
-(with-eval-after-load 'company
-  (add-to-list 'company-backends 'company-jedi)
-  (add-to-list 'company-backends 'company-restclient))
-;; Advanced usage.
-;; (add-to-list 'company-backends '(company-jedi company-files))
-
-(company-quickhelp-mode 1)
-(eval-after-load 'company
-  '(define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; Color company theme for dark background
 
@@ -50,8 +54,3 @@
 ;;    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
 ;;    `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
 
-(autoload 'helm-company "helm-company") ;; Not necessary if using ELPA package
-(eval-after-load 'company
-  '(progn
-     (define-key company-mode-map (kbd "C-:") 'helm-company)
-     (define-key company-active-map (kbd "C-:") 'helm-company)))

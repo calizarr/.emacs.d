@@ -3,6 +3,7 @@
   :pin melpa
   :bind (("C-c C-v t" . lsp-describe-type-at-point)
          ("C-c C-r t" . lsp-describe-thing-at-point)
+         ("C-c C-l" . lsp)
          ;; (:map lsp-mode-map ("C-c C-l" . hydra-lsp/body))
          )
   :hook
@@ -10,6 +11,7 @@
   (sh-mode .lsp-deferred)
   (go-mode . lsp-deferred)
   (terraform-mode . lsp-deferred)
+  (lsp-mode . lsp-lens-mode)
   :commands (lsp lsp-deferred)
   :config (setq lsp-prefer-flymake nil
                 lsp-modeline-diagnostics-scope :project
@@ -36,6 +38,8 @@
 
 (use-package helm-lsp
   :ensure t
+  :requires helm
+  :after helm
   :commands helm-lsp-workspace-symbol)
 
 ;; (use-package company-lsp
@@ -49,7 +53,8 @@
   :defer t
   :after treemacs lsp-mode lsp-ui company-lsp)
 
-(use-package lsp-metals)
+(use-package lsp-metals
+  :config (setq lsp-metals-treeview-show-when-views-received t))
 
 (use-package which-key
   :config
@@ -70,3 +75,25 @@
 
 ;; Bash LSP Settings
 ;; https://github.com/mads-hartmann/bash-language-server#emacs
+;; (setq lsp-bash-highlight-parsing-errors t)
+
+;; Use the Debug Adapter Protocol for running tests and debugging
+(use-package posframe
+  ;; Posframe is a pop-up tool that must be manually installed for dap-mode
+  )
+(use-package dap-mode
+  :hook
+  (lsp-mode . dap-mode)
+  (lsp-mode . dap-ui-mode)
+  )
+
+;; LSP Yaml mode
+(setq lsp-yaml-schemas (make-hash-table)
+      lsp-yaml-schema-store-enable t
+      lsp-yaml-schema-store-uri "https://www.schemastore.org/api/json/catalog.json")
+
+;; Filling the schemas in
+(puthash "kubernetes" "/*.yaml" lsp-yaml-schemas)
+
+
+;;

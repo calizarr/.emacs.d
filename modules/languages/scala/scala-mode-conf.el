@@ -14,13 +14,16 @@
    'minibuffer-complete-word
    'self-insert-command
    minibuffer-local-completion-map)
+  ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
   (setq sbt:program-options '("-Dsbt.supershell=false"))
   )
 
 ;; Scala-Mode package
 ;; Enable scala-mode and sbt-mode
 (use-package scala-mode
-  :mode "\\.s\\(cala\\|bt\\)$"
+  :interpreter
+    ("scala" . scala-mode)
+  :mode "\\.s\\(cala\\|sc\\|bt\\)$"
   :hook ((scala-mode . show-paren-mode)
          (scala-mode . smartparens-mode)
          (scala-mode . yas-minor-mode)
@@ -29,6 +32,10 @@
          )
   )
 
+;; Adding .sc files to scala mode
+;; (add-to-list 'auto-mode-alist '("\\.\\(scala\\|sc\\|sbt\\)\\'" . scala-mode))
+
+;; TODO: Replace highlight-symbol with a different package
 (use-package highlight-symbol
   :diminish highlight-symbol-mode
   :commands highlight-symbol
@@ -55,16 +62,3 @@
   (sp-restrict-to-pairs-interactive "{([" sym))
 
 (bind-key "s-{" 'sp-rewrap-sexp smartparens-mode-map)
-
-;; Hooks for scala-mode
-;; (add-hook 'scala-mode-hook
-;;           (lambda ()
-;;             (show-paren-mode)
-;;             (smartparens-mode)
-;;             (yas-minor-mode)
-;;             (company-mode)
-;;             (scala-mode:goto-start-of-code)
-;;              ))
-
-;; Adding .sc files to scala mode
-(add-to-list 'auto-mode-alist '("\\.\\(scala\\|sc\\|sbt\\)\\'" . scala-mode))
