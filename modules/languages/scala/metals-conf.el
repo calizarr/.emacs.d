@@ -14,6 +14,7 @@
 
 (defun install-metals ()
   "This will install metals hopefully easily."
+  (with-output-to-temp-buffer "*install-metals*"
   (let*
       ;; Define the arguments to coursier
       ((metals-path (convert-standard-filename (expand-file-name ".local/bin/metals-emacs" (getenv "HOME"))))
@@ -32,15 +33,15 @@
        ;; The java command to run the coursier download (OS agnostic)
        (command "java -noverify -jar coursier bootstrap"))
     ;; Check if it already exists.
-    (message (format "The metals-path is:\n %s" metals-path))
+    (princ (format "The metals-path is: %s\n" metals-path))
     (if (not (file-exists-p metals-path))
         ;; Check if we're not in Windows
         (if (not-windows)
             (progn
-              (message (format "The command that will be used:\n %s" (concat command " " args)))
-              (shell-command (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier-cli")))
+              (princ (format "The command that will be used:\n %s\n" (concat command " " args)))
+              (princ (shell-command-to-string (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier-cli"))))
               (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
-              (shell-command (format "bash -c %s" (shell-quote-argument (concat command " " args))))
+              (princ (shell-command-to-string (format "bash -c %s" (shell-quote-argument (concat command " " args)))))
               (shell-command (format "bash -c %s" (shell-quote-argument "rm coursier"))))
           ;; If we're in Windows we use Powershell
           (progn
@@ -48,7 +49,8 @@
             (shell-command (concat command " " args))
             (shell-command (format "powershell %s" "rm coursier"))))
       ;; Otherwise, we don't do anything if it already exists
-      (message "metals-emacs binary already exists"))))
+      (princ "metals-emacs binary already exists")))
+  (pop-to-buffer "*install-metals*")))
 
 (install-metals)
 
