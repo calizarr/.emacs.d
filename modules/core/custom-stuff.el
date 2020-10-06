@@ -169,8 +169,26 @@
 (global-set-key (kbd "C-c C-b") 'eval-buffer)
 
 (defvar buffer-local-ignores
-  '(buffer-undo-list mark-ring rm--help-echo imenu-generic-expression font-lock-keywords company-last-metadata)
-  )
+  '(
+    buffer-undo-list
+    company-last-metadata
+    font-lock-keywords
+    imenu-generic-expression
+    lsp--buffer-workspaces
+    lsp--document-symbols
+    lsp-headerline--path-up-to-project-string
+    lsp-headerline--string
+    lsp-lens--refresh-timer
+    lsp-ui-doc--timer
+    lsp-ui-doc--timer-mouse-movement
+    lsp-ui-sideline--timer
+    mark-ring
+    rm--help-echo
+    sml/buffer-identification
+    sml/buffer-identification-filling
+    spinner-current
+    vc-mode
+    ))
 
 ;; Reveal all the buffer local variables
 (defun buffer-locals (&optional buffer-name)
