@@ -167,3 +167,21 @@
 
 ;; Global eval buffer
 (global-set-key (kbd "C-c C-b") 'eval-buffer)
+
+(defvar buffer-local-ignores
+  '(buffer-undo-list mark-ring rm--help-echo imenu-generic-expression font-lock-keywords company-last-metadata)
+  )
+
+;; Reveal all the buffer local variables
+(defun buffer-locals (&optional buffer-name)
+  "Will reveal the BUFFER-NAME local variables like Aladdin in a Whole New World."
+  (interactive "b")
+  (let* ((buffer (get-buffer buffer-name))
+         (alist-o-vars (buffer-local-variables buffer))
+         (excluded-buffers (lambda (elem)
+                             (memq (car elem) buffer-local-ignores))))
+    (with-help-window (format "*BFL %s" buffer-name)
+      (pp
+       (-remove excluded-buffers alist-o-vars)))))
+
+;; FOOTER

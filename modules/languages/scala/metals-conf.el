@@ -14,42 +14,29 @@
 
 (defun install-metals ()
   "This will install metals hopefully easily."
-  (with-output-to-temp-buffer "*install-metals*"
   (let*
       ;; Define the arguments to coursier
       ((metals-path (convert-standard-filename (expand-file-name ".local/bin/metals-emacs" (getenv "HOME"))))
        (metals-line (concat "-o " metals-path " -f"))
+       (metals-version "0.9.4")
+       (coursier-download "curl -L -o coursier https://git.io/coursier-cli")
        ;; When quoting a list of strings and you need a variable evaluated, use a backtick (`) quote
        ;; and a comma (,) before the variable you want to evaluate
        (args (string-join `(
                             "--java-opt \"-Xss4m\""
                             "--java-opt \"-Xms100m\""
                             "--java-opt \"-Dmetals.client=emacs\""
-                            "org.scalameta:metals_2.12:0.9.4"
+                            ,(format "org.scalameta:metals_2.12:%s" metals-version)
                             "-r bintray:scalacenter/releases"
                             "-r sonatype:snapshots"
                             ,metals-line)
                           " "))
        ;; The java command to run the coursier download (OS agnostic)
-       (command "java -noverify -jar coursier bootstrap"))
+       (command "java -noverify -jar coursier bootstrap")
+       (metals-download (concat command " " args)))
     ;; Check if it already exists.
-    (princ (format "The metals-path is: %s\n" metals-path))
     (if (not (file-exists-p metals-path))
-        ;; Check if we're not in Windows
-        (if (not-windows)
-            (progn
-              (princ (format "The command that will be used:\n %s\n" (concat command " " args)))
-              (princ (shell-command-to-string (format "bash -c %s" (shell-quote-argument "curl -L -o coursier https://git.io/coursier-cli"))))
-              (shell-command (format "bash -c %s" (shell-quote-argument "chmod +x coursier")))
-              (princ (shell-command-to-string (format "bash -c %s" (shell-quote-argument (concat command " " args)))))
-              (shell-command (format "bash -c %s" (shell-quote-argument "rm coursier"))))
-          ;; If we're in Windows we use Powershell
-          (progn
-            (shell-command (format "powershell %s" "curl -o coursier https://git.io/coursier-cli"))
-            (shell-command (concat command " " args))
-            (shell-command (format "powershell %s" "rm coursier"))))
-      ;; Otherwise, we don't do anything if it already exists
-      (princ "metals-emacs binary already exists")))
-  (pop-to-buffer "*install-metals*")))
+        (compile (string-join (list coursier-download metals-download "rm coursier") " && "))
+      (message "Metals - metals-emacs binary already exists"))))
 
 (install-metals)
