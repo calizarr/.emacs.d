@@ -95,7 +95,7 @@
 ;; Filling the schemas in
 (puthash "https://json.schemastore.org/kustomization" "/kustomization.yaml" lsp-yaml-schemas)
 ;; (puthash "kubernetes" "/*-k8s.yaml" lsp-yaml-schemas)
-;; (puthash "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.15.7-standalone-strict/all.json" "/*-k8s.yaml" lsp-yaml-schemas)
+(puthash "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.15.7-standalone-strict/all.json" "/*-k8s.yaml" lsp-yaml-schemas)
 
 (defvar ylsp-modeline "# yaml-language-server: $schema=")
 
@@ -124,4 +124,13 @@
   (interactive "MUrl that contains the schema: ")
   (let ((modeline (concat ylsp-modeline url)))
     (ylsp-operations modeline)))
+
+(defun ylsp-ext-change ()
+  (interactive)
+  (async-shell-command "fd -e yaml -p -j1 -x bash -c 'old_name=\"{}\" new_name=$(echo $old_name | sed \"s/.yaml/-k8s.yaml/\") && git mv $old_name $new_name'"))
+
+(defun ylsp-ext-change-back ()
+  (interactive)
+  (async-shell-command "fd -e yaml -p -j1 -x bash -c 'old_name=\"{}\" new_name=$(echo $old_name | sed \"s/-k8s.yaml/.yaml/\") && git mv $old_name $new_name'"))
+
 ;;
