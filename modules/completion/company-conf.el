@@ -1,4 +1,5 @@
 (use-package company
+  :ensure t
   :diminish company-mode
   :commands company-mode
   :init
@@ -13,33 +14,36 @@
   ;; ;; disables TAB in company-mode, freeing it for yasnippet
   (define-key company-active-map [tab] nil)
   (define-key company-active-map (kbd "TAB") nil)
-  (add-to-list 'company-backends '(company-jedi company-restclient))
-  (add-to-list 'company-backends 'company-restclient))
+  (add-to-list 'company-backends '(company-jedi company-restclient)))
 
 (use-package company-quickhelp
   :ensure t
   :requires company
   :after company
-  :config
-  (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
+  :init (add-hook 'company-mode-hook 'company-quickhelp-mode))
+
 
 (use-package company-jedi
   :ensure t
   :requires company)
 
-(use-package helm-company
-  :ensure t
-  :defer t
-  :requires helm company
-  :after helm company
-  :init
-  ;; Not necessary if using ELPA package
-  (autoload 'helm-company "helm-company")
-  (define-key company-mode-map (kbd "C-:") 'helm-company)
-  (define-key company-active-map (kbd "C-:") 'helm-company))
+;; (use-package helm-company
+;;   :ensure t
+;;   :defer t
+;;   :requires helm company
+;;   :after helm company
+;;   :init
+;;   ;; Not necessary if using ELPA package
+;;   (autoload 'helm-company "helm-company"))
+
 
 (use-package company-restclient
   :ensure t)
+
+(with-eval-after-load 'company
+  ;; (define-key company-mode-map (kbd "C-:") 'helm-company)
+  ;; (define-key company-active-map (kbd "C-:") 'helm-company)
+  (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; Color company theme for dark background
 

@@ -93,7 +93,40 @@
       lsp-yaml-schema-store-uri "https://www.schemastore.org/api/json/catalog.json")
 
 ;; Filling the schemas in
-(puthash "kubernetes" "/*.yaml" lsp-yaml-schemas)
+(puthash "https://json.schemastore.org/kustomization" "/kustomization.yaml" lsp-yaml-schemas)
+;; (puthash "kubernetes" "/*-k8s.yaml" lsp-yaml-schemas)
+;; (puthash "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.15.7-standalone-strict/all.json" "/*-k8s.yaml" lsp-yaml-schemas)
 
+(defvar ylsp-modeline "# yaml-language-server: $schema=")
 
+(defun ylsp-kustomize-modeline ()
+  "Inserts kustomization modeline at top of buffer"
+  (interactive)
+  (let ((modeline (concat ylsp-modeline "https://json.schemastore.org/kustomization\n")))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (insert modeline "\n")))))
+
+(defun ylsp-k8s-modeline (name version)
+  "Inserts the kubernetes modeline at the top of the buffer"
+  (interactive "MName of k8s Kind: ")
+  (let* ((url "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.15.7-standalone-strict/")
+        (modeline (concat ylsp-modeline url name)))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (insert modeline "\n")))))
+
+(defun ylsp-generic-modeline (url)
+  "Inserts a yaml schema modeline using url"
+  (interactive "MUrl that contains the schema: ")
+  (let ((modeline (concat ylsp-modeline url)))
+    (save-excursion
+      (save-restriction
+        (widen)
+        (goto-char (point-min))
+        (insert modeline "\n")))))    
 ;;
