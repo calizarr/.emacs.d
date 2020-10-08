@@ -10,16 +10,26 @@
    company-idle-delay 0
    company-minimum-prefix-length 2)
   (add-hook 'after-init-hook 'global-company-mode)
+
   :config
   ;; ;; disables TAB in company-mode, freeing it for yasnippet
   (define-key company-active-map [tab] nil)
   (define-key company-active-map (kbd "TAB") nil)
-  (add-to-list 'company-backends '(company-jedi company-restclient)))
+  (add-to-list 'company-backends '(company-jedi company-restclient))
+  :bind (:map company-mode-map
+              ("C-'" . #'company-complete)
+              ("C-:" . #'helm-company)
+         :map company-active-map
+               ("C-'" . #'company-complete)
+               ("C-:" . #'helm-company)))
 
 (use-package company-quickhelp
   :ensure t
   :requires company
   :after company
+  :commands (company-quickhelp-manual-begin)
+  :bind (:map company-active-map
+              ("C-c h" . #'company-quickhelp-manual-begin))
   :init (add-hook 'company-mode-hook 'company-quickhelp-mode))
 
 
@@ -27,23 +37,18 @@
   :ensure t
   :requires company)
 
-;; (use-package helm-company
-;;   :ensure t
-;;   :defer t
-;;   :requires helm company
-;;   :after helm company
-;;   :init
-;;   ;; Not necessary if using ELPA package
-;;   (autoload 'helm-company "helm-company"))
+(use-package helm-company
+  :ensure t
+  :defer t
+  :requires helm company
+  :after helm company
+  :init
+  ;; Not necessary if using ELPA package
+  (autoload 'helm-company "helm-company"))
 
 
 (use-package company-restclient
   :ensure t)
-
-(with-eval-after-load 'company
-  ;; (define-key company-mode-map (kbd "C-:") 'helm-company)
-  ;; (define-key company-active-map (kbd "C-:") 'helm-company)
-  (define-key company-active-map (kbd "C-c h") #'company-quickhelp-manual-begin))
 
 ;; Color company theme for dark background
 
@@ -56,4 +61,3 @@
 ;;    `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
 ;;    `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
 ;;    `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
-

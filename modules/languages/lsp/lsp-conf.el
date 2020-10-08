@@ -94,8 +94,8 @@
 
 ;; Filling the schemas in
 (puthash "https://json.schemastore.org/kustomization" "/kustomization.yaml" lsp-yaml-schemas)
-;; (puthash "kubernetes" "/*-k8s.yaml" lsp-yaml-schemas)
-(puthash "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.15.7-standalone-strict/all.json" "/*-k8s.yaml" lsp-yaml-schemas)
+(puthash "kubernetes" "/*-k8s.yaml" lsp-yaml-schemas)
+;; (puthash "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.15.7-standalone-strict/all.json" "/*-k8s.yaml" lsp-yaml-schemas)
 
 (defvar ylsp-modeline "# yaml-language-server: $schema=")
 
@@ -112,7 +112,7 @@
   (let ((modeline (concat ylsp-modeline "https://json.schemastore.org/kustomization\n")))
     (ylsp-operations modeline)))
 
-(defun ylsp-k8s-modeline (name version)
+(defun ylsp-k8s-modeline (name)
   "Inserts the kubernetes modeline at the top of the buffer"
   (interactive "MName of k8s Kind: ")
   (let* ((url "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.15.7-standalone-strict/")
@@ -134,3 +134,4 @@
   (async-shell-command "fd -e yaml -p -j1 -x bash -c 'old_name=\"{}\" new_name=$(echo $old_name | sed \"s/-k8s.yaml/.yaml/\") && git mv $old_name $new_name'"))
 
 ;;
+
