@@ -1,34 +1,33 @@
 ;; Projectile Configurations
 (use-package projectile
   :demand
+  :ensure t
   :init (setq projectile-use-git-grep t
               ;; Opens project root when using projectile-switch-project (C-c p p)
               projectile-switch-project-action #'projectile-dired)
-  :config (projectile-mode)
-  :bind (("s-f" . projectile-find-file)
-         ("s-F" . projectile-grep))
+  :bind (("s-f" . projectile-find-file))
   :config
   (projectile-mode +1)
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
 
-(defun projectile-discover-projects-in-directory (directory)
-  "Discover any projects in DIRECTORY and add them to the projectile cache.
-This function is not recursive and only adds projects with roots
-at the top level of DIRECTORY."
-  (interactive
-   (list (read-directory-name "Starting directory: ")))
-  (let ((subdirs (directory-files directory t)))
-    (mapcar
-     (lambda (dir)
-       (when (and (file-directory-p dir)
-                  (not (member (file-name-nondirectory dir) '(".." "."))))
-         (let ((default-directory dir)
-               (projectile-cached-project-root dir))
-           (when (projectile-project-p)
-             (projectile-add-known-project (projectile-project-root))))))
-     subdirs)))
+;; (defun projectile-discover-projects-in-directory (directory)
+;;   "Discover any projects in DIRECTORY and add them to the projectile cache.
+;; This function is not recursive and only adds projects with roots
+;; at the top level of DIRECTORY."
+;;   (interactive
+;;    (list (read-directory-name "Starting directory: ")))
+;;   (let ((subdirs (directory-files directory t)))
+;;     (mapcar
+;;      (lambda (dir)
+;;        (when (and (file-directory-p dir)
+;;                   (not (member (file-name-nondirectory dir) '(".." "."))))
+;;          (let ((default-directory dir)
+;;                (projectile-cached-project-root dir))
+;;            (when (projectile-project-p)
+;;              (projectile-add-known-project (projectile-project-root))))))
+;;      subdirs)))
 
 
 (use-package helm-projectile
@@ -36,8 +35,8 @@ at the top level of DIRECTORY."
   :requires helm projectile
   :after helm projectile
   :ensure t
-  :config (helm-projectile-on)
-  )
+  :bind (("s-F" . helm-projectile-rg))
+  :config (helm-projectile-on))
 
 ;; Needed to use `.projectile` ignores or the globally ignored section above
 (defun projectile-setup-indexing ()
@@ -46,18 +45,18 @@ at the top level of DIRECTORY."
   (if (not-windows)
       (progn
         (setq projectile-indexing-method 'hybrid
-              projectile-enable-caching t)
+              projectile-enable-caching t
         (message
-         (format "Projectile indexing is now: %s and is caching enabled: %s" projectile-indexing-method projectile-enable-caching)))
+         (format "Projectile indexing is now: %s and caching is: %s" projectile-indexing-method projectile-enable-caching)))
     ;; If Windows has fd and tr, use them
     (if (and (is-windows) (locate-file "fd" exec-path exec-suffixes 1) (locate-file "tr" exec-path exec-suffixes 1))
         (progn
           (setq projectile-indexing-method 'alien
                 projectile-enable-caching nil
-                projectile-git-command "fd . -0 --color never"
-                projectile-generic-command "fd . -0 --color never")
+                projectile-git-command "fd . -0 --type f --color=never"
+                projectile-generic-command "fd . -0 --type f --color=never")
           (message
-           (format "Projectile indexing is now: %s and is caching enabled: %s" projectile-indexing-method projectile-enable-caching))
+           (format "Projectile indexing is now: %s and caching is: %s" projectile-indexing-method projectile-enable-caching))
           (message "fd is being used for git and generic commands"))
       ;; If it doesn't use the painfully slow native indexing
       (setq projectile-indexing-method 'native

@@ -101,6 +101,12 @@
   sp-local-pair
   :init
   (setq sp-interactive-dwim t)
+  :bind (:map smartparens-mode-map
+              ("M-<right>" . #'sp-backward-slurp-sexp)
+              ("C-<right>" . #'sp-forward-slurp-sexp)
+              ("M-<left>" . #'sp-backward-barf-sexp)
+              ("C-<left>" . #'sp-forward-barf-sexp)
+              )
   :config
   (require 'smartparens-config)
   (sp-use-smartparens-bindings)
@@ -110,8 +116,9 @@
   (sp-pair "{" "}" :wrap "C-{")
 
   ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/543
-  (bind-key "C-<left>" nil smartparens-mode-map)
-  (bind-key "C-<right>" nil smartparens-mode-map)
+  ;; Ensime / Fommil bindings
+  ;; (bind-key "C-<left>" nil smartparens-mode-map)
+  ;; (bind-key "C-<right>" nil smartparens-mode-map)
 
   (bind-key "s-<delete>" 'sp-kill-sexp smartparens-mode-map)
   (bind-key "s-<backspace>" 'sp-backward-kill-sexp smartparens-mode-map))
@@ -125,6 +132,7 @@
 
 ;; Add a beacon!
 (use-package beacon
+  ;; :disabled
   :demand
   :ensure t
   :config (beacon-mode 1))

@@ -49,9 +49,9 @@
   :bind (("C-." . goto-last-change)
          ("C-," . goto-last-change-reverse)))
 
-(use-package popup-imenu
-  :commands popup-imenu
-  :bind ("M-i" . popup-imenu))
+;; (use-package popup-imenu
+;;   :commands popup-imenu
+;;   :bind ("M-i" . popup-imenu))
 
 ;; Smartparens settings for scala-mode
 (sp-local-pair 'scala-mode "(" nil :post-handlers '(("||\n[i]" "RET")))

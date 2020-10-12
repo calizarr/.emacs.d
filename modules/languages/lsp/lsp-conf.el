@@ -56,8 +56,10 @@
 (use-package lsp-metals
   :config (setq lsp-metals-treeview-show-when-views-received t))
 
+;; TODO: Add hydra/transient to which-key itself
 (use-package which-key
-  :config
+  :ensure t
+  :init
   (which-key-mode))
 
 ;; (push 'company-lsp company-backends)

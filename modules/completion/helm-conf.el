@@ -12,8 +12,8 @@
          ("M-i" . helm-semantic-or-imenu)
          )
   :init
-  (setq helm-mode-fuzzy-match nil
-        helm-completion-in-region-fuzzy-match nil
+  (setq helm-mode-fuzzy-match t
+        helm-completion-in-region-fuzzy-match t
         helm-split-window-inside-p t
         helm-display-line-numbers-mode t
         )

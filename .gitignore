@@ -56,3 +56,6 @@ recentf
 
 # For later use
 private.el
+
+# Elpy
+elpy*
