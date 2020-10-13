@@ -45,7 +45,7 @@
   (if (not-windows)
       (progn
         (setq projectile-indexing-method 'hybrid
-              projectile-enable-caching t
+              projectile-enable-caching t)
         (message
          (format "Projectile indexing is now: %s and caching is: %s" projectile-indexing-method projectile-enable-caching)))
     ;; If Windows has fd and tr, use them

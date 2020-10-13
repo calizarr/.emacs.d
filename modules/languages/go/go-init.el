@@ -1,3 +1,7 @@
+;;; go-init -- Provides settings for Golang IDE behavior
+;;; Commentary:
+
+;;; Code:
 ;; Go setup for Emacs
 
 (use-package go-mode
@@ -9,3 +13,6 @@
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+
+(provide 'go-init)
+;;; go -init ends here

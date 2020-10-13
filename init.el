@@ -5,6 +5,9 @@
 ;; (package-initialize)
 ;; (require 'package)
 
+;; Set this first to speed up startup 5.5s -> 2.5s
+(setq gc-cons-threshold (expt 2 24)) ;; 16mb instead of 800k
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -28,49 +31,26 @@
  '(pop-up-frames nil)
  '(undo-outer-limit 999999999999999))
 
+
+
 ;; Custom built / Stack Overflow Etc Settings
 (add-to-list 'load-path "~/.emacs.d/modules")
-(add-to-list 'load-path "~/.emacs.d/modules/core")
-(add-to-list 'load-path "~/.emacs.d/modules/appearance")
-(add-to-list 'load-path "~/.emacs.d/modules/completion")
-(add-to-list 'load-path "~/.emacs.d/modules/languages")
-(add-to-list 'load-path "~/.emacs.d/modules/languages/lsp")
-(add-to-list 'load-path "~/.emacs.d/modules/languages/python")
-(add-to-list 'load-path "~/.emacs.d/modules/languages/scala")
-(add-to-list 'load-path "~/.emacs.d/modules/languages/javascript")
-(add-to-list 'load-path "~/.emacs.d/modules/languages/elisp")
-(add-to-list 'load-path "~/.emacs.d/modules/languages/go")
-(add-to-list 'load-path "~/.emacs.d/modules/projects")
-(add-to-list 'load-path "~/.emacs.d/modules/http")
-(add-to-list 'load-path "~/.emacs.d/modules/infrastructure")
+(let ((default-directory "~/.emacs.d/modules/"))
+  (normal-top-level-add-subdirs-to-load-path))
 
+;; Charlie Settings For Below
 ;; Load Individual Modules
-(load "core/core-init")
-(load "appearance/appearance-init")
-(load "completion/completion-init")
-(load "lsp/lsp-init")
-(load "python/python-init")
-(load "scala/scala-init")
-(load "javascript/frontend-init")
-(load "elisp/elisp-init")
-(load "projects/projects-init")
-(load "http/http-init")
-(load "infrastructure/infra-init.el")
-(load "go/go-init.el")
+(require 'core-init)
+(require 'appearance-init)
+(require 'completion-init)
+(require 'projects-init)
+(require 'lsp-init)
+(require 'python-init)
+(require 'scala-init)
+(require 'frontend-init)
+(require 'elisp-init)
+(require 'http-init)
+(require 'infra-init)
+(require 'go-init)
 
-;; (custom-set-faces
-;;  ;; custom-set-faces was added by Custom.
-;;  ;; If you edit it by hand, you could mess it up, so be careful.
-;;  ;; Your init file should contain only one such instance.
-;;  ;; If there is more than one, they won't work right.
-;;  '(company-scrollbar-bg ((t (:background "#45bb4ed351db"))))
-;;  '(company-scrollbar-fg ((t (:background "#39f441834408"))))
-;;  '(company-tooltip ((t (:inherit default :background "#32e339873bbd"))))
-;;  '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
-;;  '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;;;

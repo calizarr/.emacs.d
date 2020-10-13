@@ -1,3 +1,9 @@
+;;; core-init --- Loads several core / orphaned settings
+;;; Commentary:
+;;; TODO: Cleanup and move to appropriate files and groups
+
+
+;;; Code:
 ;; Must be loaded first
 (load "custom-stuff.el")
 ;; Calendar Configuration
@@ -34,3 +40,6 @@
 (load "./mobility-conf.el")
 ;; Load other editing conf files (YAML, etc)
 (load "editing-conf.el")
+
+(provide 'core-init)
+;;; core-init.el ends here
