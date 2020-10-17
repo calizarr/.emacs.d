@@ -11,8 +11,6 @@
                               ("gnu" . 10))
  )
 
-;; (package-initialize)
-
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents)
@@ -132,7 +130,7 @@
 
 ;; Add a beacon!
 (use-package beacon
-  ;; :disabled
+  :disabled
   :demand
   :ensure t
   :config (beacon-mode 1))
@@ -209,5 +207,6 @@
     (with-help-window (format "*BFL %s" buffer-name)
       (pp
        (-remove excluded-buffers alist-o-vars)))))
+
 
 ;; FOOTER

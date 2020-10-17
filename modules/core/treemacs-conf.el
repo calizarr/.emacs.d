@@ -69,8 +69,9 @@
 
 (use-package treemacs-icons-dired
   :after treemacs dired
-  :ensure t
-  :config (treemacs-icons-dired-mode))
+  :ensure t)
+
+
 
 (use-package treemacs-magit
   :after treemacs magit

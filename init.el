@@ -27,15 +27,19 @@
  '(ediff-window-setup-function 'ediff-setup-windows-plain)
  '(eide-custom-color-theme 'dark)
  '(package-selected-packages
-   '(ensime perspective loop helm-company conda helm-rg helm-fd helm-projectile helm-lsp kubernetes kubel k8s-mode sbt-mode pyenv-mode json-navigator ahk-mode lsp-metals lsp-treemacs which-key grip-mode company-terraform terraform-mode go-mode poly-ansible company-ansible ansible-doc ansible pretty-hydra htmlize groovy-mode company-anaconda protobuf-mode smart-mode-line lsp-mode scala-mode markdown-mode lsp-ui powershell elisp-lint pandoc-mode yaml-mode highlight-indent-guides flycheck js2-mode rainbow-mode web-mode tide prodigy know-your-http-well company page-break-lines pyenv-mode-auto sphinx-doc sphinx-mode request restclient-helm auto-yasnippet helpful eshell-mode smex company-restclient restclient nyan-mode ido-grid-mode pcre2el f dockerfile-mode calfw vlf yasnippet-snippets dashboard company-quickhelp company-jedi ido-yes-or-no ido-vertical-mode ido-completing-read+ auto-complete neotree e2wm e2wm-R persp-projectile zoom pretty-mode elscreen doremi stan-mode dirtree fish-mode eimp dired+ expand-region smartparens popup-imenu goto-chg highlight-symbol flx-ido undo-tree projectile elpy csv-mode use-package exec-path-from-shell))
+   '(helm-xref helm-swoop ensime perspective loop helm-company conda helm-rg helm-fd helm-projectile helm-lsp kubernetes kubel k8s-mode sbt-mode pyenv-mode json-navigator ahk-mode lsp-metals lsp-treemacs which-key grip-mode company-terraform terraform-mode go-mode poly-ansible company-ansible ansible-doc ansible pretty-hydra htmlize groovy-mode company-anaconda protobuf-mode smart-mode-line lsp-mode scala-mode markdown-mode lsp-ui powershell elisp-lint pandoc-mode yaml-mode highlight-indent-guides flycheck js2-mode rainbow-mode web-mode tide prodigy know-your-http-well company page-break-lines pyenv-mode-auto sphinx-doc sphinx-mode request restclient-helm auto-yasnippet helpful eshell-mode smex company-restclient restclient nyan-mode ido-grid-mode pcre2el f dockerfile-mode calfw vlf yasnippet-snippets dashboard company-quickhelp company-jedi ido-yes-or-no ido-vertical-mode ido-completing-read+ auto-complete neotree e2wm e2wm-R persp-projectile zoom pretty-mode elscreen doremi stan-mode dirtree fish-mode eimp dired+ expand-region smartparens popup-imenu goto-chg highlight-symbol flx-ido undo-tree projectile elpy csv-mode use-package exec-path-from-shell yafolding treemacs-projectile treemacs-magit treemacs-icons-dired smart-mode-line-powerline-theme powerline beacon))
  '(pop-up-frames nil)
  '(undo-outer-limit 999999999999999))
 
 
+(defvar cal-modules
+  (concat user-emacs-directory
+          (convert-standard-filename "modules/"))
+  "Directory containing personal settings in a modular format.")
 
 ;; Custom built / Stack Overflow Etc Settings
-(add-to-list 'load-path "~/.emacs.d/modules")
-(let ((default-directory "~/.emacs.d/modules/"))
+(add-to-list 'load-path cal-modules)
+(let ((default-directory cal-modules))
   (normal-top-level-add-subdirs-to-load-path))
 
 ;; Charlie Settings For Below
@@ -53,4 +57,11 @@
 (require 'infra-init)
 (require 'go-init)
 
+
 ;;;
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )

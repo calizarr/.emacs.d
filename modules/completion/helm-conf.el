@@ -35,3 +35,8 @@
   :demand
   :ensure t
   )
+
+(use-package helm-swoop
+  :ensure t
+  :requires helm
+  :after helm)

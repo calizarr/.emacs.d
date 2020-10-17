@@ -17,7 +17,7 @@
 ;; Remove shell command echo
 (defun my-comint-init ()
   (setq comint-process-echoes t))
-(add-hook 'comint-mode-hook 'my-comint-init)
+(add-hook 'shell-mode-hook 'my-comint-init)
 
 ;; Add exec-path-from-shell for OSX
 

@@ -11,6 +11,7 @@
           (lambda ()
             ;; Set dired-x buffer-local variables here.  For example:
             ;; (dired-omit-mode 1)
+            (treemacs-icons-dired-mode 1)
             ))
 
 
