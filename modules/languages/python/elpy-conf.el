@@ -8,5 +8,3 @@
   )
 
 (setq elpy-shell-use-project-root nil)
-
-

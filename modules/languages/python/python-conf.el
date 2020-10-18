@@ -56,6 +56,7 @@
 
 (if (is-windows)
     (use-package conda
+      :disabled
       :pin melpa
       :ensure t
       :init

@@ -31,6 +31,18 @@
   :requires helm
   :after helm)
 
+(use-package helm-ag
+  :ensure t
+  :requires helm
+  :after helm
+  :config
+  (custom-set-variables
+   '(helm-ag-base-command "ag --nocolor --nogroup --ignore-case --vimgrep")
+   ;; '(helm-ag-command-option "--all-text")
+   '(helm-ag-insert-at-point 'symbol)
+   '(helm-ag-ignore-buffer-patterns '("\\.txt\\'" "\\.mkd\\'"))))
+
+
 (use-package dash
   :demand
   :ensure t

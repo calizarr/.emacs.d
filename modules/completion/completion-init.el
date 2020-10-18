@@ -3,11 +3,13 @@
 
 ;;; Code:
 ;; Load Company Configuration
-(load "company-conf.el")
+(load "./company-conf.el")
 ;; Add in helm settings
-(load "helm-conf.el")
+(load "./helm-conf.el")
+;; Load helm-rg conf for Windows overrides
+(load "./helm-rg-conf.el")
 ;; Add in yasnippet settings
-(load "yasnippet-conf.el")
+(load "./yasnippet-conf.el")
 
 ;; Load Ido Configuration
 ;; (load "ido-conf.el")
