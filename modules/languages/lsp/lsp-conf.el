@@ -16,7 +16,8 @@
   :config (setq lsp-prefer-flymake nil
                 lsp-modeline-diagnostics-scope :project
                 lsp-headerline-breadcrumb-enable t
-                lsp-headerline-breadcrumb-enable-symbol-numbers t))
+                lsp-headerline-breadcrumb-enable-symbol-numbers t)
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
 
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))

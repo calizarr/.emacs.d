@@ -52,7 +52,7 @@
     (if (and (is-windows) (locate-file "fd" exec-path exec-suffixes 1) (locate-file "tr" exec-path exec-suffixes 1))
         (progn
           (setq projectile-indexing-method 'alien
-                projectile-enable-caching nil
+                projectile-enable-caching t
                 projectile-git-command "fd . -0 --type f --color=never"
                 projectile-generic-command "fd . -0 --type f --color=never")
           (message
