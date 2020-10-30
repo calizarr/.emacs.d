@@ -1,6 +1,6 @@
 ;; Have emacs save customize settings not in init.el
 (setq custom-file (concat user-emacs-directory (convert-standard-filename "emacs-custom.el")))
-(load custom-file 'noerror)
+(load custom-file :noerror)
 
 ;; Removing stuff from custom-set-variables
 (global-display-line-numbers-mode t)
@@ -45,9 +45,7 @@
   (interactive)
   (if (region-active-p)
       (comment-or-uncomment-region (region-beginning) (region-end))
-    (comment-or-uncomment-region (line-beginning-position) (line-end-position))
-    )
-  )
+    (comment-or-uncomment-region (line-beginning-position) (line-end-position))))
 (global-set-key (kbd "C-c ;") 'comment-or-uncomment-line-or-region)
 
 ;; Contextually hungry C-<backspace>
@@ -72,6 +70,24 @@
 ;; Don't auto-fill paragraphs with spaces
 (auto-fill-mode -1)
 (remove-hook 'text-mode-hook #'turn-on-auto-fill)
+
+;; Removing annoying alarm bell.
+(setq visible-bell 1)
+
+;; Window Undo!
+(when (fboundp 'winner-mode)
+  (winner-mode 1))
+
+;; Getting rid of tool bar mode.
+(tool-bar-mode -1)
+(menu-bar-mode -1)
+(toggle-scroll-bar -1)
+
+;; Changing list buffers (C-x C-b) to ibuffer
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
+;; Global eval buffer
+(global-set-key (kbd "C-c C-b") 'eval-buffer)
 
 (use-package smartparens
   :diminish smartparens-mode
@@ -104,20 +120,6 @@
   (bind-key "s-<delete>" 'sp-kill-sexp smartparens-mode-map)
   (bind-key "s-<backspace>" 'sp-backward-kill-sexp smartparens-mode-map))
 
-;; Removing annoying alarm bell.
-(setq visible-bell 1)
-
-;; Window Undo!
-(when (fboundp 'winner-mode)
-  (winner-mode 1))
-
-;; Add a beacon!
-(use-package beacon
-  :disabled
-  :demand
-  :ensure t
-  :config (beacon-mode 1))
-
 ;; Expand-region style
 (use-package expand-region
   :commands 'er/expand-region
@@ -145,17 +147,6 @@
     (if wsl
         t
       nil)))
-
-;; Getting rid of tool bar mode.
-(tool-bar-mode -1)
-(menu-bar-mode -1)
-(toggle-scroll-bar -1)
-
-;; Changing list buffers (C-x C-b) to ibuffer
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-
-;; Global eval buffer
-(global-set-key (kbd "C-c C-b") 'eval-buffer)
 
 (defvar buffer-local-ignores
   '(

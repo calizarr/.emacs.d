@@ -2,7 +2,6 @@
 ;;; Commentary:
 ;;; TODO: Cleanup and move to appropriate files and groups
 
-
 ;;; Code:
 ;; Must be loaded first
 (load "custom-stuff.el")
