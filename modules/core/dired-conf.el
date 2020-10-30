@@ -1,4 +1,6 @@
 ;; Dired mode settings
+(setq dired-listing-switches "-alh")
+
 
 (add-hook 'dired-load-hook
 	  (lambda ()

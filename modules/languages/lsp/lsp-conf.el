@@ -4,7 +4,6 @@
   :bind (("C-c C-v t" . lsp-describe-type-at-point)
          ("C-c C-r t" . lsp-describe-thing-at-point)
          ("C-c C-l" . lsp)
-         ;; (:map lsp-mode-map ("C-c C-l" . hydra-lsp/body))
          )
   :hook
   (scala-mode . lsp-deferred)

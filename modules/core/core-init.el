@@ -35,9 +35,9 @@
 ;; Load syntax checking (flycheck)
 (load "syntax-checking-conf.el")
 ;; Load org-mode keybindings
-(load "./org-conf.el")
+(load "org-conf.el")
 ;; Load mobility conf / movement around buffers
-(load "./mobility-conf.el")
+(load "mobility-conf.el")
 ;; Load other editing conf files (YAML, etc)
 (load "editing-conf.el")
 

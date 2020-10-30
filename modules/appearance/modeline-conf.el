@@ -1,13 +1,12 @@
 ;; Setting up powerline etc.
-(use-package smart-mode-line
-  :ensure t)
-
 (use-package smart-mode-line-powerline-theme
   :ensure t)
 
-;; These two lines are just examples
-(setq powerline-arrow-shape 'curve)
-(setq powerline-default-separator-dir '(right . left))
-(setq sml/theme 'light-powerline)
-(sml/setup)
-
+(use-package smart-mode-line
+  :ensure t
+  :init
+  (setq powerline-arrow-shape 'curve
+        powerline-default-separator-dir '(right . left)
+        sml/theme 'light-powerline
+        sml/no-confirm-load-theme t)
+  (sml/setup))

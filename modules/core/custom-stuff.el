@@ -1,29 +1,13 @@
-;; the package manager
-(require 'package)
+;; Have emacs save customize settings not in init.el
+(setq custom-file (concat user-emacs-directory (convert-standard-filename "emacs-custom.el")))
+(load custom-file 'noerror)
 
-(setq
- package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                    ("org" . "http://orgmode.org/elpa/")
-                    ("melpa" . "http://melpa.org/packages/")
-                    ("melpa-stable" . "http://stable.melpa.org/packages/"))
- package-archive-priorities '(("melpa-stable" . 20)
-                              ("melpa" . 20)
-                              ("gnu" . 10))
- )
-
-(package-initialize)
-(when (not package-archive-contents)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require 'use-package)
-
-;; Enable defer and ensure by default for use-package
-;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
-(setq use-package-always-defer t
-      use-package-always-ensure t
-      backup-directory-alist `((".*" . ,temporary-file-directory))
-      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+;; Removing stuff from custom-set-variables
+(global-display-line-numbers-mode t)
+(setq desktop-save-mode nil
+      ediff-window-setup-function 'ediff-setup-windows-plain
+      eide-custom-color-theme 'dark
+      pop-up-frames nil)
 
 ;; Changing prompt to y/n instead of yes/no
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -37,7 +21,6 @@
  scroll-error-top-bottom t
  ;; Show Parentheses!
  show-paren-delay 0.5
- use-package-always-ensure t
  sentence-end-double-space nil)
 
 (show-paren-mode)
@@ -207,6 +190,5 @@
     (with-help-window (format "*BFL %s" buffer-name)
       (pp
        (-remove excluded-buffers alist-o-vars)))))
-
 
 ;; FOOTER
