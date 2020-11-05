@@ -4,13 +4,11 @@
   :ensure t
   :preface (require 'helm-config)
   :commands (helm-M-x helm-find-files helm-semantic-or-imenu)
-  :bind (
-         ("M-x" . helm-M-x)
+  :bind (("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x b" . helm-mini)
          ("M-y" . helm-show-kill-ring)
-         ("M-i" . helm-semantic-or-imenu)
-         )
+         ("M-i" . helm-semantic-or-imenu))
   :init
   (setq helm-mode-fuzzy-match t
         helm-completion-in-region-fuzzy-match t
@@ -51,4 +49,8 @@
 (use-package helm-swoop
   :ensure t
   :requires helm
-  :after helm)
+  :after helm
+  :bind ("C-c C-s" . helm-swoop)
+  :init (setq helm-swoop-use-line-number-face t
+              helm-swoop-move-to-line-cycle t
+              helm-swoop-use-fuzzy-match t))

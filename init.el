@@ -36,7 +36,6 @@
 (let ((default-directory cal-modules))
   (normal-top-level-add-subdirs-to-load-path))
 
-;; Charlie Settings For Below
 ;; Load Individual Modules
 (require 'core-init)
 (require 'appearance-init)

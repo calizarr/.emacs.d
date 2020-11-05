@@ -3,8 +3,7 @@
   :pin melpa
   :bind (("C-c C-v t" . lsp-describe-type-at-point)
          ("C-c C-r t" . lsp-describe-thing-at-point)
-         ("C-c C-l" . lsp)
-         )
+         ("C-c C-l" . lsp))
   :hook
   (scala-mode . lsp-deferred)
   (sh-mode .lsp-deferred)
