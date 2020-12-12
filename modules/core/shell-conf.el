@@ -19,14 +19,6 @@
   (setq comint-process-echoes t))
 (add-hook 'shell-mode-hook 'my-comint-init)
 
-;; Add exec-path-from-shell for OSX
-
-(when (memq window-system '(mac ns x))
-  (use-package exec-path-from-shell
-    :ensure t
-    :pin melpa-stable
-    :commands exec-path-from-shell-initialize))
-
 ;; (setq ansi-color-faces-vector
 ;;       [default default default italic underline success warning error]
 ;;       ansi-color-for-comint-mode t

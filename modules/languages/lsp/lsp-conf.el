@@ -10,15 +10,17 @@
   (go-mode . lsp-deferred)
   (terraform-mode . lsp-deferred)
   (lsp-mode . lsp-lens-mode)
+  (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred)
   :config (setq lsp-prefer-flymake nil
                 lsp-modeline-diagnostics-scope :project
                 lsp-headerline-breadcrumb-enable t
-                lsp-headerline-breadcrumb-enable-symbol-numbers t)
+                lsp-headerline-breadcrumb-enable-symbol-numbers t
+                lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
 
-(with-eval-after-load 'lsp-mode
-  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+;; (with-eval-after-load 'lsp-mode
+;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
 (use-package lsp-ui
   :ensure t
@@ -39,7 +41,8 @@
   :ensure t
   :requires helm
   :after helm
-  :commands helm-lsp-workspace-symbol)
+  :commands helm-lsp-workspace-symbol
+  :config ((define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)))
 
 ;; (use-package company-lsp
 ;;   :ensure t
@@ -55,11 +58,6 @@
 (use-package lsp-metals
   :config (setq lsp-metals-treeview-show-when-views-received t))
 
-;; TODO: Add hydra/transient to which-key itself
-(use-package which-key
-  :ensure t
-  :init
-  (which-key-mode))
 
 ;; (push 'company-lsp company-backends)
 
@@ -79,14 +77,13 @@
 ;; (setq lsp-bash-highlight-parsing-errors t)
 
 ;; Use the Debug Adapter Protocol for running tests and debugging
-(use-package posframe
-  ;; Posframe is a pop-up tool that must be manually installed for dap-mode
-  )
+;; Posframe is a pop-up tool that must be manually installed for dap-mode
+(use-package posframe)
+
 (use-package dap-mode
   :hook
   (lsp-mode . dap-mode)
-  (lsp-mode . dap-ui-mode)
-  )
+  (lsp-mode . dap-ui-mode))
 
 (use-package helm-xref
   :ensure t)

@@ -2,11 +2,19 @@
 (setq custom-file (concat user-emacs-directory (convert-standard-filename "emacs-custom.el")))
 (load custom-file :noerror)
 
+;; Test out uniquify different style
+(require 'uniquify)
+(setq uniquify-buffer-name-style 'forward)
+
 ;; Removing stuff from custom-set-variables
 (global-display-line-numbers-mode t)
 (setq desktop-save-mode nil
       ediff-window-setup-function 'ediff-setup-windows-plain
       eide-custom-color-theme 'dark
+      load-prefer-newer t
+      require-final-newline t
+      apropos-do-all t
+      eval-expression-print-length nil
       pop-up-frames nil)
 
 ;; Changing prompt to y/n instead of yes/no
@@ -89,6 +97,22 @@
 ;; Global eval buffer
 (global-set-key (kbd "C-c C-b") 'eval-buffer)
 
+;; Add exec-path-from-shell for OSX and daemon-mode
+(use-package exec-path-from-shell
+  :ensure t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize))
+  (when (daemonp)
+    (exec-path-from-shell-initialize)))
+
+
+(use-package which-key
+  :diminish
+  :ensure t
+  :init
+  (which-key-mode))
+
 (use-package smartparens
   :diminish smartparens-mode
   :commands
@@ -124,6 +148,10 @@
 (use-package expand-region
   :commands 'er/expand-region
   :bind ("C-=" . er/expand-region))
+
+;; Diminish
+(use-package diminish)
+(diminish 'auto-revert-mode)
 
 ;; Convenience functions for checking whether we're in windows or not
 (defun not-windows ()

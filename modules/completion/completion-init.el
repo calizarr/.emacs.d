@@ -2,6 +2,10 @@
 ;;; Commentary:
 
 ;;; Code:
+
+;; Use hippie-expand instead of dabbrev-expand
+(global-set-key (kbd "M-/") 'hippie-expand)
+
 ;; Load Company Configuration
 (load "./company-conf.el")
 ;; Add in helm settings

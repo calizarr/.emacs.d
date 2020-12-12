@@ -1,5 +1,8 @@
 (require 'ansi-color)
 
+;; Color company theme for dark background
+(use-package color)
+
 (defun endless/colorize-compilation ()
   "Colorize from `compilation-filter-start' to `point'."
   (let ((inhibit-read-only t))
