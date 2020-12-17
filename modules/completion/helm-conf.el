@@ -17,12 +17,12 @@
         )
   :config (helm-mode 1))
 
-(use-package helm-fd
-  :ensure t
-  :requires helm
-  :after helm
-  :bind (:map helm-command-map
-              ("/" . helm-fd)))
+;; (use-package helm-fd
+;;   :ensure t
+;;   :requires helm
+;;   :after helm
+;;   :bind (:map helm-command-map
+;;               ("/" . helm-fd)))
 
 (use-package helm-rg
   :ensure t
