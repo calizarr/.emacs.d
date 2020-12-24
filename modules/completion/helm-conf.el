@@ -17,17 +17,11 @@
         )
   :config (helm-mode 1))
 
-;; (use-package helm-fd
-;;   :ensure t
-;;   :requires helm
-;;   :after helm
-;;   :bind (:map helm-command-map
-;;               ("/" . helm-fd)))
-
 (use-package helm-rg
   :ensure t
   :requires helm
-  :after helm)
+  :after helm
+  :init (setq helm-rg-default-extra-args (list "--hidden")))
 
 (use-package helm-ag
   :ensure t
@@ -40,11 +34,9 @@
    '(helm-ag-insert-at-point 'symbol)
    '(helm-ag-ignore-buffer-patterns '("\\.txt\\'" "\\.mkd\\'"))))
 
-
 (use-package dash
   :demand
-  :ensure t
-  )
+  :ensure t)
 
 (use-package helm-swoop
   :ensure t

@@ -1,5 +1,7 @@
 # Compiled
 *.elc
+# Ignore the emacs lisp nativecomp cache
+eln-cache/
 
 # Packaging
 .cask
