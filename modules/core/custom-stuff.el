@@ -1,5 +1,6 @@
 ;; Have emacs save customize settings not in init.el
 (setq custom-file (concat user-emacs-directory (convert-standard-filename "emacs-custom.el")))
+
 (load custom-file :noerror)
 
 ;; Test out uniquify different style
@@ -186,6 +187,17 @@
          ;; don't find this very useful, but it's frequently useful to only
          ;; look at interactive functions.
          ("C-h C" . #'helpful-command)))
+
+;; Emacs String Manipulation libraries
+;; https://github.com/magnars/s.el
+(use-package s
+  :ensure t)
+
+;; Undo Tree Mode
+(use-package undo-tree
+  :diminish undo-tree-mode
+  :config (global-undo-tree-mode)
+  :bind ("s-/" . undo-tree-visualize))
 
 ;; Convenience functions for checking whether we're in windows or not
 (defun not-windows ()

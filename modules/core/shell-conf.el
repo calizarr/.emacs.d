@@ -1,3 +1,5 @@
+;;; Shell and Eshell settings etc.
+
 (defun helm-eshell-hist-key ()
   (eshell-cmpl-initialize)
   (define-key eshell-mode-map [remap eshell-pcomplete] 'helm-esh-pcomplete)

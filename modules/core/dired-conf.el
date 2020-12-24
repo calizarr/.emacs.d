@@ -1,6 +1,11 @@
-;; Dired mode settings
-(setq dired-listing-switches "-alh")
-
+(use-package dired
+  :ensure nil
+  :config
+  ;; Dired Mode Settings
+  (setq dired-recursive-copies 'always
+        dired-recursive-deletes 'always
+        dired-dwim-target t
+        dired-listing-switches "-alh"))
 
 (add-hook 'dired-load-hook
 	  (lambda ()
@@ -15,5 +20,3 @@
             ;; (dired-omit-mode 1)
             (treemacs-icons-dired-mode 1)
             ))
-
-

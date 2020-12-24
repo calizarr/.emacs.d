@@ -17,12 +17,8 @@
 (load "random-stupid-stuff.el")
 ;; Shell & Eshell Configuration
 (load "shell-conf.el")
-;; Undo-Tree Conf
-(load "undo-tree-conf.el")
 ;; Version Control Settings
 (load "version-control.el")
-;; Load String Manipulation Packages
-(load "string-manipulation.el")
 ;; Load in treemacs
 (load "treemacs-conf.el")
 ;; Load syntax checking (flycheck)
