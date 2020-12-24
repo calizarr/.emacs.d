@@ -14,7 +14,8 @@
         helm-completion-in-region-fuzzy-match t
         helm-split-window-inside-p t
         helm-display-line-numbers-mode t
-        )
+        helm-describe-function-function #'helpful-callable
+        helm-describe-variable-function #'helpful-variable)
   :config (helm-mode 1))
 
 (use-package helm-rg

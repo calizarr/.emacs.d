@@ -13,20 +13,14 @@
 (load "dired-conf.el")
 ;; Calendar Framework
 (load "calendar-conf.el")
-;; Window resizing shortcuts
-(load "winres-conf.el")
 ;; Random Stupid Stuff
 (load "random-stupid-stuff.el")
 ;; Shell & Eshell Configuration
 (load "shell-conf.el")
 ;; Undo-Tree Conf
 (load "undo-tree-conf.el")
-;; Very Large Files settings
-(load "vlf-conf.el")
 ;; Version Control Settings
 (load "version-control.el")
-;; Load More Helpful Help Settings
-(load "help-conf.el")
 ;; Load String Manipulation Packages
 (load "string-manipulation.el")
 ;; Load in treemacs

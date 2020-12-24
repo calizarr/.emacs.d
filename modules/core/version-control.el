@@ -1,3 +1,5 @@
+;;; Version Control Settings such as magit etc.
+
 (use-package magit
   :ensure t
   :pin melpa)

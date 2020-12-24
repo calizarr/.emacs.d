@@ -1,3 +1,5 @@
+;;; Mobility around emacs buffers
+
 (use-package avy
   :ensure t
   :bind (("C-c '" . avy-goto-char-2)
@@ -23,4 +25,3 @@
 
 (use-package hydra
   :ensure t)
-

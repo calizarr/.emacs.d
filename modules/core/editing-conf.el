@@ -77,4 +77,3 @@
       :ensure t
       :pin melpa-stable
       :config (setq ahk-indentation 2)))
-
