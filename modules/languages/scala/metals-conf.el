@@ -18,7 +18,7 @@
       ;; Define the arguments to coursier
       ((metals-path (convert-standard-filename (expand-file-name ".local/bin/metals-emacs" (getenv "HOME"))))
        (metals-line (concat "-o " metals-path " -f"))
-       (metals-version "0.9.4")
+       (metals-version "0.9.8")
        (coursier-download "curl -L -o coursier https://git.io/coursier-cli")
        ;; When quoting a list of strings and you need a variable evaluated, use a backtick (`) quote
        ;; and a comma (,) before the variable you want to evaluate
