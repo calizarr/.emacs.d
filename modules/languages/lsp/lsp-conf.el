@@ -56,7 +56,7 @@
   :after treemacs lsp-mode lsp-ui company-lsp)
 
 (use-package lsp-metals
-  :config (setq lsp-metals-treeview-show-when-views-received t))
+  :config (setq lsp-metals-treeview-show-when-views-received f))
 
 
 ;; (push 'company-lsp company-backends)

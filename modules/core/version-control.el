@@ -9,3 +9,7 @@
   :ensure t
   :pin melpa
   :after magit)
+
+(use-package epg
+  :init
+  (setq epg-pinentry-mode 'loopback))
