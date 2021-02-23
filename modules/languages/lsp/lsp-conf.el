@@ -19,6 +19,15 @@
                 lsp-keymap-prefix "C-c l")
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
 
+
+;; ;; Settings for terraform-ls
+;; (lsp-register-client
+;;  (make-lsp-client :new-connection (lsp-stdio-connection
+;;                                    (list (executable-find "terraform-ls") "serve"
+;;                                          (string-join (list "tf-exec=" (executable-find "terraform_0.13.6")))))
+;;                   :major-modes '(terraform-mode)
+;;                   :server-id 'terraform-ls))
+
 ;; (with-eval-after-load 'lsp-mode
 ;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
@@ -55,8 +64,7 @@
   :defer t
   :after treemacs lsp-mode lsp-ui company-lsp)
 
-(use-package lsp-metals
-  :config (setq lsp-metals-treeview-show-when-views-received f))
+(use-package lsp-metals)
 
 
 ;; (push 'company-lsp company-backends)
