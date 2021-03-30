@@ -10,13 +10,14 @@
   "This will install the palantir python language server into the virtual environment"
   (compile "pip install python-language-server[all] pyls-mypy pyls-isort pyls-black virtualenv future"))
 
+;; should be `(lsp-register-custom-settings '((\"pyls.plugins.pyls_mypy.enabled\" t t)))'
 (defun use-pyls ()
   (with-eval-after-load 'lsp-mode
     (setq lsp-pyls-configuration-sources ["pycodestyle"])
-    (lsp-register-custom-settings '(("pyls.plugins.pyls_mypy.enabled" t t)
-                                    ("pyls.plugins.pyls_mypy.live_mode" nil t)
-                                    ("pyls.plugins.pyls_black.enabled" t t)
-                                    ("pyls.plugins.pyls_isort.enabled" t t)))))
+    `(lsp-register-custom-settings '((\"pyls.plugins.pyls_mypy.enabled\" t t)
+                                    (\"pyls.plugins.pyls_mypy.live_mode\" nil t)
+                                    (\"pyls.plugins.pyls_black.enabled\" t t)
+                                    (\"pyls.plugins.pyls_isort.enabled\" t t)))))
 
 ;; (use-package lsp-mode
 ;;   :ensure t
