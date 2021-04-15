@@ -12,14 +12,19 @@
 ;; "--java-opt \"-XX:+UseG1GC\""
 ;; "--java-opt \"-XX:+UseStringDeduplication\""
 
+(defun metals-version-fn ()
+  "This will pull the latest metals version via coursier"
+  (shell-command "curl -s -L -o coursier https://git.io/coursier-cli" nil nil)
+  (shell-command-to-string "java -noverify -jar coursier complete org.scalameta:metals_2.12: | tail -n1 | tr -d '\n'"))
+
 (defun install-metals ()
   "This will install metals hopefully easily."
   (let*
       ;; Define the arguments to coursier
       ((metals-path (convert-standard-filename (expand-file-name ".local/bin/metals-emacs" (getenv "HOME"))))
        (metals-line (concat "-o " metals-path " -f"))
-       (metals-version "0.10.1")
-       (coursier-download "curl -L -o coursier https://git.io/coursier-cli")
+       (metals-version (metals-version-fn))
+       (coursier-download "curl -s -L -o coursier https://git.io/coursier-cli")
        ;; When quoting a list of strings and you need a variable evaluated, use a backtick (`) quote
        ;; and a comma (,) before the variable you want to evaluate
        (args (string-join `(
@@ -36,7 +41,12 @@
        (metals-download (concat command " " args)))
     ;; Check if it already exists.
     (if (not (file-exists-p metals-path))
-        (compile (string-join (list coursier-download metals-download "rm coursier") " && "))
-      (message "Metals - metals-emacs binary already exists"))))
+        (compile (string-join (list coursier-download metals-download "rm coursier") " && ")))
+    (message "Metals - metals-emacs binary already exists")
+    (message "Metals - Checking if it is the latest version...")
+    (let ((current-version (shell-command-to-string "metals-emacs --version | head -n1 | awk '{printf $2}'")))
+      (if (not (string-equal current-version metals-version))
+          (compile (string-join (list coursier-download metals-download "rm coursier") " && ")))
+      (message "Metals - Most current version already exists"))))
 
 (install-metals)
