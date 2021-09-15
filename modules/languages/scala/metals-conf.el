@@ -1,8 +1,8 @@
 ;; Configuration file for all things Metals the Scala LSP server
-(defun lsp-scala-add-type-annotation ()
-  "Add type annotation to the val at point."
-  (interactive)
-  (lsp-describe-thing-at-point))
+;; (defun lsp-scala-add-type-annotation ()
+;;   "Add type annotation to the val at point."
+;;   (interactive)
+;;   (lsp-describe-thing-at-point))
 
 ;; Printing server I/O for debugging
 ;; (setq 'lsp-print-io t)
@@ -15,7 +15,7 @@
 (defun metals-version-fn ()
   "This will pull the latest metals version via coursier"
   (shell-command "curl -s -L -o coursier https://git.io/coursier-cli" nil nil)
-  (shell-command-to-string "java -noverify -jar coursier complete org.scalameta:metals_2.12: | tail -n1 | tr -d '\n'"))
+  (shell-command-to-string "java -noverify -jar coursier complete org.scalameta:metals_2.12: | tail -n1"))
 
 (defun install-metals ()
   "This will install metals hopefully easily."
@@ -49,4 +49,4 @@
           (compile (string-join (list coursier-download metals-download "rm coursier") " && ")))
       (message "Metals - Most current version already exists"))))
 
-(install-metals)
+;; (install-metals)
