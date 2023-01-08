@@ -2,7 +2,7 @@
 (use-package helm
   :demand
   :ensure t
-  :preface (require 'helm-config)
+  ;; :preface (require 'helm-config)
   :commands (helm-M-x helm-find-files helm-semantic-or-imenu)
   :bind (("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
