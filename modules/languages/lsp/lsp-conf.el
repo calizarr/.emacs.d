@@ -5,7 +5,7 @@
          ("C-c C-r t" . lsp-describe-thing-at-point)
          ("C-c C-l" . lsp))
   :hook
-  (scala-mode . lsp-deferred)
+  (scala-mode . lsp)
   (sh-mode .lsp-deferred)
   (go-mode . lsp-deferred)
   (terraform-mode . lsp-deferred)
@@ -13,6 +13,10 @@
   (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred)
   :config (setq lsp-prefer-flymake nil
+                lsp-idle-delay 0.250
+                ;; Set to t for debugging
+                lsp-completion-provider :capf
+                lsp-log-io nil
                 lsp-modeline-diagnostics-scope :project
                 lsp-headerline-breadcrumb-enable t
                 lsp-headerline-breadcrumb-enable-symbol-numbers t
@@ -62,7 +66,8 @@
   :commands lsp-treemacs-errors-list
   :pin melpa
   :defer t
-  :after treemacs lsp-mode lsp-ui company-lsp)
+  :after treemacs lsp-mode lsp-ui company-lsp
+  :config (lsp-treemacs-sync-mode 1))
 
 (use-package lsp-metals
   :ensure t

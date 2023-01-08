@@ -21,7 +21,7 @@
   "This will install metals hopefully easily."
   (let*
       ;; Define the arguments to coursier
-      ((metals-path (convert-standard-filename (expand-file-name ".local/bin/metals-emacs" (getenv "HOME"))))
+      ((metals-path (convert-standard-filename (expand-file-name ".local/bin/metals" (getenv "HOME"))))
        (metals-line (concat "-o " metals-path " -f"))
        (metals-version (metals-version-fn))
        (coursier-download "curl -s -L -o coursier https://git.io/coursier-cli")

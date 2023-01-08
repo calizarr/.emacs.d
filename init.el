@@ -1,5 +1,6 @@
 ;; Set this first to speed up startup 5.5s -> 2.5s
-(setq gc-cons-threshold (expt 2 24)) ;; 16mb instead of 800k
+(setq gc-cons-threshold 200000000) ;; 200 MB of RAM
+(setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq comp-deferred-compilation t)
 
 ;; the package manager
