@@ -196,7 +196,9 @@
 ;; Undo Tree Mode
 (use-package undo-tree
   :diminish undo-tree-mode
-  :config (global-undo-tree-mode)
+  :init
+  (setq undo-tree-history-directory-alist (concat user-emacs-directory (convert-standard-filename "undo")))
+  :config (global undo-tree-mode)
   :bind ("s-/" . undo-tree-visualize))
 
 ;; Convenience functions for checking whether we're in windows or not
