@@ -214,6 +214,10 @@
   "Check if OS is linux, return t if it is."
   (string-equal system-type "gnu/linux"))
 
+(defun is-mac ()
+  "Check if OS is Darwin/OSX/Mac, return t if it is."
+  (string-equal system-type "darwin"))
+
 (defun is-wsl ()
   "Check if OS is a WSL version of Linux, return t if it is."
   (let ((wsl
