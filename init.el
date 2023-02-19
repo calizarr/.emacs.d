@@ -28,6 +28,10 @@
       backup-directory-alist `((".*" . ,temporary-file-directory))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
+(defvar custom-lisp
+  (concat user-emacs-directory
+          (convert-standard-filename "custom-lisp/")))
+
 (defvar cal-modules
   (concat user-emacs-directory
           (convert-standard-filename "modules/"))
@@ -36,6 +40,10 @@
 ;; Custom built / Stack Overflow Etc Settings
 (add-to-list 'load-path cal-modules)
 (let ((default-directory cal-modules))
+  (normal-top-level-add-subdirs-to-load-path))
+
+(add-to-list 'load-path custom-lisp)
+(let ((default-directory custom-lisp))
   (normal-top-level-add-subdirs-to-load-path))
 
 ;; Load Individual Modules
@@ -51,5 +59,6 @@
 (require 'http-init)
 (require 'infra-init)
 (require 'go-init)
+(require 'tla-init)
 
 ;;; FOOTER
