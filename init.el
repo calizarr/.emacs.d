@@ -60,5 +60,6 @@
 (require 'infra-init)
 (require 'go-init)
 (require 'tla-init)
+(require 'alloy-init)
 
 ;;; FOOTER
