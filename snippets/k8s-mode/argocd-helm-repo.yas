@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: argocd-repo
+# key: argocd-repo
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region nil))
+# --
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: ${1:secret-name}
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: repository
+type: Opaque
+stringData:
+  name: ${2:name}
+  url: ${3:url}
+  type: helm
