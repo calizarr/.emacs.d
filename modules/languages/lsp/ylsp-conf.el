@@ -26,8 +26,14 @@
 (defun ylsp-k8s-modeline (name)
   "Inserts the kubernetes modeline at the top of the buffer"
   (interactive "MName of k8s Kind: ")
-  (let* ((url "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.15.7-standalone-strict/")
+  (let* ((url "https://raw.githubusercontent.com/instrumenta/kubernetes-json-schema/master/v1.25.3-standalone-strict/")
          (modeline (concat ylsp-modeline url name)))
+    (ylsp-operations modeline)))
+
+(defun ylsp-argo-workflows-modeline ()
+  "Inserts the argo-workflows modeline at the top of the buffer"
+  (interactive)
+  (let ((modeline (concat ylsp-modeline "https://raw.githubusercontent.com/argoproj/argo-workflows/master/api/jsonschema/schema.json\n")))
     (ylsp-operations modeline)))
 
 (defun ylsp-generic-modeline (url)
