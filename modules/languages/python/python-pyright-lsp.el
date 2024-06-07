@@ -6,4 +6,3 @@
   "Installs the pyright python language server"
   (interactive)
   (compile "npm install -g pyright"))
-

@@ -6,6 +6,11 @@
 ;; Use hippie-expand instead of dabbrev-expand
 (global-set-key (kbd "M-/") 'hippie-expand)
 
+;; Rebind completion-list-mode-map
+(global-set-key (kbd "C-M-g") 'keyboard-escape-quit)
+(global-set-key (kbd "C-g") 'keyboard-quit)
+
+
 ;; Load Company Configuration
 (load "./company-conf.el")
 ;; Add in helm settings

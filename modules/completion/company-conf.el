@@ -13,7 +13,6 @@
 
   :config
   ;; ;; disables TAB in company-mode, freeing it for yasnippet
-  (setq lsp-completion-provider :capf)
   (define-key company-active-map [tab] nil)
   (define-key company-active-map (kbd "TAB") nil)
   (add-to-list 'company-backends '(company-jedi company-restclient))
@@ -50,3 +49,8 @@
 
 (use-package company-restclient
   :ensure t)
+
+(use-package company-box
+  :ensure t
+  :defer t
+  :hook (company-mode . company-box-mode))

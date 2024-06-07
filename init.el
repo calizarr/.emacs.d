@@ -61,5 +61,6 @@
 (require 'go-init)
 (require 'tla-init)
 (require 'alloy-init)
+(require 'kotlin-init)
 
 ;;; FOOTER

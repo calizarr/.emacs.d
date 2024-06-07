@@ -1,0 +1,11 @@
+# key: krt
+# name: kustomize-replacement-target
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-aroung-region 'nil))
+# --
+targets:
+  - select:
+      kind: ${1:kind}
+      version: ${2:version}
+      group: ${3:group}
+      name: ${4:name}
+    fieldPaths: 

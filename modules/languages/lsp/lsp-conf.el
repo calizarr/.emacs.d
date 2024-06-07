@@ -1,11 +1,13 @@
 (use-package lsp-mode
   :ensure t
   :pin melpa
+  :init
+  (setq lsp-keymap-prefix "C-c l")
   :bind (("C-c C-v t" . lsp-describe-type-at-point)
          ("C-c C-r t" . lsp-describe-thing-at-point)
          ("C-c C-l" . lsp))
   :hook
-  (scala-mode . lsp)
+  (scala-mode . lsp-deferred)
   (sh-mode .lsp-deferred)
   (go-mode . lsp-deferred)
   (terraform-mode . lsp-deferred)
@@ -15,25 +17,20 @@
   :config (setq lsp-prefer-flymake nil
                 lsp-idle-delay 0.250
                 ;; Set to t for debugging
-                lsp-completion-provider :capf
                 lsp-log-io nil
                 lsp-modeline-diagnostics-scope :project
+                lsp-modeline-code-actions-enable t
                 lsp-headerline-breadcrumb-enable t
                 lsp-headerline-breadcrumb-enable-symbol-numbers t
-                lsp-keymap-prefix "C-c l")
+                lsp-disabled-clients '(tfls)
+                lsp-terraform-ls-enable-show-reference t
+                lsp-semantic-tokens-enable t
+                lsp-semantic-tokens-enable-multiline-token-support t
+                lsp-semantic-tokens-honor-refresh-requests t
+                lsp-enable-links t
+                lsp-terraform-ls-prefill-required-fields t
+                )
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
-
-
-;; ;; Settings for terraform-ls
-;; (lsp-register-client
-;;  (make-lsp-client :new-connection (lsp-stdio-connection
-;;                                    (list (executable-find "terraform-ls") "serve"
-;;                                          (string-join (list "tf-exec=" (executable-find "terraform_0.13.6")))))
-;;                   :major-modes '(terraform-mode)
-;;                   :server-id 'terraform-ls))
-
-;; (with-eval-after-load 'lsp-mode
-;;   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
 (use-package lsp-ui
   :ensure t
@@ -46,6 +43,8 @@
   (setq lsp-ui-sideline-ignore-duplicate t
         lsp-ui-flycheck-enable t
         lsp-ui-doc-include-signature t
+        lsp-ui-sideline-show-diagnostics t
+        lsp-ui-sideline-show-code-actions t
         ))
 
 ;; (setq lsp-print-io t)

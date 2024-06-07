@@ -1,0 +1,9 @@
+# key: krs
+# name: kustomize-replacement-source
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-aroung-region 'nil))
+# --
+  - source:
+      name: ${1:configmap-name}
+      kind: ConfigMap
+      version: v1
+      fieldPath: ${2:configmap-value-path}
