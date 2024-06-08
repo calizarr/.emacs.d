@@ -1,5 +1,5 @@
 (use-package org
-  :ensure t
+  :straight t
   :bind (("M-p" . org-metaup)
          ("M-n" . org-metadown)
          ("C-x M-p" . org-metaleft)
@@ -7,4 +7,4 @@
   )
 
 (use-package htmlize
-  :ensure t)
+  :straight t)

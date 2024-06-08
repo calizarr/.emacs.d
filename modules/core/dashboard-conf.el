@@ -1,7 +1,7 @@
 ;; Dashboard
 (use-package page-break-lines
   :demand
-  :ensure t)
+  :straight t)
 
 (setq dashboard-banner-logo-title "Welcome back calizarr!")
 
@@ -13,5 +13,5 @@
 
 (use-package dashboard
   :demand
-  :ensure t
+  :straight t
   :config (dashboard-setup-startup-hook))

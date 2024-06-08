@@ -1,7 +1,7 @@
 (setq js-indent-level 2)
 
 (use-package json-navigator
-  :ensure t)
+  :straight t)
 
 ;; (use-package js2-mode)
 
@@ -26,4 +26,3 @@
 ;; (add-to-list 'auto-mode-alist '("components\\/.*\\.js\\'" . rjsx-mode))
 
 ;; (use-package indium)
-

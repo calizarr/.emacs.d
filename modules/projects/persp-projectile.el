@@ -1,9 +1,9 @@
 (use-package perspective
-  :ensure t
+  :straight t
   :init (persp-mode))
 
 (use-package persp-projectile
-  :ensure t
+  :straight t
   :config
   (define-key projectile-mode-map (kbd "s-x") 'projectile-persp-switch-project)
   (define-key projectile-mode-map (kbd "s-s") 'persp-switch))

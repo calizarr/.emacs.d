@@ -1,15 +1,15 @@
 (use-package ansible
-  :ensure t
+  :straight t
   :config
   (add-hook 'yaml-mode-hook #'(lambda () (ansible 1)))
   )
 
 (use-package ansible-doc
 
-  :ensure t)
+  :straight t)
 
 (use-package company-ansible
-  :ensure t)
+  :straight t)
 
 (use-package poly-ansible
-  :ensure t)
+  :straight t)

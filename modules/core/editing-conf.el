@@ -1,6 +1,6 @@
 ;; Make sure you have highlight-indentation-guides
 (use-package highlight-indent-guides
-  :ensure t
+  :straight t
   :config
   (setq
    highlight-indent-guides-responsive nil)
@@ -8,7 +8,7 @@
 
 ;; Get a general yaml-mode that does not exist in emacs proper
 (use-package yafolding
-  :ensure t)
+  :straight t)
 
 (defvar yafolding-mode-map
   (let ((map (make-sparse-keymap)))
@@ -18,7 +18,7 @@
     map))
 
 (use-package yaml-mode
-  :ensure t
+  :straight t
   :hook (yaml-mode . yafolding-mode)
   )
 
@@ -26,7 +26,7 @@
 
 ;; Markdown Mode
 (use-package markdown-mode
-  :ensure t
+  :straight t
   :pin melpa
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
@@ -41,11 +41,11 @@
 ;; grip-mode
 ;; https://github.com/seagle0128/grip-mode
 (use-package grip-mode
-  :ensure t)
+  :straight t)
 
 ;; Pandoc Mode
 (use-package pandoc-mode
-  :ensure t
+  :straight t
   :config
   (add-hook 'markdown-mode-hook 'pandoc-mode))
 
@@ -54,7 +54,7 @@
 
 ;; Add powershell-mode
 (use-package powershell
-  :ensure t)
+  :straight t)
 
 ;; Giving Windows (Hyper, Alt, and Super) keys
 ;; See: https://stackoverflow.com/questions/27418756/is-it-possible-to-make-emacs-interpet-an-fn-key-as-a-modifier-key/27419718#27419718
@@ -74,6 +74,6 @@
 ;; Autohotkey Mode
 (if (is-windows)
     (use-package ahk-mode
-      :ensure t
+      :straight t
       :pin melpa-stable
       :config (setq ahk-indentation 2)))

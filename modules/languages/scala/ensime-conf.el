@@ -3,7 +3,7 @@
 
 ;; ENSIME Packge
 (use-package ensime
-  :ensure t
+  :straight t
   :pin melpa-stable
   :init
   (setq ensime-sbt-command "nil")
@@ -79,4 +79,3 @@
             (sleep-for 10)
             (kill-buffer (current-buffer))))
         (directory-files-recursively dir ".scala$")))
-

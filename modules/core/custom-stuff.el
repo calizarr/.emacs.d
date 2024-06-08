@@ -105,7 +105,7 @@
 
 ;; Add exec-path-from-shell for OSX and daemon-mode
 (use-package exec-path-from-shell
-  :ensure t
+  :straight t
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize))
@@ -115,7 +115,7 @@
 
 (use-package which-key
   :diminish
-  :ensure t
+  :straight t
   :init
   (which-key-mode))
 
@@ -161,11 +161,11 @@
 
 ;; Very Large File
 (use-package vlf
-  :ensure t)
+  :straight t)
 
 ;; Load More Helpful Help Settings
 (use-package helpful
-  :ensure t
+  :straight t
   :bind (
          ;; Note that the built-in `describe-function' includes both functions
          ;; and macros. `helpful-function' is functions only, so we provide
@@ -191,7 +191,7 @@
 ;; Emacs String Manipulation libraries
 ;; https://github.com/magnars/s.el
 (use-package s
-  :ensure t)
+  :straight t)
 
 ;; Undo Tree Mode
 (use-package undo-tree

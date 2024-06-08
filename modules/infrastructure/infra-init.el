@@ -11,16 +11,16 @@
 
 ;; Load Dockerfile Mode
 (use-package dockerfile-mode
-  :ensure t)
+  :straight t)
 ;; Load Groovy Mode
 (use-package groovy-mode
-  :ensure t
+  :straight t
   :init
   (setq groovy-indent-offset 2))
 
 ;; Load Terraform Mode
 (use-package terraform-mode
-  :ensure t
+  :straight t
   :pin melpa
   :mode "\\.\\(tf\\|tfvars\\)"
   :hook
@@ -28,7 +28,7 @@
   )
 
 (use-package company-terraform
-  :ensure t)
+  :straight t)
 
 (provide 'infra-init)
 ;;; infra-init ends here

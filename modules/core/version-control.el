@@ -5,14 +5,14 @@
     (setq git-commit-post-finish-hook #'((lambda () (shell-command (string-join `("cd" ,(getenv "PWD") "&&" "git commit --amend --no-edit" ,(string-join `("-S" ,(getenv "GPG_DEFAULT_KEY")))) " "))))))
 
 (use-package magit
-  :ensure t
+  :straight t
   :pin melpa
   :bind (("C-x g" . #'magit-status))
   )
 
 
 (use-package forge
-  :ensure t
+  :straight t
   :pin melpa
   :after magit
   )

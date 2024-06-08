@@ -20,7 +20,7 @@
                                     (\"pyls.plugins.pyls_isort.enabled\" t t)))))
 
 ;; (use-package lsp-mode
-;;   :ensure t
+;;   :straight t
 ;;   :pin melpa
 ;;   :config
 
@@ -37,7 +37,7 @@
 
 ;;   ;; lsp extras
 ;;   (use-package lsp-ui
-;;     :ensure t
+;;     :straight t
 ;;     :config
 ;;     (setq lsp-ui-sideline-ignore-duplicate t)
 ;;     (add-hook 'lsp-mode-hook 'lsp-ui-mode))

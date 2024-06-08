@@ -1,5 +1,5 @@
 (use-package company
-  :ensure t
+  :straight t
   :diminish company-mode
   :commands company-mode
   :init
@@ -24,7 +24,7 @@
                ("C-:" . #'helm-company)))
 
 (use-package company-quickhelp
-  :ensure t
+  :straight t
   :requires company
   :after company
   :commands (company-quickhelp-manual-begin)
@@ -34,11 +34,11 @@
 
 
 (use-package company-jedi
-  :ensure t
+  :straight t
   :requires company)
 
 (use-package helm-company
-  :ensure t
+  :straight t
   :defer t
   :requires helm company
   :after helm company
@@ -48,9 +48,9 @@
 
 
 (use-package company-restclient
-  :ensure t)
+  :straight t)
 
 (use-package company-box
-  :ensure t
+  :straight t
   :defer t
   :hook (company-mode . company-box-mode))
