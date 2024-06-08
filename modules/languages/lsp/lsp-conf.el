@@ -1,5 +1,5 @@
 (use-package lsp-mode
-  :ensure t
+  :straight t
   :pin melpa
   :init
   (setq lsp-keymap-prefix "C-c l")
@@ -33,7 +33,7 @@
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
 
 (use-package lsp-ui
-  :ensure t
+  :straight t
   :pin melpa
   :bind (("C-c C-v s" . lsp-ui-sideline-toggle-symbols-info)
          ("C-c C-v d" . lsp-ui-doc-mode)
@@ -50,18 +50,18 @@
 ;; (setq lsp-print-io t)
 
 (use-package helm-lsp
-  :ensure t
+  :straight t
   :requires helm
   :after helm
   :commands helm-lsp-workspace-symbol
   :config ((define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)))
 
 ;; (use-package company-lsp
-;;   :ensure t
+;;   :straight t
 ;;   :pin melpa)
 
 (use-package lsp-treemacs
-  :ensure t
+  :straight t
   :commands lsp-treemacs-errors-list
   :pin melpa
   :defer t
@@ -69,7 +69,7 @@
   :config (lsp-treemacs-sync-mode 1))
 
 (use-package lsp-metals
-  :ensure t
+  :straight t
   :custom
   ;; Metals claims to support range formatting by default but it supports range
   ;; formatting of multiline strings only. You might want to disable it so that
@@ -105,4 +105,4 @@
   (lsp-mode . dap-ui-mode))
 
 (use-package helm-xref
-  :ensure t)
+  :straight t)

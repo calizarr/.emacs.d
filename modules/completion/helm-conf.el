@@ -1,7 +1,7 @@
 ;; Helm
 (use-package helm
   :demand
-  :ensure t
+  :straight t
   ;; :preface (require 'helm-config)
   :commands (helm-M-x helm-find-files helm-semantic-or-imenu)
   :bind (("M-x" . helm-M-x)
@@ -19,13 +19,13 @@
   :config (helm-mode 1))
 
 (use-package helm-rg
-  :ensure t
+  :straight t
   :requires helm
   :after helm
   :init (setq helm-rg-default-extra-args (list "--hidden")))
 
 (use-package helm-ag
-  :ensure t
+  :straight t
   :requires helm
   :after helm
   :config
@@ -37,10 +37,10 @@
 
 (use-package dash
   :demand
-  :ensure t)
+  :straight t)
 
 (use-package helm-swoop
-  :ensure t
+  :straight t
   :requires helm
   :after helm
   :bind ("C-c C-s" . helm-swoop)

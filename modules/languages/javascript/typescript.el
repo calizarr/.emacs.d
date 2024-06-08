@@ -19,7 +19,7 @@
 ;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
 
 (use-package web-mode
-  :ensure t
+  :straight t
   :mode (("\\.html?\\'" . web-mode)
          ("\\.tsx\\'" . web-mode)
          ("\\.jsx\\'" . web-mode))
@@ -47,14 +47,14 @@
 
 (use-package tide
   :init
-  :ensure t
+  :straight t
   :after (typescript-mode company flycheck)
   :hook ((typescript-mode . tide-setup)
          (typescript-mode . tide-hl-identifier-mode)
          (before-save . tide-format-before-save)))
 
 (use-package typescript-mode
-  :ensure t
+  :straight t
   :config
   (setq typescript-indent-level 2)
   (add-hook 'typescript-mode #'subword-mode))

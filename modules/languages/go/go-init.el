@@ -10,12 +10,12 @@
   (compile (string-join (list "go run" (buffer-name)) " ")))
 
 (use-package go-mode
-  :ensure t
+  :straight t
   :defer t
   :mode ("\\.go$" . go-mode)
   :bind (:map go-mode-map
          ("C-c C-c" . go-run)))
-    
+
 
 ;; Set up before-save hooks to format buffer and add/delete imports.
 ;; Make sure you don't have other gofmt/goimports hooks enabled.

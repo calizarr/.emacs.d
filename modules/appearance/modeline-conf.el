@@ -1,9 +1,9 @@
 ;; Setting up powerline etc.
 (use-package smart-mode-line-powerline-theme
-  :ensure t)
+  :straight t)
 
 (use-package smart-mode-line
-  :ensure t
+  :straight t
   :init
   (setq powerline-arrow-shape 'curve
         powerline-default-separator-dir '(right . left)

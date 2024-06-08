@@ -1,7 +1,7 @@
 ;;; Mobility around emacs buffers
 
 (use-package avy
-  :ensure t
+  :straight t
   :bind (("C-c '" . avy-goto-char-2)
          ("C-;" . avy-goto-char)
          ("M-g g" . avy-goto-line)
@@ -15,13 +15,13 @@
         ))
 
 (use-package ace-window
-  :ensure t
+  :straight t
   :bind (("C-c o" . ace-window)
          )
   )
 
 (use-package pretty-hydra
-  :ensure t)
+  :straight t)
 
 (use-package hydra
-  :ensure t)
+  :straight t)

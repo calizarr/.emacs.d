@@ -1,10 +1,10 @@
 (use-package auto-yasnippet
-  :ensure t
+  :straight t
   :pin melpa
   )
 
 (use-package yasnippet
-  :ensure t
+  :straight t
   :diminish yas-minor-mode
   :commands yas-minor-mode
   :hook ((go-mode . yas-minor-mode)
@@ -14,6 +14,6 @@
 (require 'yasnippet)
 
 (use-package yasnippet-snippets
-  :ensure t
+  :straight t
   :pin melpa
   )

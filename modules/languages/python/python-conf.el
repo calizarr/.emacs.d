@@ -1,10 +1,10 @@
 ;; (setq python-shell-completion-native-enable nil)
 
 (use-package sphinx-mode
-  :ensure t)
+  :straight t)
 
 (use-package sphinx-doc
-  :ensure t)
+  :straight t)
 
 (add-hook 'python-mode-hook (lambda ()
                               (require 'sphinx-doc)
@@ -17,7 +17,7 @@
               (yas-activate-extra-mode 'python-mode)))
 
 (use-package pyenv-mode
-  :ensure t
+  :straight t
   :pin melpa)
 
 ;; (defun conda--get-path-prefix (env-dir)
@@ -58,7 +58,7 @@
     (use-package conda
       :disabled
       :pin melpa
-      :ensure t
+      :straight t
       :init
       (setq conda-anaconda-home (get-conda-root)
             conda-postactivate-hook 'conda-add-env-postactivate-func

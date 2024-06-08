@@ -1,5 +1,5 @@
 (use-package lsp-pyright
-  :ensure t
+  :straight t
   :after lsp-mode)
 
 (defun install-pyright ()

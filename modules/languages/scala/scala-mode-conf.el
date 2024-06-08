@@ -1,6 +1,6 @@
 ;; SBT-Mode package
 (use-package sbt-mode
-  :ensure t
+  :straight t
   :pin melpa
   :init
   (setq

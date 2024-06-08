@@ -1,6 +1,6 @@
 ;; Elpy-Install information
 (use-package elpy
-  :ensure t
+  :straight t
   :commands elpy-enable
   :after python
   :config (elpy-enable)

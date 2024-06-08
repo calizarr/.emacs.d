@@ -1,7 +1,7 @@
 ;; Projectile Configurations
 (use-package projectile
   :demand
-  :ensure t
+  :straight t
   :init (setq projectile-use-git-grep t
               ;; Opens project root when using projectile-switch-project (C-c p p)
               projectile-switch-project-action #'projectile-dired)
@@ -34,7 +34,7 @@
   :demand
   :requires helm projectile
   :after helm projectile
-  :ensure t
+  :straight t
   :bind (("s-F" . helm-projectile-rg))
   :config (helm-projectile-on))
 

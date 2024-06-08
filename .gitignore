@@ -61,3 +61,6 @@ private.el
 
 # Elpy
 elpy*
+
+# Straight
+straight/
