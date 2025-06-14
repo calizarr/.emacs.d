@@ -3,10 +3,10 @@
 # key: ort-maven
 # expand-env: ((yas-indent-line 'fixed) (yas-wrap-aroung-region 'nil))
 # --
-    - id: Maven:commons-$1:commons-$1
+    - id: Maven:$1:$1
       curations:
         comment: |
-          The source code for commons-$1 has moved to Github
+          The source code for $1 has moved to Github
         vcs:
           type: "Git"
-          url: https://github.com/apache/commons-$1.git
+          url: https://github.com/apache/$1.git

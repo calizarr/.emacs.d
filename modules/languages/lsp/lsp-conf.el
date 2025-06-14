@@ -11,6 +11,7 @@
   (sh-mode .lsp-deferred)
   (go-mode . lsp-deferred)
   (terraform-mode . lsp-deferred)
+  (kotlin-mode . lsp-deferred)
   (lsp-mode . lsp-lens-mode)
   (lsp-mode . lsp-enable-which-key-integration)
   :commands (lsp lsp-deferred)
@@ -29,6 +30,7 @@
                 lsp-semantic-tokens-honor-refresh-requests t
                 lsp-enable-links t
                 lsp-terraform-ls-prefill-required-fields t
+                lsp-disabled-clients '(semgrep-ls)
                 )
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
 
@@ -106,3 +108,8 @@
 
 (use-package helm-xref
   :ensure t)
+
+(use-package iedit
+  :ensure t
+  :hook
+  (lsp-mode . iedit-mode))

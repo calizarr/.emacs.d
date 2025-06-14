@@ -52,3 +52,5 @@
 
 ;;
 
+(use-package json-navigator
+  :ensure t)

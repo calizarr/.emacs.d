@@ -62,5 +62,6 @@
 (require 'tla-init)
 (require 'alloy-init)
 (require 'kotlin-init)
+(require 'graphviz-init)
 
 ;;; FOOTER
