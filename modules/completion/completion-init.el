@@ -4,7 +4,7 @@
 ;;; Code:
 
 ;; Use hippie-expand instead of dabbrev-expand
-(global-set-key (kbd "M-/") 'hippie-expand)
+;; (global-set-key (kbd "M-/") 'hippie-expand)
 
 ;; Rebind completion-list-mode-map
 (global-set-key (kbd "C-M-g") 'keyboard-escape-quit)
@@ -12,13 +12,21 @@
 
 
 ;; Load Company Configuration
-(load "./company-conf.el")
+;; (load "./company-conf.el")
 ;; Add in helm settings
-(load "./helm-conf.el")
+;; (load "./helm-conf.el")
 ;; Load helm-rg conf for Windows overrides
-(load "./helm-rg-conf.el")
+;; (load "./helm-rg-conf.el")
 ;; Add in yasnippet settings
 (load "./yasnippet-conf.el")
+
+;; Load the Vertico Ecosystem => Currently in trying it out mode
+(load "./vertico-eco/consult.el")
+(load "./vertico-eco/vertico-ecosystem.el")
+(load "./vertico-eco/embark.el")
+(load "./vertico-eco/orderless.el")
+(load "./vertico-eco/corfu.el")
+(load "./vertico-eco/vertico-eco-emacs.el")
 
 ;; Load Ido Configuration
 ;; (load "ido-conf.el")

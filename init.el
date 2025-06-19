@@ -1,7 +1,6 @@
-;; Set this first to speed up startup 5.5s -> 2.5s
-(setq gc-cons-threshold 200000000) ;; 200 MB of RAM
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
-(setq comp-deferred-compilation t)
+;; -*- lexical-binding: t -*-
+(message "Loading init.el: ~ is %S, user-emacs-directory is %S"
+         (expand-file-name "~") user-emacs-directory)
 
 ;; the package manager
 (require 'package)

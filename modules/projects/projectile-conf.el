@@ -11,6 +11,12 @@
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
+(use-package rg
+  :ensure t)
+
+(use-package ripgrep
+  :ensure t)
+
 
 ;; (defun projectile-discover-projects-in-directory (directory)
 ;;   "Discover any projects in DIRECTORY and add them to the projectile cache.
@@ -30,13 +36,13 @@
 ;;      subdirs)))
 
 
-(use-package helm-projectile
-  :demand
-  :requires helm projectile
-  :after helm projectile
-  :ensure t
-  :bind (("s-F" . helm-projectile-rg))
-  :config (helm-projectile-on))
+;; (use-package helm-projectile
+;;   :demand
+;;   :requires helm projectile
+;;   :after helm projectile
+;;   :ensure t
+;;   :bind (("s-F" . helm-projectile-rg))
+;;   :config (helm-projectile-on))
 
 ;; Needed to use `.projectile` ignores or the globally ignored section above
 (defun projectile-setup-indexing ()
@@ -65,4 +71,5 @@
 (projectile-setup-indexing)
 
 (push "*.mypy_cache" projectile-globally-ignored-directories)
+(push "*.tree-sitter" projectile-globally-ignored-directories)
 (push "*.bloop" projectile-globally-ignored-directories)

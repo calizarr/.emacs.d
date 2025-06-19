@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (use-package lsp-mode
   :ensure t
   :pin melpa
@@ -23,14 +24,14 @@
                 lsp-modeline-code-actions-enable t
                 lsp-headerline-breadcrumb-enable t
                 lsp-headerline-breadcrumb-enable-symbol-numbers t
-                lsp-disabled-clients '(tfls)
                 lsp-terraform-ls-enable-show-reference t
                 lsp-semantic-tokens-enable t
                 lsp-semantic-tokens-enable-multiline-token-support t
                 lsp-semantic-tokens-honor-refresh-requests t
                 lsp-enable-links t
                 lsp-terraform-ls-prefill-required-fields t
-                lsp-disabled-clients '(semgrep-ls)
+                lsp-disabled-clients '(tfls semgrep-ls)
+                lsp-use-plists t
                 )
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
 
@@ -51,12 +52,12 @@
 
 ;; (setq lsp-print-io t)
 
-(use-package helm-lsp
-  :ensure t
-  :requires helm
-  :after helm
-  :commands helm-lsp-workspace-symbol
-  :config ((define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)))
+;; (use-package helm-lsp
+;;   :ensure t
+;;   :requires helm
+;;   :after helm
+;;   :commands helm-lsp-workspace-symbol
+;;   :config ((define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)))
 
 ;; (use-package company-lsp
 ;;   :ensure t
@@ -99,17 +100,22 @@
 
 ;; Use the Debug Adapter Protocol for running tests and debugging
 ;; Posframe is a pop-up tool that must be manually installed for dap-mode
-(use-package posframe)
+(use-package posframe
+  :ensure t)
+
+(use-package lsp-docker
+  :ensure t)
 
 (use-package dap-mode
+  :ensure t
   :hook
   (lsp-mode . dap-mode)
   (lsp-mode . dap-ui-mode))
 
-(use-package helm-xref
-  :ensure t)
+;; (use-package helm-xref
+;;   :ensure t)
 
 (use-package iedit
-  :ensure t
-  :hook
-  (lsp-mode . iedit-mode))
+  :ensure t)
+  ;; :hook
+  ;; (lsp-mode . iedit-mode))

@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;;; lsp-init --- Provides settings for Emacs LSP mode and which key
 ;;; Commentary:
 

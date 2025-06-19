@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 ;; LSP Yaml mode
 (setq lsp-yaml-schemas (make-hash-table)
       lsp-yaml-schema-store-enable t
