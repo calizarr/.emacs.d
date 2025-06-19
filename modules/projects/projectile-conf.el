@@ -35,15 +35,6 @@
 ;;              (projectile-add-known-project (projectile-project-root))))))
 ;;      subdirs)))
 
-
-;; (use-package helm-projectile
-;;   :demand
-;;   :requires helm projectile
-;;   :after helm projectile
-;;   :ensure t
-;;   :bind (("s-F" . helm-projectile-rg))
-;;   :config (helm-projectile-on))
-
 ;; Needed to use `.projectile` ignores or the globally ignored section above
 (defun projectile-setup-indexing ()
   "Check for not windows and then set projectile-indexing appropriately."

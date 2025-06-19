@@ -13,10 +13,6 @@
 
 ;; Load Company Configuration
 ;; (load "./company-conf.el")
-;; Add in helm settings
-;; (load "./helm-conf.el")
-;; Load helm-rg conf for Windows overrides
-;; (load "./helm-rg-conf.el")
 ;; Add in yasnippet settings
 (load "./yasnippet-conf.el")
 
@@ -27,9 +23,6 @@
 (load "./vertico-eco/orderless.el")
 (load "./vertico-eco/corfu.el")
 (load "./vertico-eco/vertico-eco-emacs.el")
-
-;; Load Ido Configuration
-;; (load "ido-conf.el")
 
 (provide 'completion-init)
 ;;; completion-init ends here

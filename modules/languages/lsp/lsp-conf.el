@@ -52,13 +52,6 @@
 
 ;; (setq lsp-print-io t)
 
-;; (use-package helm-lsp
-;;   :ensure t
-;;   :requires helm
-;;   :after helm
-;;   :commands helm-lsp-workspace-symbol
-;;   :config ((define-key lsp-mode-map [remap xref-find-apropos] #'helm-lsp-workspace-symbol)))
-
 ;; (use-package company-lsp
 ;;   :ensure t
 ;;   :pin melpa)
@@ -111,9 +104,6 @@
   :hook
   (lsp-mode . dap-mode)
   (lsp-mode . dap-ui-mode))
-
-;; (use-package helm-xref
-;;   :ensure t)
 
 (use-package iedit
   :ensure t)
