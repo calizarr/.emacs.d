@@ -33,3 +33,15 @@
      (rust "https://github.com/tree-sitter/tree-sitter-rust")))
 
 (setq treesit-load-name-override-list '((js "libtree-sitter-js" "tree_sitter_javascript")))
+
+(setq major-mode-remap-alist
+      '((yaml-mode . yaml-ts-mode)
+        (go-mode . go-ts-mode)
+        (dockerfile-mode . dockerfile-ts-mode)
+        (rust-mode . rust-ts-mode)
+        (bash-mode . bash-ts-mode)
+        (js2-mode . js-ts-mode)
+        (typescript-mode . typescript-ts-mode)
+        (json-mode . json-ts-mode)
+        (css-mode . css-ts-mode)
+        (python-mode . python-ts-mode)))
