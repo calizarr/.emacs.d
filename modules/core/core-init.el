@@ -29,6 +29,8 @@
 (load "mobility-conf.el")
 ;; Load other editing conf files (YAML, etc)
 (load "editing-conf.el")
+;; Load combobulate for tree-sitter concrete syntax tree navigation
+(load "./combobulate-conf.el")
 
 (provide 'core-init)
 ;;; core-init.el ends here
