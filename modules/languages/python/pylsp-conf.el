@@ -19,5 +19,4 @@
       lsp-pylsp-plugins-rope-completion-enabled t
       lsp-pylsp-plugins-rope-completion-eager t
       lsp-pylsp-plugins-ruff-enabled t
-      lsp-pylsp-plugins-yapf-enabled t
-      )
+      lsp-pylsp-plugins-yapf-enabled t)

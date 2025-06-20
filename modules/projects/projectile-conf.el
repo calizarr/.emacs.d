@@ -13,12 +13,6 @@
   (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
 
-(use-package rg
-  :ensure t)
-
-(use-package ripgrep
-  :ensure t)
-
 ;; (defun projectile-discover-projects-in-directory (directory)
 ;;   "Discover any projects in DIRECTORY and add them to the projectile cache.
 ;; This function is not recursive and only adds projects with roots

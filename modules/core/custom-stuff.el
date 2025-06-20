@@ -5,9 +5,22 @@
 
 (load custom-file :noerror)
 
+;; speed up redisplay with very long lines, e.g. compilation buffers
+(setq-default cache-long-scans t)
+
+;; Save all backup(~) files and auto-save files in /tmp
+;; This keeps clutter down.
+(defconst emacs-tmp-dir
+  (expand-file-name (format "emacs%d" (user-uid)) temporary-file-directory))
+(setq backup-directory-alist
+      `((".*" . ,emacs-tmp-dir)))
+(setq auto-save-file-name-transforms
+      `((".*" ,emacs-tmp-dir t)))
+
 ;; Test out uniquify different style
 (require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
+;; (setq uniquify-buffer-name-style 'forward)
+(setq uniquify-buffer-name-style 'post-forward-angle-brackets)
 
 ;; Removing stuff from custom-set-variables
 (global-display-line-numbers-mode t)
@@ -160,6 +173,7 @@
 ;; Diminish
 (use-package diminish)
 (diminish 'auto-revert-mode)
+
 
 ;; Very Large File
 (use-package vlf

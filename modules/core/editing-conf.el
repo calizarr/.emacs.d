@@ -40,7 +40,7 @@
   ;;                               " --standalone --mathjax --highlight-style=pygments"))
   )
 
-;; grip-mode
+;; grip-mode (GitHub Flavored Markdown)
 ;; https://github.com/seagle0128/grip-mode
 (use-package grip-mode
   :ensure t)
@@ -57,6 +57,68 @@
 ;; Add powershell-mode
 (use-package powershell
   :ensure t)
+
+
+;;; Ediff: split horizontally (A|B, like C-x 3) and
+;;; don't use the little floating control frame.
+(use-package ediff
+  :ensure nil
+  :config
+  (setq ediff-split-window-function 'split-window-horizontally)
+  (setq ediff-window-setup-function 'ediff-setup-windows-plain))
+
+;;; Temporarily highlight undo, yank, find-tag and a few other things
+(use-package volatile-highlights
+  :config
+  (volatile-highlights-mode t)
+  :diminish volatile-highlights-mode)
+
+(use-package all-the-icons)
+
+;; better visual paren matching
+(use-package mic-paren
+  :hook ((c-mode-common .
+                        (lambda ()
+                          (paren-toggle-open-paren-context 1)))
+         (c-ts-base-mode .
+                         (lambda ()
+                           (paren-toggle-open-paren-context 1))))
+  :config
+  (paren-activate))
+
+;;; Useful for folding, manipulating and navigating indented languages like yaml
+;;; (or even python)
+(use-package indent-tools
+  :bind (("C-c >" . 'indent-tools-hydra/body)))
+
+;;; Timezone converter: functions are like `tzc-convert-*` and `tzc-world-clock`
+(use-package tzc)
+
+(use-package package-lint)
+
+;; (use-package rg
+;;   :ensure t)
+
+;; (use-package ripgrep
+;;   :ensure t)
+
+(use-package deadgrep
+  :config
+  :bind ("C-c s" . deadgrep))
+
+  ;;; wgrep-change-to-wgrep-mode to edit right in a grep buffer (or ag/ripgrep)
+  ;;; Use C-c C-e to apply.
+(use-package wgrep
+  :commands wgrep-change-to-wgrep-mode
+  :config
+  (setq wgrep-auto-save-buffer t)
+  )
+
+;; deadgrep + wgrep
+(use-package wgrep-deadgrep
+  :after deadgrep wgrep)
+
+(provide 'init-grep)
 
 ;; Giving Windows (Hyper, Alt, and Super) keys
 ;; See: https://stackoverflow.com/questions/27418756/is-it-possible-to-make-emacs-interpet-an-fn-key-as-a-modifier-key/27419718#27419718

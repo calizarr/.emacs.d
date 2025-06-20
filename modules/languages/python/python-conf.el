@@ -22,49 +22,41 @@
   :ensure t
   :pin melpa)
 
-;; (defun conda--get-path-prefix (env-dir)
-;;   "Get a platform-specific path string to utilize the conda env in ENV-DIR.
-;;          It's platform specific in that it uses the platform's native path separator."
-;;   (string-trim (shell-command-to-string (format "conda activate \"%s\"" env-dir))))
+;;; Ruff is a new 2024 much-faster code linter/formatter
+(use-package ruff-format)
 
+;;;; Format Python buffers with ~black~
+(use-package python-black)
 
-(defun get-conda-root ()
-  "Return the unstable _CONDA_ROOT env variable using the stable CONDA_EXE ENV variable."
-  (file-name-directory (directory-file-name (file-name-directory (getenv "CONDA_EXE")))))
+(use-package pytest)
 
-(defun check-conda-envs ()
-  "Print out all current CONDA environment variables."
-  (let
-      ((conda-envs (-filter (lambda (x) (string-match "^_?CONDA.*$" x)) process-environment)))
-    (dolist (element conda-envs)
-      (print (split-string element "=")))))
+(use-package python-isort)
 
-(defun conda-add-env-postactivate-func ()
-  "Add environment variables postactivation"
-  (setenv "CONDA_SHLVL" "1")
-  ;; (setenv "CONDA_PYTHON_EXE" (convert-standard-filename (subst-char-in-string ?/ ?\\ (concat (get-conda-root) "python.exe"))))
-  (setenv "CONDA_PROMPT_MODIFIER" (format "%s%s%s" "(" conda-env-current-name ")"))
-  ;; (setenv "CONDA_PREFIX" (convert-standard-filename (subst-char-in-string ?/ ?\\ (conda-env-current-dir))))
-  (setenv "CONDA_DEFAULT_ENV" conda-env-current-name)
-  (setq elpy-rpc-python-command (executable-find "pythonw.exe")))
+;;; Pet is Python Executable Tracker.
+;;; Supports all kinds of virtualenvs, especially "uv"
+(use-package pet
+  :ensure t
+  :config
+  ;;; Master python hook
+  (add-hook 'python-base-mode-hook 'pet-mode -10)
+  (add-hook 'python-mode-hook 'pet-flycheck-setup))
+  ;; (add-hook 'python-base-mode-hook
+  ;;           (lambda ()
+  ;;             (setq-local python-shell-interpreter (pet-executable-find "python")
+  ;;                         python-shell-virtualenv-root (pet-virtualenv-root))
 
-(defun conda-rm-env-postdeactivate-func ()
-  "Remove environment variables post deactivation."
-  (setenv "CONDA_SHLVL" "0")
-  (setenv "CONDA_PROMPT_MODIFIER")
-  (setenv "CONDA_PREFIX")
-  (setenv "CONDA_DEFAULT_ENV")
-  (setq elpy-rpc-python-command (executable-find "pythonw.exe")))
+  ;;             (setq-local dap-python-executable python-shell-interpreter)
 
-(if (is-windows)
-    (use-package conda
-      :disabled
-      :pin melpa
-      :ensure t
-      :init
-      (setq conda-anaconda-home (get-conda-root)
-            conda-postactivate-hook 'conda-add-env-postactivate-func
-            conda-postdeactivate-hook 'conda-rm-env-postdeactivate-func)
-      :config
-      (conda-env-initialize-interactive-shells)
-      (conda-env-initialize-eshell)))
+  ;;             (setq-local python-pytest-executable (pet-executable-find "pytest"))
+
+  ;;             (when-let ((ruff-executable (pet-executable-find "ruff")))
+  ;;               (setq-local ruff-format-command ruff-executable)
+  ;;               (ruff-format-on-save-mode))
+
+  ;;             (when-let ((black-executable (pet-executable-find "black")))
+  ;;               (setq-local python-black-command black-executable)
+  ;;               (python-black-on-save-mode))
+
+  ;;             (when-let ((isort-executable (pet-executable-find "isort")))
+  ;;               (setq-local python-isort-command isort-executable)
+  ;;               (python-isort-on-save-mode)))))
