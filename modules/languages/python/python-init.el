@@ -2,14 +2,11 @@
 ;;; Commentary:
 
 ;;; Code:
-;; Elpy-settings
-;; (load "elpy-conf.el")
+
 ;; python configurations
 (load "./python-conf.el")
-;; Python PYLS (Palantir) LSP Server
-(load "./python-pyls-lsp.el")
-;; Python Pyright (Microsoft) LSP Server
-(load "./python-pyright-lsp.el")
+;; Python-Lsp-Server
+(load "./pylsp-conf.el")
 
 (provide 'python-init)
 ;;; python-init ends here

@@ -2,7 +2,8 @@
 ;; LSP Yaml mode
 (setq lsp-yaml-schemas (make-hash-table)
       lsp-yaml-schema-store-enable t
-      lsp-yaml-schema-store-uri "https://www.schemastore.org/api/json/catalog.json")
+      lsp-yaml-schema-store-uri "https://www.schemastore.org/api/json/catalog.json"
+      lsp-yaml-server-command '(emacs-lsp-booster yaml-language-server --stdio))
 
 ;; Filling the schemas in
 (puthash "https://json.schemastore.org/kustomization" "/kustomization.yaml" lsp-yaml-schemas)

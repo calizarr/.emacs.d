@@ -1,7 +1,7 @@
 (setq treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
      (go "https://github.com/tree-sitter/tree-sitter-go")
-     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (python "https://github.com/tree-sitter/tree-sitter-python" "v0.19.0")
      (scala "https://github.com/tree-sitter/tree-sitter-scala")
      (kotlin "https://github.com/tree-sitter-grammars/tree-sitter-kotlin")
      (elisp "https://github.com/Wilfred/tree-sitter-elisp")
