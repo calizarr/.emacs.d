@@ -17,7 +17,7 @@
          ("C-x 5 b" . consult-buffer-other-frame)  ;; orig. switch-to-buffer-other-frame
          ("C-x t b" . consult-buffer-other-tab)    ;; orig. switch-to-buffer-other-tab
          ("C-x r b" . consult-bookmark)            ;; orig. bookmark-jump
-         ;; ("C-x p b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
+         ("C-x c b" . consult-project-buffer)      ;; orig. project-switch-to-buffer
          ;; Custom M-# bindings for fast register access
          ("M-#" . consult-register-load)
          ("M-'" . consult-register-store)          ;; orig. abbrev-prefix-mark (unrelated)
@@ -35,7 +35,7 @@
          ("M-g i" . consult-imenu)
          ("M-g I" . consult-imenu-multi)
          ;; M-s bindings in `search-map'
-         ("M-s d" . consult-find)                  ;; Alternative: consult-fd
+         ("M-s d" . consult-fd)                  ;; Alternative: consult-fd
          ("M-s c" . consult-locate)
          ("M-s g" . consult-grep)
          ("M-s G" . consult-git-grep)
@@ -101,19 +101,21 @@
   ;; Optionally make narrowing help available in the minibuffer.
   ;; You may want to use `embark-prefix-help-command' or which-key instead.
   ;; (keymap-set consult-narrow-map (concat consult-narrow-key " ?") #'consult-narrow-help)
+
+  ;; Use the ~substring~ completion style so calling this from isearch works properly
+  (defun consult-line-literal ()
+    (interactive)
+    (let ((completion-styles '(substring))
+          (completion-category-defaults nil)
+          (completion-category-overrides nil))
+      (consult-line)))
+
+  ;; 4. projectile.el (projectile-project-root)
+  (autoload 'projectile-project-root "projectile")
+  (setq consult-project-function (lambda (_) (projectile-project-root)))
 )
 
-;; 4. projectile.el (projectile-project-root)
-(autoload 'projectile-project-root "projectile")
-(setq consult-project-function (lambda (_) (projectile-project-root)))
 
-;; Use the ~substring~ completion style so calling this from isearch works properly
-(defun consult-line-literal ()
-  (interactive)
-  (let ((completion-styles '(substring))
-        (completion-category-defaults nil)
-        (completion-category-overrides nil))
-    (consult-line)))
 
 (use-package consult-dir
   :ensure t
@@ -121,3 +123,6 @@
          :map minibuffer-local-completion-map
          ("C-x C-d" . consult-dir)
          ("C-x C-j" . consult-dir-jump-file)))
+
+(use-package consult-projectile
+  :after consult)
