@@ -41,7 +41,6 @@
                 lsp-headerline-breadcrumb-enable t
                 lsp-headerline-breadcrumb-enable-symbol-numbers t
                 lsp-terraform-ls-enable-show-reference t
-                lsp-terraform-ls-server '(emacs-lsp-booster terraform-ls)
                 lsp-semantic-tokens-enable t
                 lsp-semantic-tokens-enable-multiline-token-support t
                 lsp-semantic-tokens-honor-refresh-requests t
@@ -100,7 +99,6 @@
   ;; setting `lsp-semantic-tokens-apply-modifiers' to `nil' because metals sends `abstract' modifier
   ;; which is mapped to `keyword' face.
   (lsp-metals-enable-semantic-highlighting t)
-  (lsp-metals-server-command '(emacs-lsp-booster 'lsp-metals--server-command))
   :hook (scala-mode . lsp-deferred))
 
 
