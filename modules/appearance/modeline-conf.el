@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Setting up powerline etc.
 (use-package smart-mode-line-powerline-theme
   :ensure t)

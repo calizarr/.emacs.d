@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t; -*-
 ;;; core-init --- Loads several core / orphaned settings
 ;;; Commentary:
 ;;; TODO: Cleanup and move to appropriate files and groups

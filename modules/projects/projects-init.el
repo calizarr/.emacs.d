@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; projects-init --- Provides settings for projects
 ;;; Commentary:
 

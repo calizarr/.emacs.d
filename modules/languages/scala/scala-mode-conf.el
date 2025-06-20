@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; SBT-Mode package
 (use-package sbt-mode
   :ensure t

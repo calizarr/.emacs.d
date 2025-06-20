@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; graphviz-init --- Provides settings for graphviz
 ;;; Commentary:
 

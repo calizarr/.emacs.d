@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; http-init --- Provides settings for REST API usage and HTTP in general
 ;;; Commentary:
 

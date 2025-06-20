@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package auto-yasnippet
   :ensure t
   :pin melpa

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; appearance-init --- Contains settings specifically about the aesthetics
 ;;; Commentary:
 

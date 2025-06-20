@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; scala-init --- Provides settings for Scala, SBT, etc. files
 ;;; Commentary:
 

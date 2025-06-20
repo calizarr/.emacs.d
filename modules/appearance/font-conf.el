@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Customize font for emacs
 
 ;; (set-fontset-font

@@ -1,3 +1,6 @@
+;; -*- lexical-binding: t; -*-
+
+
 ;;; Version Control Settings such as magit etc.
 
 (if (is-mac)

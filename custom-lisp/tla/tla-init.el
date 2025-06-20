@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; tla-init --- Loads tla+ modules
 ;;; Commentary:
 ;;; Taken from: https://github.com/rudi/tla-tools

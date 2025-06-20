@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Projectile Configurations
 (use-package projectile
   :demand

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Kotlin Mode
 (use-package kotlin-mode
   :mode "\\.kt$"

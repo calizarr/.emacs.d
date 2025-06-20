@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Ensure Elisp References
 (use-package elisp-refs
   :ensure)

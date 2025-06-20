@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; kotlin-init --- Provides settings for Kotlin files
 ;;; Commentary:
 

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (setq treesit-language-source-alist
    '((bash "https://github.com/tree-sitter/tree-sitter-bash")
      (go "https://github.com/tree-sitter/tree-sitter-go")

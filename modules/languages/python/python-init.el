@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; python-init --- Provides settings for python IDE style editing
 ;;; Commentary:
 

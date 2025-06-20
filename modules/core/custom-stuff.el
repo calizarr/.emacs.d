@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Have emacs save customize settings not in init.el
 (setq custom-file (concat user-emacs-directory (convert-standard-filename "emacs-custom.el")))
 

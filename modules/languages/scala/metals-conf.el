@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Configuration file for all things Metals the Scala LSP server
 ;; (defun lsp-scala-add-type-annotation ()
 ;;   "Add type annotation to the val at point."

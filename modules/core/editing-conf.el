@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Make sure you have highlight-indentation-guides
 (use-package highlight-indent-guides
   :ensure t

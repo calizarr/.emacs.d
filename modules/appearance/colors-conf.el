@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (require 'ansi-color)
 
 (defun display-ansi-colors ()

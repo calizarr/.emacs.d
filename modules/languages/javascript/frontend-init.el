@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; frontend-init --- Provides settings for Typescript and Javascript
 ;;; Commentary:
 ;;; TODO: Outdated if ever to use again

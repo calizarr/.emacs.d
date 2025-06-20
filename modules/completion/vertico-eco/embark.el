@@ -1,3 +1,4 @@
+;;  -*- lexical-binding: t; -*-
 ;; Enable rich annotations using the Marginalia package
 (use-package marginalia
   :ensure t

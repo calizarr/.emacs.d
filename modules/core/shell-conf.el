@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; Shell and Eshell settings etc.
 
 ;; Remove shell command echo

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Enable nice rendering of diagnostics like compile errors.
 (use-package flycheck
   :ensure t

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; infra-init -- Provides settings for infrastructure related settings
 ;;; Commentary:
 

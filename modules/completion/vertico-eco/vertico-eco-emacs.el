@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; A few more useful configurations...
 (use-package emacs
   :custom

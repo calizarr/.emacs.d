@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; go-init -- Provides settings for Golang IDE behavior
 ;;; Commentary:
 

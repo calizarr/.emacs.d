@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;; Dashboard
 (use-package page-break-lines
   :demand

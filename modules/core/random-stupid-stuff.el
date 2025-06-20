@@ -1,3 +1,6 @@
+;; -*- lexical-binding: t; -*-
+
+
 ;; Nyan Mode
 (use-package nyan-mode
   :demand

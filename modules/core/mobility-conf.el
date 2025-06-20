@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; Mobility around emacs buffers
 
 (use-package avy

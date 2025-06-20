@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 ;;; alloy-init --- Loads alloy modules
 ;;; Commentary:
 ;;; Taken from: https://github.com/dwwmmn/alloy-mode
