@@ -13,7 +13,7 @@
 ;; Set this first to speed up startup 5.5s -> 2.5s
 (setq gc-cons-threshold most-positive-fixnum) ;; 200 MB of RAM
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
-(setq comp-deferred-compilation t)
+;; (setq comp-deferred-compilation t)
 
 ;; If an `.el' file is newer than its corresponding `.elc', load the `.el'.
 (setq load-prefer-newer t)

@@ -6,7 +6,7 @@
 (load custom-file :noerror)
 
 ;; speed up redisplay with very long lines, e.g. compilation buffers
-(setq-default cache-long-scans t)
+;; (setq-default cache-long-scans t)
 
 ;; Save all backup(~) files and auto-save files in /tmp
 ;; This keeps clutter down.
@@ -113,7 +113,7 @@
 (toggle-scroll-bar -1)
 
 ;; Changing list buffers (C-x C-b) to ibuffer
-(global-set-key (kbd "C-x C-b") 'ibuffer)
+;; (global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;; Global eval buffer
 (global-set-key (kbd "C-c C-b") 'eval-buffer)
@@ -128,42 +128,11 @@
     (exec-path-from-shell-initialize)))
 
 
-(use-package which-key
-  :diminish
-  :ensure t
-  :init
-  (which-key-mode))
-
-(use-package smartparens
-  :diminish smartparens-mode
-  :commands
-  smartparens-strict-mode
-  smartparens-mode
-  sp-restrict-to-pairs-interactive
-  sp-local-pair
-  :init
-  (setq sp-interactive-dwim t)
-  :bind (:map smartparens-mode-map
-              ("M-<right>" . #'sp-backward-slurp-sexp)
-              ("C-<right>" . #'sp-forward-slurp-sexp)
-              ("M-<left>" . #'sp-backward-barf-sexp)
-              ("C-<left>" . #'sp-forward-barf-sexp)
-              )
-  :config
-  (require 'smartparens-config)
-  (sp-use-smartparens-bindings)
-
-  (sp-pair "(" ")" :wrap "C-(") ;; how do people live without this?
-  (sp-pair "[" "]" :wrap "s-[") ;; C-[ sends ESC
-  (sp-pair "{" "}" :wrap "C-{")
-
-  ;; WORKAROUND https://github.com/Fuco1/smartparens/issues/543
-  ;; Ensime / Fommil bindings
-  ;; (bind-key "C-<left>" nil smartparens-mode-map)
-  ;; (bind-key "C-<right>" nil smartparens-mode-map)
-
-  (bind-key "s-<delete>" 'sp-kill-sexp smartparens-mode-map)
-  (bind-key "s-<backspace>" 'sp-backward-kill-sexp smartparens-mode-map))
+;; (use-package which-key
+;;   :diminish
+;;   :ensure t
+;;   :init
+;;   (which-key-mode))
 
 ;; Expand-region style
 (use-package expand-region
@@ -179,30 +148,30 @@
 (use-package vlf
   :ensure t)
 
-;; Load More Helpful Help Settings
-(use-package helpful
-  :ensure t
-  :bind (
-         ;; Note that the built-in `describe-function' includes both functions
-         ;; and macros. `helpful-function' is functions only, so we provide
-         ;; `helpful-callable' as a drop-in replacement.
-         ("C-h f" . #'helpful-callable)
-         ("C-h v" . #'helpful-variable)
-         ("C-h k" . #'helpful-key)
-         ;; Lookup the current symbol at point. C-c C-d is a common keybinding
-         ;; for this in lisp modes.
-         ("C-c C-d" . #'helpful-at-point)
-         ;; Look up *F*unctions (excludes macros).
-         ;;
-         ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
-         ;; already links to the manual, if a function is referenced there.
-         ("C-h F" . #'helpful-function)
-         ;; Look up *C*ommands.
-         ;;
-         ;; By default, C-h C is bound to describe `describe-coding-system'. I
-         ;; don't find this very useful, but it's frequently useful to only
-         ;; look at interactive functions.
-         ("C-h C" . #'helpful-command)))
+;; ;; Load More Helpful Help Settings
+;; (use-package helpful
+;;   :ensure t
+;;   :bind (
+;;          ;; Note that the built-in `describe-function' includes both functions
+;;          ;; and macros. `helpful-function' is functions only, so we provide
+;;          ;; `helpful-callable' as a drop-in replacement.
+;;          ("C-h f" . #'helpful-callable)
+;;          ("C-h v" . #'helpful-variable)
+;;          ("C-h k" . #'helpful-key)
+;;          ;; Lookup the current symbol at point. C-c C-d is a common keybinding
+;;          ;; for this in lisp modes.
+;;          ("C-c C-d" . #'helpful-at-point)
+;;          ;; Look up *F*unctions (excludes macros).
+;;          ;;
+;;          ;; By default, C-h F is bound to `Info-goto-emacs-command-node'. Helpful
+;;          ;; already links to the manual, if a function is referenced there.
+;;          ("C-h F" . #'helpful-function)
+;;          ;; Look up *C*ommands.
+;;          ;;
+;;          ;; By default, C-h C is bound to describe `describe-coding-system'. I
+;;          ;; don't find this very useful, but it's frequently useful to only
+;;          ;; look at interactive functions.
+;;          ("C-h C" . #'helpful-command)))
 
 ;; Emacs String Manipulation libraries
 ;; https://github.com/magnars/s.el

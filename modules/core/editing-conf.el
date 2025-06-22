@@ -58,7 +58,6 @@
 (use-package powershell
   :ensure t)
 
-
 ;;; Ediff: split horizontally (A|B, like C-x 3) and
 ;;; don't use the little floating control frame.
 (use-package ediff
@@ -86,13 +85,36 @@
   :config
   (paren-activate))
 
+(use-package smartparens
+  :diminish smartparens-mode
+  :commands
+  smartparens-strict-mode
+  smartparens-mode
+  sp-restrict-to-pairs-interactive
+  sp-local-pair
+  :init
+  (setq sp-interactive-dwim t)
+  :bind (:map smartparens-mode-map
+              ("M-<right>" . #'sp-backward-slurp-sexp)
+              ("C-<right>" . #'sp-forward-slurp-sexp)
+              ("M-<left>" . #'sp-backward-barf-sexp)
+              ("C-<left>" . #'sp-forward-barf-sexp)
+              )
+  :config
+  (require 'smartparens-config)
+  (sp-use-smartparens-bindings)
+
+  (sp-pair "(" ")" :wrap "C-(") ;; how do people live without this?
+  (sp-pair "[" "]" :wrap "s-[") ;; C-[ sends ESC
+  (sp-pair "{" "}" :wrap "C-{")
+
+  (bind-key "s-<delete>" 'sp-kill-sexp smartparens-mode-map)
+  (bind-key "s-<backspace>" 'sp-backward-kill-sexp smartparens-mode-map))
+
 ;;; Useful for folding, manipulating and navigating indented languages like yaml
 ;;; (or even python)
 (use-package indent-tools
   :bind (("C-c >" . 'indent-tools-hydra/body)))
-
-;;; Timezone converter: functions are like `tzc-convert-*` and `tzc-world-clock`
-(use-package tzc)
 
 (use-package package-lint)
 
@@ -106,8 +128,8 @@
   :config
   :bind ("C-c s" . deadgrep))
 
-  ;;; wgrep-change-to-wgrep-mode to edit right in a grep buffer (or ag/ripgrep)
-  ;;; Use C-c C-e to apply.
+;;; wgrep-change-to-wgrep-mode to edit right in a grep buffer (or ag/ripgrep)
+;;; Use C-c C-e to apply.
 (use-package wgrep
   :commands wgrep-change-to-wgrep-mode
   :config
@@ -117,8 +139,6 @@
 ;; deadgrep + wgrep
 (use-package wgrep-deadgrep
   :after deadgrep wgrep)
-
-(provide 'init-grep)
 
 ;; Giving Windows (Hyper, Alt, and Super) keys
 ;; See: https://stackoverflow.com/questions/27418756/is-it-possible-to-make-emacs-interpet-an-fn-key-as-a-modifier-key/27419718#27419718

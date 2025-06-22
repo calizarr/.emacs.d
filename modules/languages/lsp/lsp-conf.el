@@ -29,7 +29,7 @@
   (kotlin-mode . lsp-deferred)
   (python-ts-mode . lsp-deferred)
   (lsp-mode . lsp-lens-mode)
-  (lsp-mode . lsp-enable-which-key-integration)
+  ;; (lsp-mode . lsp-enable-which-key-integration)
   (lsp-completion-mode . my/lsp-mode-setup-completion)
   :commands (lsp lsp-deferred)
   :config (setq lsp-prefer-flymake nil

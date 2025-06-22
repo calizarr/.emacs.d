@@ -1,5 +1,8 @@
 ;; -*- lexical-binding: t; -*-
 
+;;; Timezone converter: functions are like `tzc-convert-*` and `tzc-world-clock`
+(use-package tzc)
+
 (use-package calfw)
 
 ;; Adding calendar insert

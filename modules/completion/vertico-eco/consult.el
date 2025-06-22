@@ -115,8 +115,6 @@
   (setq consult-project-function (lambda (_) (projectile-project-root)))
 )
 
-
-
 (use-package consult-dir
   :ensure t
   :bind (("C-x C-d" . consult-dir)

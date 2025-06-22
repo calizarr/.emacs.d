@@ -34,6 +34,7 @@
 
 ;;; Pet is Python Executable Tracker.
 ;;; Supports all kinds of virtualenvs, especially "uv"
+;;; http://github.com/wyuenho/emacs-pet
 (use-package pet
   :ensure t
   :config
