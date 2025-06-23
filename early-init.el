@@ -11,7 +11,7 @@
 (setenv "LSP_USE_PLISTS" "true")
 
 ;; Set this first to speed up startup 5.5s -> 2.5s
-(setq gc-cons-threshold most-positive-fixnum) ;; 200 MB of RAM
+;; (setq gc-cons-threshold ) ;; 200 MB of RAM
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 ;; (setq comp-deferred-compilation t)
 
@@ -21,8 +21,8 @@
 ;; Resizing the Emacs frame can be an expensive part of changing the
 ;; font. Inhibit this to reduce startup times with fonts that are
 ;; larger than the system default.
-(setq frame-inhibit-implied-resize t
-      frame-resize-pixelwise t)
+;; (setq frame-inhibit-implied-resize t
+;;       frame-resize-pixelwise t)
 
 (provide 'early-init)
 
