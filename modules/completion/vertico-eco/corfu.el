@@ -5,14 +5,14 @@
   ;; Optional customizations
   :custom
   (corfu-cycle t)                ;; Enable cycling for `corfu-next/previous'
-  (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
-  (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
-  (corfu-preview-current nil)    ;; Disable current candidate preview
+  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
+  ;; (corfu-preview-current nil)    ;; Disable current candidate preview
   (corfu-preselect 'prompt)      ;; Preselect the prompt
-  (corfu-on-exact-match nil)     ;; Configure handling of exact matches
+  ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   (corfu-auto t)
   (corfu-auto-delay 0.10)
-  (corfu-quit-no-match t)
+  ;; (corfu-quit-no-match t)
 
   ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
   ;; :hook ((prog-mode . corfu-mode)

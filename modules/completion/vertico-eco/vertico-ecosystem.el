@@ -15,7 +15,7 @@
   ;; ;; Option 1: Additional bindings
   (keymap-set vertico-map "?" #'minibuffer-completion-help)
   (keymap-set vertico-map "M-RET" #'minibuffer-force-complete-and-exit)
-  (keymap-set vertico-map "M-TAB" #'minibuffer-complete)
+  (keymap-set vertico-map "C-M-TAB" #'minibuffer-complete)
 
   (setq completion-in-region-function #'consult-completion-in-region)
 
