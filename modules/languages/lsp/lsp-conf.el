@@ -3,9 +3,11 @@
   :ensure t
   :pin melpa
   :custom
+  ;; Actually literally for company, not any other
   (lsp-completion-provider :none) ;; CORFU!
   :init
   (setq lsp-keymap-prefix "C-c l")
+
   (defun my/orderless-dispatch-flex-first (_pattern index _total)
     (and (eq index 0) 'orderless-flex))
 
@@ -17,11 +19,12 @@
     ;; Optionally configure the cape-capf-buster.
     (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
 
-
   :bind (("C-c C-v t" . lsp-describe-type-at-point)
          ("C-c C-r t" . lsp-describe-thing-at-point)
          ("C-c C-l" . lsp))
   :hook
+  (lsp-completion-mode . my/lsp-mode-setup-completion)
+  ;; (lsp-mode . lsp-enable-which-key-integration)
   (scala-mode . lsp-deferred)
   (sh-mode .lsp-deferred)
   (go-mode . lsp-deferred)
@@ -29,8 +32,6 @@
   (kotlin-mode . lsp-deferred)
   (python-ts-mode . lsp-deferred)
   (lsp-mode . lsp-lens-mode)
-  ;; (lsp-mode . lsp-enable-which-key-integration)
-  (lsp-completion-mode . my/lsp-mode-setup-completion)
   :commands (lsp lsp-deferred)
   :config (setq lsp-prefer-flymake nil
                 lsp-idle-delay 0.250
@@ -50,7 +51,24 @@
                 lsp-disabled-clients '(tfls semgrep-ls pyright ruff)
                 lsp-use-plists t
                 )
-  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map))
+  (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+  :custom
+  (defun lsp-describe-type-at-point ()
+    "Display the full documentation of the thing at point."
+    (interactive)
+    (let ((contents (-some->> (lsp--text-document-position-params)
+                      (lsp--make-request "textDocument/hover")
+                      (lsp--send-request)
+                      (gethash "contents"))))
+      (if (and contents (not (equal contents "")) )
+          (lsp--info (lsp--render-on-hover-content contents t))
+        (lsp--info "No content at point."))))
+
+  ;; Bash LSP Settings
+  ;; https://github.com/mads-hartmann/bash-language-server#emacs
+  (setq lsp-bash-highlight-parsing-errors t
+        lsp-bash-allowed-shells '(sh bash zsh))
+  )
 
 (use-package lsp-ui
   :ensure t
@@ -104,21 +122,7 @@
 
 ;; (push 'company-lsp company-backends)
 
-(defun lsp-describe-type-at-point ()
-  "Display the full documentation of the thing at point."
-  (interactive)
-  (let ((contents (-some->> (lsp--text-document-position-params)
-                    (lsp--make-request "textDocument/hover")
-                    (lsp--send-request)
-                    (gethash "contents"))))
-    (if (and contents (not (equal contents "")) )
-        (lsp--info (lsp--render-on-hover-content contents t))
-      (lsp--info "No content at point."))))
 
-;; Bash LSP Settings
-;; https://github.com/mads-hartmann/bash-language-server#emacs
-(setq lsp-bash-highlight-parsing-errors t
-      lsp-bash-allowed-shells '(sh bash zsh))
 
 
 ;; Use the Debug Adapter Protocol for running tests and debugging

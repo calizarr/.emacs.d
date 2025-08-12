@@ -4,20 +4,26 @@
   :ensure t
   ;; Optional customizations
   :custom
-  (corfu-cycle t)                 ;; Enable cycling for `corfu-next/previous'
-  ;; (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
+  ;; (corfu-cycle t)                 ;; Enable cycling for `corfu-next/previous'
+  (corfu-quit-at-boundary nil)   ;; Never quit at completion boundary
   ;; (corfu-quit-no-match nil)      ;; Never quit, even if there is no match
   ;; (corfu-preview-current nil)    ;; Disable current candidate preview
-  (corfu-preselect 'prompt)      ;; Preselect the prompt
-  (corfu-auto-prefix 1)          ;; Number of characters before activation
+  ;; (corfu-preselect 'prompt)      ;; Preselect the prompt
   ;; (corfu-on-exact-match nil)     ;; Configure handling of exact matches
   (corfu-auto t)                 ;; Auto popup
-  (corfu-auto-delay 0.10)        ;; Auto popup delay
+  (corfu-auto-delay 0.25)        ;; Auto popup delay
+  (corfu-auto-prefix 3)          ;; Number of characters before activation
+  ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
   ;; (corfu-quit-no-match t)
   ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
   ;; :hook ((prog-mode . corfu-mode)
   ;;        (shell-mode . corfu-mode)
   ;;        (eshell-mode . corfu-mode))
+
+  :bind
+  ;; Another key binding can be used, such as S-SPC.
+  (:map corfu-map ("M-SPC" . corfu-insert-separator))
+
 
   :init
   ;; Recommended: Enable Corfu globally.  Recommended since many modes provide
@@ -26,8 +32,18 @@
   (global-corfu-mode)
   ;; Enable optional extension modes:
   (corfu-history-mode)
-  (corfu-popupinfo-mode)
+  ;; (corfu-popupinfo-mode)
   (corfu-echo-mode)
+
+  ;; :config
+  ;; ;; Free the RET key for less intrusive behavior.
+  ;; ;; Option 1: Unbind RET completely
+  ;; ;; (keymap-unset corfu-map "RET")
+  ;; ;; Option 2: Use RET only in shell modes
+  ;; (keymap-set corfu-map "RET" `( menu-item "" nil :filter
+  ;;                                ,(lambda (&optional _)
+  ;;                                   (and (derived-mode-p 'eshell-mode 'comint-mode)
+  ;;                                        #'corfu-send))))
   )
 
 ;; Add extensions
@@ -35,30 +51,30 @@
   :demand t
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
   ;; Press C-c c ? to for help.
-  :bind ("C-c c" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
+  :bind ("M-p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
   ;; Alternatively bind Cape commands individually.
-  ;; :bind (("C-c p d" . cape-dabbrev)
-  ;;        ("C-c p h" . cape-history)
-  ;;        ("C-c p f" . cape-file)
+  :bind (("C-c p d" . cape-dabbrev)
+         ("C-c p h" . cape-history)
+         ("C-c p f" . cape-file))
   ;;        ...)
   :init
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the
   ;; first function returning a result wins.  Note that the list of buffer-local
   ;; completion functions takes precedence over the global list.
+  (add-hook 'completion-at-point-functions #'cape-keyword)
+  (add-hook 'completion-at-point-functions #'cape-line)
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-abbrev)
-  (add-hook 'completion-at-point-functions #'cape-keyword)
   (add-hook 'completion-at-point-functions #'cape-file)
-  (add-hook 'completion-at-point-functions #'cape-elisp-block)
-  (add-hook 'completion-at-point-functions #'cape-elisp-symbol)
-  (add-hook 'completion-at-point-functions #'cape-line)
   (add-hook 'completion-at-point-functions #'cape-history)
   (add-hook 'completion-at-point-functions #'cape-dict)
-  (add-hook 'completion-at-point-functions #'cape-emoji)
-  (add-hook 'completion-at-point-functions #'cape-rfc1345)
-  (add-hook 'completion-at-point-functions #'cape-sgml)
-  (add-hook 'completion-at-point-functions #'cape-tex)
+  ;; (add-hook 'completion-at-point-functions #'cape-elisp-block)
+  ;; (add-hook 'completion-at-point-functions #'cape-elisp-symbol)
+  ;; (add-hook 'completion-at-point-functions #'cape-emoji)
+  ;; (add-hook 'completion-at-point-functions #'cape-rfc1345)
+  ;; (add-hook 'completion-at-point-functions #'cape-sgml)
+  ;; (add-hook 'completion-at-point-functions #'cape-tex)
   (message (format "Loading my capf extensions: %s" completion-at-point-functions))
   ;; ...
   :config
@@ -75,14 +91,15 @@
                     #'cape-dabbrev)
                   cape-file)
                 cape-dabbrev-min-length 5))
-  (add-hook 'emacs-lisp-mode-hook #'my/setup-elisp))
+  (add-hook 'emacs-lisp-mode-hook #'my/setup-elisp)
+  )
 
-;; Nice icons for corfu popups
-(use-package kind-icon
-  :after corfu
-  :demand t
-  :config
-  (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
+;; ;; Nice icons for corfu popups
+;; (use-package kind-icon
+;;   :after corfu
+;;   :demand t
+;;   :config
+;;   (add-to-list 'corfu-margin-formatters #'kind-icon-margin-formatter))
 
 ;; Use Dabbrev with Corfu!
 (use-package dabbrev

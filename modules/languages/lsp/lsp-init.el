@@ -6,7 +6,7 @@
 ;; LSP-mode settings for general lsp usage
 (load "./lsp-conf.el")
 ;; Boost LSP!
-(load "./lsp-booster.el")
+;; (load "./lsp-booster.el")
 ;; Yaml LSP Server functions and settings
 (load "./ylsp-conf.el")
 ;; Tree-Sitter Config

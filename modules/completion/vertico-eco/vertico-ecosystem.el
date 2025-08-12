@@ -17,7 +17,7 @@
   (keymap-set vertico-map "M-RET" #'minibuffer-force-complete-and-exit)
   (keymap-set vertico-map "C-M-TAB" #'minibuffer-complete)
 
-  (setq completion-in-region-function #'consult-completion-in-region)
+  ;; (setq completion-in-region-function #'consult-completion-in-region)
 
   (defun +vertico-restrict-to-matches ()
     (interactive)
