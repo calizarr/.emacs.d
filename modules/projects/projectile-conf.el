@@ -7,11 +7,19 @@
   :init (setq projectile-use-git-grep t
               ;; Opens project root when using projectile-switch-project (C-c p p)
               projectile-switch-project-action #'projectile-dired)
-  :bind (("s-f" . projectile-find-file))
+  ;; :bind (("s-f" . projectile-find-file))
   :config
   (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map))
+
+  (defun my-project-ripgrep ()
+    "Search current project using consult-ripgrep."
+    (interactive)
+    (let ((default-directory (projectile-project-root)))
+      (call-interactively 'consult-ripgrep)))
+
+  ;; (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (define-key projectile-mode-map (kbd "C-c p s r") 'my-project-ripgrep))
 
 ;; (defun projectile-discover-projects-in-directory (directory)
 ;;   "Discover any projects in DIRECTORY and add them to the projectile cache.

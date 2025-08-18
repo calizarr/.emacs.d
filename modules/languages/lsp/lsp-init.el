@@ -11,6 +11,9 @@
 (load "./ylsp-conf.el")
 ;; Tree-Sitter Config
 (load "./tree-sitter.el")
+;; helm-ls
+(with-eval-after-load "lsp-mode"
+  (load "./helm-ls.el"))
 
 (provide 'lsp-init)
 ;;; lsp-init ends here

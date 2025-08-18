@@ -9,6 +9,9 @@
 ;; persp-projectile
 ;; (load "persp-projectile.el")
 
+;; Maybe eventually use project.el
+;; (load "project.el")
+
 
 (provide 'projects-init)
 ;;; projects-init ends here

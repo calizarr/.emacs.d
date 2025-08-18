@@ -1,4 +1,15 @@
 ;;; -*- lexical-binding: t -*-
+
+;; Set up helm-ls
+(define-derived-mode helm-mode yaml-mode "helm"
+  "Major mode for editing helm kubernetes templates")
+
+(defcustom lsp-helm-ls-executable "helm_ls"
+  "Command to start the helm-ls server"
+  :group 'lsp-helm
+  :risky t
+  :type 'file)
+
 (use-package lsp-mode
   :ensure t
   :pin melpa
@@ -31,6 +42,7 @@
   (terraform-mode . lsp-deferred)
   (kotlin-mode . lsp-deferred)
   (python-ts-mode . lsp-deferred)
+  (helm-mode . lsp-deferred)
   (lsp-mode . lsp-lens-mode)
   :commands (lsp lsp-deferred)
   :config (setq lsp-prefer-flymake nil
@@ -45,24 +57,37 @@
                 lsp-semantic-tokens-enable t
                 lsp-semantic-tokens-enable-multiline-token-support t
                 lsp-semantic-tokens-honor-refresh-requests t
-                lsp-semantic-tokens-apply-modifiers nil
+                lsp-semantic-tokens-apply-modifiers t
                 lsp-enable-links t
                 lsp-terraform-ls-prefill-required-fields t
-                lsp-disabled-clients '(tfls semgrep-ls pyright ruff)
+                lsp-disabled-clients '(semgrep-ls pyright ruff)
+                ;; lsp-disabled-clients '(tfls semgrep-ls pyright ruff)
                 lsp-use-plists t
                 )
+
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-  :custom
+
+  (add-to-list 'lsp-language-id-configuration
+               '(helm-mode . "helm"))
+  (lsp-register-client
+   (make-lsp-client :new-connection (lsp-stdio-connection '("helm_ls" "serve"))
+                    :activation-fn (lsp-activate-on "helm")
+                    :server-id 'helm_ls))
+
+  ;; This puts it in the minibuffer, you can also simulate hover with
+  ;; C-l h g
   (defun lsp-describe-type-at-point ()
     "Display the full documentation of the thing at point."
     (interactive)
     (let ((contents (-some->> (lsp--text-document-position-params)
                       (lsp--make-request "textDocument/hover")
                       (lsp--send-request)
-                      (gethash "contents"))))
-      (if (and contents (not (equal contents "")) )
-          (lsp--info (lsp--render-on-hover-content contents t))
+                      (lsp:hover-contents))))
+      (if (and contents (not (equal contents "")))
+            (lsp--info (lsp--render-on-hover-content contents t))
         (lsp--info "No content at point."))))
+
+  :custom
 
   ;; Bash LSP Settings
   ;; https://github.com/mads-hartmann/bash-language-server#emacs
@@ -121,8 +146,6 @@
 
 
 ;; (push 'company-lsp company-backends)
-
-
 
 
 ;; Use the Debug Adapter Protocol for running tests and debugging

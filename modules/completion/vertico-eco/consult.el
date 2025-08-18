@@ -77,7 +77,7 @@
   ;; Configure other variables and modes in the :config section,
   ;; after lazily loading the package.
   :config
-
+  (setq consult-ripgrep-command "rg --multiline --null --ignore-case --line-buffered --color=always --max-columns=500 --no-heading --line-number . -e ARG OPTS")
   ;; Optionally configure preview. The default value
   ;; is 'any, such that any key triggers the preview.
   (setq consult-preview-key 'any)
@@ -110,7 +110,7 @@
           (completion-category-overrides nil))
       (consult-line)))
 
-  ;; 4. projectile.el (projectile-project-root)
+  ;; ;; 4. projectile.el (projectile-project-root)
   (autoload 'projectile-project-root "projectile")
   (setq consult-project-function (lambda (_) (projectile-project-root)))
 )

@@ -18,6 +18,11 @@
       (goto-char (point-min))
       (insert modeline "\n"))))
 
+(defun helm-ls-modeline ()
+  "Inserts the helm-ls modeline at the top of the file"
+  (interactive)
+  (ylsp-operations "# -*- mode: helm -*-"))
+
 (defun ylsp-kustomize-modeline ()
   "Inserts kustomization modeline at top of buffer"
   (interactive)
