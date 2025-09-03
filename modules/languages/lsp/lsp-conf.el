@@ -63,6 +63,7 @@
                 lsp-disabled-clients '(semgrep-ls pyright ruff)
                 ;; lsp-disabled-clients '(tfls semgrep-ls pyright ruff)
                 lsp-use-plists t
+                lsp-yaml-format-enable nil
                 )
 
   (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)

@@ -79,3 +79,8 @@
   "Enable hover"
   :group 'helm-ls
   :lsp-path "helm.yamlls.config.hover")
+
+(lsp-defcustom lsp-helm-language-server-property "false"
+  "Disable format"
+  :group 'helm-ls
+  :lsp-path "helm.yamlls.format.enable")
