@@ -27,6 +27,9 @@
       backup-directory-alist `((".*" . ,temporary-file-directory))
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
+;; Ask for confirmation before exit
+(setq confirm-kill-emacs 'yes-or-no-p)
+
 (defvar custom-lisp
   (concat user-emacs-directory
           (convert-standard-filename "custom-lisp/")))

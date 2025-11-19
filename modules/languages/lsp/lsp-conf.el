@@ -28,7 +28,9 @@
     ;; Optionally configure the first word as flex filtered.
     (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
     ;; Optionally configure the cape-capf-buster.
-    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point))))
+    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
+    ;; https://magnus.therning.org/2024-05-04-orderless-completion-in-lsp-mode.html
+    (setq-local completion-category-defaults (assoc-delete-all 'lsp-capf completion-category-defaults)))
 
   :bind (("C-c C-v t" . lsp-describe-type-at-point)
          ("C-c C-r t" . lsp-describe-thing-at-point)
@@ -41,12 +43,12 @@
   (go-mode . lsp-deferred)
   (terraform-mode . lsp-deferred)
   (kotlin-mode . lsp-deferred)
-  (python-ts-mode . lsp-deferred)
+  (python-mode . lsp-deferred)
   (helm-mode . lsp-deferred)
   (lsp-mode . lsp-lens-mode)
   :commands (lsp lsp-deferred)
   :config (setq lsp-prefer-flymake nil
-                lsp-idle-delay 0.250
+                lsp-idle-delay 0.50
                 ;; Set to t for debugging
                 lsp-log-io nil
                 lsp-modeline-diagnostics-scope :project
@@ -60,7 +62,7 @@
                 lsp-semantic-tokens-apply-modifiers t
                 lsp-enable-links t
                 lsp-terraform-ls-prefill-required-fields t
-                lsp-disabled-clients '(semgrep-ls pyright ruff)
+                lsp-disabled-clients '(semgrep-ls pylsp ruff)
                 ;; lsp-disabled-clients '(tfls semgrep-ls pyright ruff)
                 lsp-use-plists t
                 lsp-yaml-format-enable nil

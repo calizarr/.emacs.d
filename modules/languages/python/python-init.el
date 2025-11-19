@@ -8,7 +8,10 @@
 ;; python configurations
 (load "./python-conf.el")
 ;; Python-Lsp-Server
-(load "./pylsp-conf.el")
+;; (load "./pylsp-conf.el")
+
+;; Pyright Server
+(load "./pyright-conf.el")
 
 (provide 'python-init)
 ;;; python-init ends here

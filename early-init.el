@@ -11,8 +11,9 @@
 (setenv "LSP_USE_PLISTS" "true")
 
 ;; Set this first to speed up startup 5.5s -> 2.5s
-;; (setq gc-cons-threshold ) ;; 200 MB of RAM
-(setq read-process-output-max (* 1024 1024)) ;; 1mb
+(setq gc-cons-threshold 200000000) ;; 200 MB of RAM
+;; (setq gc-cons-threshold 800000)
+(setq read-process-output-max (* (* 1024 1024) 10)) ;; 1mb
 ;; (setq comp-deferred-compilation t)
 
 ;; If an `.el' file is newer than its corresponding `.elc', load the `.el'.

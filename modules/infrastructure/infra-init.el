@@ -10,6 +10,8 @@
 (load "ansible-conf.el")
 ;; Load Kubernetes Things
 (load "k8s-conf.el")
+;; Load Grafana Alloy Mode
+(load "grafana-alloy-mode.el")
 
 ;; Load Dockerfile Mode
 (use-package dockerfile-mode
