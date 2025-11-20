@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: lsp-defcustom
+# key: lspdc
+# --
+(lsp-defcustom lsp-${1:server}-language-server-property ${2:value}
+               ${3:Description}
+               :group '${4}
+               :lsp-path ${5:dot-separated-path-to-key})
+$0

@@ -1,0 +1,41 @@
+# -*- mode: snippet -*-
+# name: junos-interface-physical
+# key: jip
+# type: command
+# --
+(defun ether-opts ()
+  (if (y-or-n-p "ether-opts")
+      (let ((auto-neg (my-query-yes-no "auto-neg?" "auto_negotiation = true"))
+            (agg-int (my-query-yes-no-arg "aggregate?" "ae_8023ad = ")))
+        (format "  ether_opts {\n    %s    %s  }\n" auto-neg agg-int))
+      "DELETE\n"))
+
+(defun lacp ()
+  (if (y-or-n-p "lacp")
+      (let ((mode (my-query-yes-no-arg "lacp: mode (active or passive)?" "mode = "))
+            (periodic (my-query-yes-no-arg "lacp: periodic (fast or slow)?" "periodic = ")))
+        (format "  lacp {\n    %s    %s    }\n" mode periodic))
+      "DELETE\n"))
+
+(defun parent-ether-opts ()
+  (if (y-or-n-p "aggregated-ether-opts")
+      (let ((minimum-links (my-query-yes-no-arg "agg-ether: minimum-links" "minimum_links = "))
+            (lacp-res (lacp)))
+        (format "  parent_ether_opts {\n    %s  %s  }\n" minimum-links lacp-res))
+      "DELETE\n"))
+
+(setq-local name (read-from-minibuffer "name (tofu-format): "))
+(insert (format "resource \"junos_interface_physical\" \"%s\" {\n" name))
+(insert (format "%sname = \"%s\"\n" "  " (int-name name)))
+(insert (format "  %s" (my-query-yes-no "storm-control?" "storm_control = \"default\"")))
+(insert (format "  %s" (my-query-yes-no "vlan-tagging?" "vlan_tagging = true")))
+(insert (format "  %s" (my-query-yes-no "trunk? (if no it's access)" "trunk = true")))
+(insert (format "  %s" (my-query-yes-no-arg "native-vlan?" "vlan_native = ")))
+(insert (format "  %s" (my-query-yes-no-arg "description?" "description = ")))
+(insert (format "  %s" (my-query-yes-no-arg "vlan_members?" "vlan_members = ")))
+(insert (ether-opts))
+(insert (parent-ether-opts))
+(insert "}\n")
+(beginning-of-buffer)
+(flush-lines "DELETE")
+(end-of-buffer)

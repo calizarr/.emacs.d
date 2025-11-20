@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: junos-interface-rstp
+# key: jis
+# --
+resource "junos_interface_rstp" "${1:name}" {
+  name = "${1:$(int-name yas-text)}"
+}
+
+$0

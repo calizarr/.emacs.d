@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: proxmox-vm-disk
+# key: pve-disk
+# --
+  disk {
+      datastore_id = ""
+      path_in_datastore = "$1"
+      file_format = raw
+      interface = "scsi$2"
+  }
+
+$0
