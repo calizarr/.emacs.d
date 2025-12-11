@@ -14,3 +14,14 @@
 
 (use-package kubel
   :ensure t)
+
+(defun kustomize-build ()
+  (interactive)
+  (compile "kustomize build ."))
+
+(defun kustomize-apply ()
+  (interactive)
+  (let ((namespace (read-string "namespace (default none): " "")))
+    (if (string-equal namespace "")
+        (compile "kustomize build . | kubectl apply -f -")
+      (compile (format "kustomize build . | kubectl -n %s apply -f -" namespace)))))
