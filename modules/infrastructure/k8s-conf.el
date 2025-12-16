@@ -15,13 +15,20 @@
 (use-package kubel
   :ensure t)
 
+(defun cal/shell-command-completions (prompt command default)
+  (let* ((candidates command))
+    (completing-read prompt candidates nil t default)))
+
 (defun kustomize-build ()
+  "Run kustomize build on current directory"
   (interactive)
   (compile "kustomize build ."))
 
 (defun kustomize-apply ()
+  "Run kustomize apply on current directory in given namespace"
   (interactive)
-  (let ((namespace (read-string "namespace (default none): " "")))
-    (if (string-equal namespace "")
-        (compile "kustomize build . | kubectl apply -f -")
-      (compile (format "kustomize build . | kubectl -n %s apply -f -" namespace)))))
+  (let* ((current-namespace (shell-command-to-string "kubectl config view --minify --output 'jsonpath={..namespace}'"))
+         (candidates (split-string (shell-command-to-string "kubectl get namespaces -o jsonpath='{..metadata.name}'")))
+         (final-candidates (cons current-namespace candidates))
+         (selection (completing-read "Namespace: " final-candidates nil t current-namespace nil nil nil)))
+    (compile (format "kustomize build . | kubectl -n %s apply -f -" selection))))
