@@ -22,7 +22,9 @@
 (defun kustomize-build ()
   "Run kustomize build on current directory"
   (interactive)
-  (compile "kustomize build ."))
+  (if (y-or-n-p "Exclude CRDS?")
+      (compile "kustomize build . | yq ea 'select(.kind!=\"CustomResourceDefinition\")'")
+    (compile "kustomize build .")))
 
 (defun kustomize-apply ()
   "Run kustomize apply on current directory in given namespace"

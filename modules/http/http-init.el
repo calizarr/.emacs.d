@@ -8,6 +8,7 @@
 (load "restclient-conf.el")
 ;; (load "urlpackage-conf.el")
 (load "nginx-conf.el")
+(load "http-funcs.el")
 
 ;; Ensure know-your-http-well
 (use-package know-your-http-well
