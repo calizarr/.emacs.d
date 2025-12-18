@@ -15,6 +15,9 @@
 (use-package kubel
   :ensure t)
 
+(use-package kubed
+  :ensure t)
+
 (defun cal/k8s-current-namespace ()
   "Gets the current namespace and returns it as a string"
   (shell-command-to-string "kubectl config view --minify --output 'jsonpath={..namespace}'"))
