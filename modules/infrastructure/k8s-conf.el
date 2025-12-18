@@ -22,36 +22,40 @@
 (defun cal/k8s-get-namespaces ()
   "Gets all the namespaces and returns them as a list" (split-string (shell-command-to-string "kubectl get namespaces -o jsonpath='{..metadata.name}'")))
 
-(defun cal/shell-command-completions (prompt command default)
-  (let* ((candidates command))
-    (completing-read prompt candidates nil t default)))
+(defun cal/k8s-namespace ()
+  (let* ((current-namespace (cal/k8s-current-namespace))
+         (candidates (cal/k8s-get-namespaces))
+         (final-candidates (cons current-namespace candidates))
+         (selection (completing-read "Namespace: " final-candidates nil t current-namespace nil nil nil)))
+    selection))
 
-(defun kustomize-build ()
+(defun cal/kustomize-build ()
   "Run kustomize build on current directory"
   (interactive)
   (if (y-or-n-p "Exclude CRDS?")
       (compile "kustomize build . | yq ea 'select(.kind!=\"CustomResourceDefinition\")'")
     (compile "kustomize build .")))
 
-(defun kustomize-apply ()
+(defun cal/kustomize-apply ()
   "Run kustomize apply on current directory in given namespace"
   (interactive)
-  (let* ((current-namespace (cal/k8s-current-namespace))
-         (candidates (cal/k8s-get-namespaces))
-         (final-candidates (cons current-namespace candidates))
-         (selection (completing-read "Namespace: " final-candidates nil t current-namespace nil nil nil)))
-    (compile (format "kustomize build . | kubectl -n %s apply -f -" selection))))
+  (let* ((selection (cal/k8s-namespace))
+         (apply-string (cal/helm-apply-string selection)))
+    (compile (format "kustomize build . %s" apply-string))))
+
+(defun cal/kustomize-delete ()
+  "Run kustomize build -> delete on current directory in chosen namespace"
+  (interactive)
+  (let ((namespace (cal/k8s-namespace)))
+    (compile (format "kustomize build . | kubectl --namespace %s delete -f -" namespace))))
 
 (defun cal/helm-template-string (&optional dir)
   "Create the helm template string"
-  (let* ((dir (unless dir "."))
-         (helm-values (string-join (mapcar (lambda (x) (format "-f %s" x)) (mapcar 'file-name-nondirectory (directory-files-recursively dir "values.*\\.yaml"))) " "))
-         (current-namespace (cal/k8s-current-namespace))
-         (candidates (cal/k8s-get-namespaces))
-         (final-candidates (cons current-namespace candidates))
+  (let* ((dir (unless dir default-directory))
+         (helm-values (string-join (mapcar (lambda (x) (format "-f %s" x)) (directory-files-recursively dir "values.*\\.yaml")) " "))
          (include-crds (if (y-or-n-p "Include CRDS?") "--include-crds " ""))
-         (selection (completing-read "Namespace: " final-candidates nil t current-namespace nil nil nil))
-         (release-name (read-string "Release Name: "))
+         (selection (cal/k8s-namespace))
+         (release-name (read-string "Release Name: " selection selection selection))
          (helm-string (format "helm template %s--namespace %s %s . %s" include-crds selection release-name helm-values)))
     helm-string))
 
@@ -69,4 +73,11 @@
   (let* ((helm-string (cal/helm-template-string))
          (namespace (when (string-match "--namespace[[:space:]]\\([a-zA-Z0-9-]+\\)[[:space:]][a-zA-Z]" helm-string) (match-string 1 helm-string)))
          (helm-apply (cal/helm-apply-string namespace)))
-    (compile (format "%s %s" helm-string (unless helm-apply "")))))
+    (compile (format "%s %s" helm-string (if helm-apply helm-apply "")))))
+
+(defun cal/helm-delete ()
+  "Run helm template to delete resources"
+  (interactive)
+  (let* ((helm-string (cal/helm-template-string))
+         (namespace (when (string-match "--namespace[[:space:]]\\([a-zA-Z0-9-]+\\)[[:space:]][a-zA-Z]" helm-string) (match-string 1 helm-string))))
+    (compile (format "%s %s" helm-string (format " | kubectl --namespace %s delete -f -" namespace)))))
