@@ -2,7 +2,7 @@
 
 (defun install-pylsp ()
   (interactive)
-  (compile "python -m pip install 'python-lsp-server[all]' pylsp-rope pylsp-mypy pyls-memestra python-lsp-black python-lsp-ruff python-lsp-isort ruff jedi-language-server websockets"))
+  (compile "python -m pip install 'python-lsp-server[all]' pylsp-rope pylsp-mypy pyls-memestra python-lsp-black python-lsp-ruff python-lsp-isort ruff jedi-language-server websockets basedpyright"))
 
 ;; (setq lsp-pylsp-configuration-sources nil)
 (setq

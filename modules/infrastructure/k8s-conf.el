@@ -56,10 +56,9 @@
   "Create the helm template string"
   (let* ((dir (unless dir default-directory))
          (helm-values (string-join (mapcar (lambda (x) (format "-f %s" x)) (directory-files-recursively dir "values.*\\.yaml")) " "))
-         (include-crds (if (y-or-n-p "Include CRDS?") "--include-crds " ""))
          (selection (cal/k8s-namespace))
          (release-name (read-string "Release Name: " selection selection selection))
-         (helm-string (format "helm template %s--namespace %s %s . %s" include-crds selection release-name helm-values)))
+         (helm-string (format "helm template --include-crds --namespace %s %s . %s" selection release-name helm-values)))
     helm-string))
 
 (defun cal/helm-apply-string (namespace)
@@ -75,8 +74,12 @@
   (interactive)
   (let* ((helm-string (cal/helm-template-string))
          (namespace (when (string-match "--namespace[[:space:]]\\([a-zA-Z0-9-]+\\)[[:space:]][a-zA-Z]" helm-string) (match-string 1 helm-string)))
+         (include-crds (if (y-or-n-p "Include CRDS?") "" "| yq ea 'select(.kind!=\"CustomResourceDefinition\")'"))
+         (debug (if (y-or-n-p "Debug?") "--debug" ""))
          (helm-apply (cal/helm-apply-string namespace)))
-    (compile (format "%s %s" helm-string (if helm-apply helm-apply "")))))
+    (if helm-apply
+        (compile (format "%s %s" helm-string (if helm-apply helm-apply)))
+      (compile (format "%s %s %s" helm-string debug include-crds)))))
 
 (defun cal/helm-delete ()
   "Run helm template to delete resources"
