@@ -17,6 +17,11 @@
     (let ((default-directory (projectile-project-root)))
       (call-interactively 'consult-ripgrep)))
 
+  (defun my/projectile-project-find-function (dir)
+    (let ((root (projectile-project-root dir)))
+      (when root (cons 'transient root))))
+  (add-hook 'project-find-functions #'my/projectile-project-find-function)
+
   ;; (define-key projectile-mode-map (kbd "s-p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
   (define-key projectile-mode-map (kbd "C-c p s r") 'my-project-ripgrep))

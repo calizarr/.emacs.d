@@ -13,6 +13,10 @@
                                    ("melpa" . 20)
                                    ("gnu" . 10)))
 
+;; transient must be loaded before package-initialize because ai-code-autoloads.el
+;; calls transient-define-prefix directly (not via an autoload cookie).
+(require 'transient)
+
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents)
@@ -65,5 +69,6 @@
 (require 'alloy-init)
 (require 'kotlin-init)
 (require 'graphviz-init)
+(require 'llm-init)
 
 ;;; FOOTER

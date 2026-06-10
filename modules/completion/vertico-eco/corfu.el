@@ -13,6 +13,7 @@
   (corfu-auto t)                 ;; Auto popup
   (corfu-auto-delay 0.25)        ;; Auto popup delay
   (corfu-auto-prefix 3)          ;; Number of characters before activation
+  (global-corfu-modes '((not minibuffer-mode) t)) ;; Disable in minibuffer (prevents conflict with vertico)
   ;; (corfu-separator ?_) ;; Set to orderless separator, if not using space
   ;; (corfu-quit-no-match t)
   ;; Enable Corfu only for certain modes. See also `global-corfu-modes'.
@@ -34,6 +35,14 @@
   (corfu-history-mode)
   ;; (corfu-popupinfo-mode)
   (corfu-echo-mode)
+
+  ;; Re-enable Corfu in minibuffer for shell commands (M-!, eval-expression, etc.)
+  ;; but only when Vertico is NOT active — Vertico owns the minibuffer for consult commands.
+  (defun my/corfu-enable-in-minibuffer ()
+    (unless (bound-and-true-p vertico--input)
+      (setq-local corfu-auto nil)
+      (corfu-mode 1)))
+  (add-hook 'minibuffer-setup-hook #'my/corfu-enable-in-minibuffer)
 
   ;; :config
   ;; ;; Free the RET key for less intrusive behavior.
@@ -63,12 +72,14 @@
   ;; first function returning a result wins.  Note that the list of buffer-local
   ;; completion functions takes precedence over the global list.
   (add-hook 'completion-at-point-functions #'cape-keyword)
-  (add-hook 'completion-at-point-functions #'cape-line)
+  ;; cape-line removed from global: fires on every completion in every buffer, very noisy
+  ;; (add-hook 'completion-at-point-functions #'cape-line)
   (add-hook 'completion-at-point-functions #'cape-dabbrev)
   (add-hook 'completion-at-point-functions #'cape-abbrev)
   (add-hook 'completion-at-point-functions #'cape-file)
   (add-hook 'completion-at-point-functions #'cape-history)
-  (add-hook 'completion-at-point-functions #'cape-dict)
+  ;; cape-dict removed from global: too slow and broad; add per-mode (e.g. text-mode-hook) if needed
+  ;; (add-hook 'completion-at-point-functions #'cape-dict)
   ;; (add-hook 'completion-at-point-functions #'cape-elisp-block)
   ;; (add-hook 'completion-at-point-functions #'cape-elisp-symbol)
   ;; (add-hook 'completion-at-point-functions #'cape-emoji)

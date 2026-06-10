@@ -1,7 +1,6 @@
 ;; -*- lexical-binding: t -*-
 ;; Enable Vertico.
 (use-package vertico
-  :after consult
   :demand t
   :init
   (vertico-mode +1)

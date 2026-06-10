@@ -28,7 +28,10 @@
     ;; Optionally configure the first word as flex filtered.
     (add-hook 'orderless-style-dispatchers #'my/orderless-dispatch-flex-first nil 'local)
     ;; Optionally configure the cape-capf-buster.
-    (setq-local completion-at-point-functions (list (cape-capf-buster #'lsp-completion-at-point)))
+    (setq-local completion-at-point-functions
+                (list (cape-capf-buster #'lsp-completion-at-point)
+                      #'cape-dabbrev
+                      #'cape-file))
     ;; https://magnus.therning.org/2024-05-04-orderless-completion-in-lsp-mode.html
     (setq-local completion-category-defaults (assoc-delete-all 'lsp-capf completion-category-defaults)))
 
@@ -124,7 +127,8 @@
   :commands lsp-treemacs-errors-list
   :pin melpa
   :defer t
-  :after treemacs lsp-mode lsp-ui company-lsp
+  :after treemacs lsp-mode lsp-ui
+  ;; :after treemacs lsp-mode lsp-ui company-lsp
   :config (lsp-treemacs-sync-mode 1))
 
 

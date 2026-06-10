@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (use-package lsp-pyright
   :ensure t
   :custom (lsp-pyright-langserver-command "basedpyright") ;; or basedpyright
