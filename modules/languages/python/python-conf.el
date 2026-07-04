@@ -22,6 +22,25 @@
   :ensure t
   :pin melpa)
 
+;; (use-package pyenv-mode
+;;   :ensure t
+;;   :init
+;;   ;; Crucial: Point Emacs to where pyenv stores virtualenv layouts
+;;   (setenv "WORKON_HOME" (expand-file-name "~/.pyenv/versions"))
+;;   :config
+;;   (pyenv-mode 1)
+
+;;   ;; Dynamic sync: Automatically update Emacs' exec-path when pyenv changes
+;;   (defun my/sync-pyenv-to-lsp ()
+;;     (let ((pyenv-bin (expand-file-name (concat (pyenv-mode-version) "/bin") pyenv-mode-base-dir)))
+;;       (setenv "PATH" (concat pyenv-bin ":" (getenv "PATH")))
+;;       (add-to-list 'exec-path pyenv-bin)
+;;       ;; Force lsp-mode to check the newly updated path variables
+;;       (when (bound-and-true-p lsp-mode)
+;;         (lsp-workspace-restart))))
+
+;;   (add-hook 'pyenv-mode-after-switch-hook #'my/sync-pyenv-to-lsp))
+
 ;;; Ruff is a new 2024 much-faster code linter/formatter
 (use-package ruff-format)
 

@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (defun python-args-to-google-docstring (text &optional make-fields)
   "Return a reST docstring format for the python arguments in yas-text."
   (let* ((indent (concat "\n" (make-string (current-column) 32)))

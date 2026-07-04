@@ -40,7 +40,7 @@
          ("C-c C-l" . lsp))
   :hook
   (lsp-completion-mode . my/lsp-mode-setup-completion)
-  ;; (lsp-mode . lsp-enable-which-key-integration)
+  (lsp-mode . lsp-enable-which-key-integration)
   (scala-mode . lsp-deferred)
   (sh-mode .lsp-deferred)
   (go-mode . lsp-deferred)

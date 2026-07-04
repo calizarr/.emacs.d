@@ -36,10 +36,11 @@
   ;; (corfu-popupinfo-mode)
   (corfu-echo-mode)
 
-  ;; Re-enable Corfu in minibuffer for shell commands (M-!, eval-expression, etc.)
-  ;; but only when Vertico is NOT active — Vertico owns the minibuffer for consult commands.
+  ;; Enable Corfu in free-form minibuffers (M-:, M-!) but NOT in completing-read contexts
+  ;; (consult, vertico). The reliable signal is whether completion-at-point-functions was set
+  ;; *locally* — eval-expression does this; completing-read/vertico minibuffers do not.
   (defun my/corfu-enable-in-minibuffer ()
-    (unless (bound-and-true-p vertico--input)
+    (when (local-variable-p 'completion-at-point-functions)
       (setq-local corfu-auto nil)
       (corfu-mode 1)))
   (add-hook 'minibuffer-setup-hook #'my/corfu-enable-in-minibuffer)

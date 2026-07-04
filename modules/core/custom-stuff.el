@@ -123,16 +123,18 @@
   :ensure t
   :config
   (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize))
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "VIRTUAL_ENV"))
   (when (daemonp)
-    (exec-path-from-shell-initialize)))
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "VIRTUAL_ENV")))
 
 
-;; (use-package which-key
-;;   :diminish
-;;   :ensure t
-;;   :init
-;;   (which-key-mode))
+(use-package which-key
+  :diminish
+  :ensure t
+  :init
+  (which-key-mode))
 
 ;; Expand-region style
 (use-package expand-region

@@ -140,6 +140,11 @@
 (use-package wgrep-deadgrep
   :after deadgrep wgrep)
 
+(use-package just-mode
+  :ensure t
+  :mode ("\\justfile\\'" . just-mode))
+
+
 ;; Giving Windows (Hyper, Alt, and Super) keys
 ;; See: https://stackoverflow.com/questions/27418756/is-it-possible-to-make-emacs-interpet-an-fn-key-as-a-modifier-key/27419718#27419718
 ;; See: C-x @ C-h

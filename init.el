@@ -8,10 +8,13 @@
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")
                          ("melpa" . "http://melpa.org/packages/")
-                         ("melpa-stable" . "http://stable.melpa.org/packages/"))
+                         ("melpa-stable" . "http://stable.melpa.org/packages/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/"))
       package-archive-priorities '(("melpa-stable" . 20)
                                    ("melpa" . 20)
                                    ("gnu" . 10)))
+
+(setq package-install-upgrade-built-in t)
 
 ;; transient must be loaded before package-initialize because ai-code-autoloads.el
 ;; calls transient-define-prefix directly (not via an autoload cookie).

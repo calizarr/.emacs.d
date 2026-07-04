@@ -6,6 +6,18 @@
 ;;     t (cons ? ?)
 ;;     (font-spec :family "DejaVu Sans Mono for Powerline"))
 
+
+;; https://github.com/rainstormstudio/nerd-icons.el (for knockknock.el)
+(use-package nerd-icons
+  :ensure t
+  :custom
+  ;; Linux/macOS/BSDs
+  (when (member system-type '(gnu gnu/linux gnu/kfreebsd darwin))
+    (unless (find-font (font-spec :name "Symbols Nerd Font Mono"))
+      (nerd-icons-install-fonts t)))
+  (nerd-icons-font-family "0xProto Nerd Font")
+  )
+
 (cond
  ;; 🍏 macOS Configuration (Handles Both Personal & Work MacBooks)
  ((is-mac)

@@ -161,6 +161,14 @@
   ;; (setq claude-code-ide-cli-extra-flags "--model opus")
 
   :config
+  ;; Unlimited eat scrollback so Claude's normal-screen output (startup
+  ;; banners, errors, anything printed outside the TUI's alternate screen)
+  ;; stays scrollable instead of being truncated at eat's default cap.
+  ;; NOTE: the TUI itself renders in the alternate screen buffer, which is
+  ;; never added to scrollback by design — this maximizes what *is* capturable.
+  (with-eval-after-load 'eat
+    (setq eat-term-scrollback-size nil))
+
   ;; Enable the built-in Emacs MCP tools: xref-find-references,
   ;; xref-find-apropos, treesit-info, imenu-list-symbols, project-info.
   ;; This is what gives Claude access to your LSP/xref data.

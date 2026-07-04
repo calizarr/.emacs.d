@@ -8,6 +8,10 @@
 ;; Adding calendar insert
 (require 'calendar)
 
+;; Knocknock Emacs Alerts with nice fonts!
+(use-package knockknock
+  :vc (:url "https://github.com/konrad1977/knockknock" :rev :newest))
+
 (defun insdate-insert-any-date (date)
   "Insert DATE using the current locale."
   (interactive (list (calendar-read-date)))
