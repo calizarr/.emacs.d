@@ -17,6 +17,37 @@
   ;; (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
   )
 
+(use-package ghostel
+  :ensure t
+  :bind (("C-x m" . ghostel)
+         :map ghostel-semi-char-mode-map
+         ("C-s"  . consult-line)
+         ("C-k"  . my/ghostel-send-C-k-and-kill)
+         ;; ;; I'm used to go up/down the shell history with M-n/p from eshell
+         ;; ;; Simulate this behavior in ghostel by sending C-p and C-n
+         ;; ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
+         ;; ("M-n" . (lambda () (interactive) (ghostel-send-key "n" "ctrl")))
+         :map project-prefix-map
+         ("m" . ghostel-project)
+         ("M" . ghostel-project-list-buffers))
+  :config
+  (defun my/ghostel-send-C-k-and-kill ()
+    "Send `C-k' to ghostel.
+Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
+    (interactive)
+    (kill-ring-save (point) (line-end-position))
+    (ghostel-send-key "k" "ctrl"))
+
+  (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
+  (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers") t)
+  (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer)))
+
+;; (use-package ghostel-compile
+;;   :hook (after-init . ghostel-compile-global-mode))
+
+;; (use-package ghostel-comint
+;;   :hook (after-init . ghostel-comint-global-mode))
+
 ;; Or: vterm (comment out eat above and uncomment this)
 ;; (use-package vterm :ensure t)
 
@@ -134,7 +165,9 @@
 
   :init
   ;; Terminal backend: 'vterm (default), 'eat, or 'ghostel
-  (setq claude-code-ide-terminal-backend 'eat)
+  ;; (setq claude-code-ide-terminal-backend 'vterm)
+  ;; (setq claude-code-ide-terminal-backend 'eat)
+  (setq claude-code-ide-terminal-backend 'ghostel)
 
   ;; Side window placement. Options: 'right (default), 'left, 'top, 'bottom
   (setq claude-code-ide-window-side 'right)
@@ -161,13 +194,14 @@
   ;; (setq claude-code-ide-cli-extra-flags "--model opus")
 
   :config
-  ;; Unlimited eat scrollback so Claude's normal-screen output (startup
-  ;; banners, errors, anything printed outside the TUI's alternate screen)
-  ;; stays scrollable instead of being truncated at eat's default cap.
-  ;; NOTE: the TUI itself renders in the alternate screen buffer, which is
-  ;; never added to scrollback by design — this maximizes what *is* capturable.
-  (with-eval-after-load 'eat
-    (setq eat-term-scrollback-size nil))
+
+  ;; ;; Unlimited eat scrollback so Claude's normal-screen output (startup
+  ;; ;; banners, errors, anything printed outside the TUI's alternate screen)
+  ;; ;; stays scrollable instead of being truncated at eat's default cap.
+  ;; ;; NOTE: the TUI itself renders in the alternate screen buffer, which is
+  ;; ;; never added to scrollback by design — this maximizes what *is* capturable.
+  ;; (with-eval-after-load 'eat
+  ;;   (setq eat-term-scrollback-size 500000))
 
   ;; Enable the built-in Emacs MCP tools: xref-find-references,
   ;; xref-find-apropos, treesit-info, imenu-list-symbols, project-info.
@@ -210,8 +244,248 @@
                 (local-set-key (kbd "s--") #'ignore)
                 (local-set-key (kbd "s-0") #'ignore))))
 
+  ;; Maximize/restore the Claude Code IDE window to fill the whole frame.
+  ;; It's a side window, so Emacs refuses plain `delete-other-windows' on
+  ;; it ("Cannot make side window the only window"), and its
+  ;; `no-delete-other-windows' parameter means C-x 1 from elsewhere leaves
+  ;; it alone too. `delete-other-windows-internal' is the primitive that
+  ;; `delete-other-windows' itself calls after those checks pass, so it
+  ;; skips both guards. Toggle back by restoring the saved layout.
+  (defvar my/claude-code-ide--saved-window-configs nil
+    "Alist of (FRAME . WINDOW-CONFIGURATION) saved before maximizing.")
+
+  (defun my/claude-code-ide--window ()
+    "Return the window showing a Claude Code IDE buffer on the selected frame."
+    (seq-find (lambda (win)
+                (string-prefix-p "*claude-code[" (buffer-name (window-buffer win))))
+              (window-list)))
+
+  (defun my/claude-code-ide-toggle-maximize ()
+    "Toggle the Claude Code IDE window filling the whole frame."
+    (interactive)
+    (if-let ((saved (assq (selected-frame) my/claude-code-ide--saved-window-configs)))
+        (progn
+          (set-window-configuration (cdr saved))
+          (setq my/claude-code-ide--saved-window-configs
+                (assq-delete-all (selected-frame) my/claude-code-ide--saved-window-configs)))
+      (let ((win (my/claude-code-ide--window)))
+        (unless win
+          (user-error "No Claude Code IDE window on this frame"))
+        (push (cons (selected-frame) (current-window-configuration))
+              my/claude-code-ide--saved-window-configs)
+        (select-window win)
+        (delete-other-windows-internal win))))
+
+  ;; Surface the toggle in the built-in transient menu too, next to the
+  ;; other window commands.
+  (with-eval-after-load 'claude-code-ide-transient
+    (transient-append-suffix 'claude-code-ide-menu "W"
+      '("m" "Toggle maximize window" my/claude-code-ide-toggle-maximize)))
+
   :bind
-  ("C-c C-'" . claude-code-ide-menu))   ; transient menu with all commands
+  (("C-c C-'" . claude-code-ide-menu)   ; transient menu with all commands
+   ("<f9>" . my/claude-code-ide-toggle-maximize)))
+
+
+;;; ============================================================
+;;; Live transcript viewer for Claude Code CLI session logs
+;;;
+;;; Every `claude' CLI session — in Emacs or a plain terminal, any
+;;; terminal backend — streams its full transcript to a JSONL file at
+;;; ~/.claude/projects/<sanitized-cwd>/<session-id>.jsonl as it runs.
+;;; The interactive TUI paints in the terminal's alternate screen,
+;;; which no terminal emulator's scrollback captures (that's why
+;;; bumping eat/vterm/ghostel scrollback size never helps); this reads
+;;; the on-disk transcript instead, so it's backend-independent.
+;;; ============================================================
+
+(defgroup my/claude-transcript nil
+  "Live viewer for Claude Code CLI session transcripts."
+  :group 'tools)
+
+(defcustom my/claude-transcript-lines 200
+  "Number of trailing lines to preload when opening a transcript."
+  :type 'integer
+  :group 'my/claude-transcript)
+
+(defface my/claude-transcript-user-face
+  '((t :inherit font-lock-keyword-face :weight bold))
+  "Face for the \"You:\" label in the Claude transcript viewer.")
+
+(defface my/claude-transcript-assistant-face
+  '((t :inherit font-lock-function-name-face :weight bold))
+  "Face for the \"Claude:\" label in the Claude transcript viewer.")
+
+(defface my/claude-transcript-tool-face
+  '((t :inherit font-lock-comment-face))
+  "Face for tool-use/tool-result lines in the Claude transcript viewer.")
+
+(defun my/claude-transcript--sanitize-path (path)
+  "Sanitize PATH the way the Claude Code CLI names its project directories."
+  (replace-regexp-in-string "[/.]" "-" (directory-file-name (expand-file-name path))))
+
+(defun my/claude-transcript--project-root ()
+  "Return the current project root, or `default-directory' if there is none."
+  (if-let ((proj (project-current)))
+      (project-root proj)
+    default-directory))
+
+(defun my/claude-transcript--dir (&optional root)
+  "Return the ~/.claude/projects directory holding transcripts for ROOT."
+  (expand-file-name (my/claude-transcript--sanitize-path
+                      (or root (my/claude-transcript--project-root)))
+                     "~/.claude/projects/"))
+
+(defun my/claude-transcript--sessions (&optional root)
+  "Return session JSONL files for ROOT's project, newest first."
+  (let ((dir (my/claude-transcript--dir root)))
+    (sort (and (file-directory-p dir) (directory-files dir t "\\.jsonl\\'"))
+          (lambda (a b)
+            (time-less-p (file-attribute-modification-time (file-attributes b))
+                         (file-attribute-modification-time (file-attributes a)))))))
+
+(defun my/claude-transcript--parse-line (line)
+  "Parse one JSONL LINE, returning a plist or nil on malformed input."
+  (condition-case nil
+      (json-parse-string line :object-type 'plist :array-type 'list
+                          :null-object nil :false-object nil)
+    (error nil)))
+
+(defun my/claude-transcript--format-content-block (block)
+  "Return a propertized string for a tool_use/tool_result content BLOCK, or nil to skip."
+  (pcase (plist-get block :type)
+    ("text"
+     (let ((text (plist-get block :text)))
+       (and text (not (string-empty-p text)) text)))
+    ("tool_use"
+     (concat (propertize (format "→ %s " (plist-get block :name))
+                          'face 'my/claude-transcript-tool-face)
+             (propertize (truncate-string-to-width
+                          (format "%S" (plist-get block :input)) 120 nil nil "...")
+                         'face 'shadow)))
+    ("tool_result"
+     (let ((content (plist-get block :content)))
+       (propertize (format "← result: %s"
+                            (truncate-string-to-width
+                             (if (stringp content) content (format "%S" content))
+                             200 nil nil "..."))
+                   'face 'my/claude-transcript-tool-face)))
+    (_ nil)))
+
+(defun my/claude-transcript--render-line (parsed)
+  "Return a display string for one PARSED JSONL event, or nil to skip it."
+  (let* ((type (plist-get parsed :type))
+         (message (plist-get parsed :message))
+         (content (and message (plist-get message :content))))
+    (cond
+     ((equal type "user")
+      (if (stringp content)
+          (concat (propertize "You: " 'face 'my/claude-transcript-user-face) content)
+        (mapconcat #'identity
+                   (delq nil (mapcar #'my/claude-transcript--format-content-block content))
+                   "\n")))
+     ((equal type "assistant")
+      (mapconcat #'identity
+                 (delq nil (mapcar (lambda (block)
+                                     (if (equal (plist-get block :type) "text")
+                                         (concat (propertize "Claude: "
+                                                              'face 'my/claude-transcript-assistant-face)
+                                                 (plist-get block :text))
+                                       (my/claude-transcript--format-content-block block)))
+                                   content))
+                 "\n"))
+     (t nil))))
+
+(defvar-local my/claude-transcript--pending ""
+  "Unterminated tail of the last chunk read from the tail process.")
+
+(defun my/claude-transcript--insert-line (line)
+  "Parse LINE and, if it renders to something, append it to the current buffer.
+Windows already scrolled to the end follow the new text; windows
+scrolled back to read history are left alone."
+  (let* ((parsed (my/claude-transcript--parse-line line))
+         (text (and parsed (my/claude-transcript--render-line parsed))))
+    (when (and text (not (string-empty-p text)))
+      (let ((inhibit-read-only t)
+            (old-max (point-max))
+            (windows (get-buffer-window-list (current-buffer) nil t)))
+        (save-excursion
+          (goto-char (point-max))
+          (insert text "\n\n"))
+        (dolist (win windows)
+          (when (= (window-point win) old-max)
+            (set-window-point win (point-max))))))))
+
+(defun my/claude-transcript--filter (proc chunk)
+  "Process filter that buffers partial lines and renders complete ones."
+  (when (buffer-live-p (process-buffer proc))
+    (with-current-buffer (process-buffer proc)
+      (setq my/claude-transcript--pending (concat my/claude-transcript--pending chunk))
+      (let ((lines (split-string my/claude-transcript--pending "\n")))
+        (setq my/claude-transcript--pending (car (last lines)))
+        (dolist (line (butlast lines))
+          (unless (string-empty-p line)
+            (my/claude-transcript--insert-line line)))))))
+
+(defun my/claude-transcript--cleanup ()
+  "Kill this buffer's tail process, if any. Meant for `kill-buffer-hook'."
+  (when-let ((proc (get-buffer-process (current-buffer))))
+    (when (process-live-p proc)
+      (delete-process proc))))
+
+(define-derived-mode my/claude-transcript-mode special-mode "Claude-Transcript"
+  "Major mode for the live Claude Code transcript viewer."
+  (setq buffer-read-only t)
+  (setq-local truncate-lines nil))
+
+(defun my/claude-code-view-transcript (&optional pick)
+  "Open a live-updating view of the current project's Claude Code transcript.
+With a prefix argument, choose which session to view instead of
+defaulting to the most recently active one."
+  (interactive "P")
+  (let* ((root (my/claude-transcript--project-root))
+         (sessions (my/claude-transcript--sessions root))
+         (file (if (not sessions)
+                   (user-error "No Claude Code transcripts found for %s"
+                               (my/claude-transcript--dir root))
+                 (if pick
+                     (let ((choices
+                            (mapcar (lambda (f)
+                                      (cons (format "%s  (%s)"
+                                                    (file-name-base f)
+                                                    (format-time-string
+                                                     "%Y-%m-%d %H:%M"
+                                                     (file-attribute-modification-time
+                                                      (file-attributes f))))
+                                            f))
+                                    sessions)))
+                       (cdr (assoc (completing-read "Session: " choices nil t) choices)))
+                   (car sessions))))
+         (bufname (format "*claude-transcript: %s*"
+                           (file-name-nondirectory (directory-file-name root))))
+         (buf (get-buffer bufname)))
+    (if (and buf
+             (get-buffer-process buf)
+             (process-live-p (get-buffer-process buf))
+             (equal (process-get (get-buffer-process buf) 'transcript-file) file))
+        (pop-to-buffer buf)
+      (when buf (kill-buffer buf))
+      (setq buf (get-buffer-create bufname))
+      (with-current-buffer buf
+        (my/claude-transcript-mode)
+        (let ((proc (start-process "claude-transcript-tail" buf
+                                    "tail" "-n" (number-to-string my/claude-transcript-lines)
+                                    "-f" file)))
+          (process-put proc 'transcript-file file)
+          (set-process-filter proc #'my/claude-transcript--filter)
+          (add-hook 'kill-buffer-hook #'my/claude-transcript--cleanup nil t)))
+      (pop-to-buffer buf))))
+
+(with-eval-after-load 'claude-code-ide-transient
+  (transient-append-suffix 'claude-code-ide-menu "m"
+    '("t" "View live transcript" my/claude-code-view-transcript)))
+
+(global-set-key (kbd "<f8>") #'my/claude-code-view-transcript)
 
 
 ;;; ============================================================
