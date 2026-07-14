@@ -30,15 +30,12 @@
 (use-package markdown-mode
   :ensure t
   :pin melpa
-  :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode)
-         ("\\.md\\'" . markdown-mode)
-         ("\\.markdown\\'" . markdown-mode))
-  ;; :init (setq markdown-command (concat
-  ;;                               "/usr/local/bin/pandoc"
-  ;;                               " --from=markdown --to=html"
-  ;;                               " --standalone --mathjax --highlight-style=pygments"))
-  )
+  :mode (("\\.md\\'" . gfm-mode)
+         ("\\.markdown\\'" . gfm-mode))
+  :init
+  ;; Force Pandoc to use GFM as the input format and HTML5 as the output
+  (setq markdown-command "pandoc --from=gfm --to=html5"))
+
 
 ;; grip-mode (GitHub Flavored Markdown)
 ;; https://github.com/seagle0128/grip-mode
