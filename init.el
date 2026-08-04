@@ -1,4 +1,5 @@
 ;; -*- lexical-binding: t -*-
+
 (message "Loading init.el: ~ is %S, user-emacs-directory is %S"
          (expand-file-name "~") user-emacs-directory)
 

@@ -7,6 +7,14 @@
 
 ;;; Code:
 
+;; 1. Force the frame name to lowercase 'emacs' for the Ubuntu Wayland App ID
+(setq initial-frame-alist '((name . "emacs") (title . "emacs")))
+(setq default-frame-alist '((name . "emacs") (title . "emacs")))
+
+;; 2. Start Emacs completely maximized
+(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 ;; Speed up lsp-mode w/ lsp-booster etc.
 (setenv "LSP_USE_PLISTS" "true")
 
