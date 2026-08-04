@@ -11,50 +11,9 @@
 ;;
 ;; Terminal backend — install whichever you prefer (eat is the easier starting point):
 
-(use-package eat
-  :ensure t
-  ;; Required for NonGNU ELPA if not using :vc install:
-  ;; (add-to-list 'package-archives '("nongnu" . "https://elpa.nongnu.org/nongnu/"))
-  )
-
-(use-package ghostel
-  :ensure t
-  :bind (("C-x m" . ghostel)
-         :map ghostel-semi-char-mode-map
-         ("C-s"  . consult-line)
-         ("C-k"  . my/ghostel-send-C-k-and-kill)
-         ;; ;; I'm used to go up/down the shell history with M-n/p from eshell
-         ;; ;; Simulate this behavior in ghostel by sending C-p and C-n
-         ;; ("M-p" . (lambda () (interactive) (ghostel-send-key "p" "ctrl")))
-         ;; ("M-n" . (lambda () (interactive) (ghostel-send-key "n" "ctrl")))
-         :map project-prefix-map
-         ("m" . ghostel-project)
-         ("M" . ghostel-project-list-buffers))
-  :config
-  (defun my/ghostel-send-C-k-and-kill ()
-    "Send `C-k' to ghostel.
-Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
-    (interactive)
-    (kill-ring-save (point) (line-end-position))
-    (ghostel-send-key "k" "ctrl"))
-
-  (add-to-list 'project-switch-commands '(ghostel-project "Ghostel") t)
-  (add-to-list 'project-switch-commands '(ghostel-project-list-buffers "Ghostel buffers") t)
-  (add-to-list 'ghostel-eval-cmds '("magit-status-setup-buffer" magit-status-setup-buffer)))
-
-;; (use-package ghostel-compile
-;;   :hook (after-init . ghostel-compile-global-mode))
-
-;; (use-package ghostel-comint
-;;   :hook (after-init . ghostel-comint-global-mode))
-
-;; Or: vterm (comment out eat above and uncomment this)
-;; (use-package vterm :ensure t)
-
 ;; Required by claude-code.el (stevemolitor):
 (use-package inheritenv
   :vc (:url "https://github.com/purcell/inheritenv" :rev :newest))
-
 
 ;;; ============================================================
 ;;; OPTION 1: claude-code.el (stevemolitor)
@@ -166,8 +125,8 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
   :init
   ;; Terminal backend: 'vterm (default), 'eat, or 'ghostel
   ;; (setq claude-code-ide-terminal-backend 'vterm)
-  ;; (setq claude-code-ide-terminal-backend 'eat)
-  (setq claude-code-ide-terminal-backend 'ghostel)
+  (setq claude-code-ide-terminal-backend 'eat)
+  ;; (setq claude-code-ide-terminal-backend 'ghostel)
 
   ;; Side window placement. Options: 'right (default), 'left, 'top, 'bottom
   (setq claude-code-ide-window-side 'right)
@@ -308,6 +267,21 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
   :type 'integer
   :group 'my/claude-transcript)
 
+(defcustom my/claude-transcript-tool-use-max 1200
+  "Characters of a tool_use input to show before folding the remainder.
+Nothing is discarded: the complete text is kept on a text property, so
+press TAB (or RET) on a folded block to expand it in place.  nil shows
+every input in full and never folds."
+  :type '(choice (const :tag "Never fold" nil) integer)
+  :group 'my/claude-transcript)
+
+(defcustom my/claude-transcript-tool-result-max 2000
+  "Characters of a tool_result to show before folding the remainder.
+See `my/claude-transcript-tool-use-max' — folding is reversible with TAB.
+nil shows every result in full and never folds."
+  :type '(choice (const :tag "Never fold" nil) integer)
+  :group 'my/claude-transcript)
+
 (defface my/claude-transcript-user-face
   '((t :inherit font-lock-keyword-face :weight bold))
   "Face for the \"You:\" label in the Claude transcript viewer.")
@@ -351,6 +325,56 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
                           :null-object nil :false-object nil)
     (error nil)))
 
+(defun my/claude-transcript--scalar (value)
+  "Render a scalar JSON VALUE as display text."
+  (cond ((stringp value) value)
+        ((null value) "")
+        ((eq value t) "true")
+        ((numberp value) (number-to-string value))
+        (t (format "%S" value))))
+
+(defun my/claude-transcript--format-json (value)
+  "Render a parsed JSON VALUE as readable text rather than `prin1' syntax.
+Objects become \"key: value\" lines, arrays one element per line, and
+nested structures are indented.  This is what keeps a multi-line shell
+command readable instead of collapsing it into a `%S' plist dump."
+  (cond
+   ((null value) "")
+   ((stringp value) value)
+   ;; JSON object -> plist with keyword keys
+   ((keywordp (car-safe value))
+    (let (parts)
+      (while value
+        (let ((key (substring (symbol-name (car value)) 1))
+              (val (cadr value)))
+          (push (format "%s: %s" key
+                        (if (and (listp val) val)
+                            (replace-regexp-in-string
+                             "\n" "\n  " (my/claude-transcript--format-json val))
+                          (my/claude-transcript--scalar val)))
+                parts))
+        (setq value (cddr value)))
+      (mapconcat #'identity (nreverse parts) "\n")))
+   ;; JSON array
+   ((listp value)
+    (mapconcat #'my/claude-transcript--format-json value "\n"))
+   (t (my/claude-transcript--scalar value))))
+
+(defun my/claude-transcript--fold (text limit)
+  "Return TEXT for display, folding it to LIMIT characters if longer.
+The full text is stored on the `my/claude-transcript-full' property of the
+result, so folding is lossless and reversible via
+`my/claude-transcript-toggle-block'.  A nil LIMIT returns TEXT unchanged."
+  (if (or (null limit) (<= (length text) limit))
+      text
+    (propertize (concat (substring text 0 limit)
+                        (propertize (format " …[+%d chars — TAB to expand]"
+                                            (- (length text) limit))
+                                    'face 'warning))
+                'my/claude-transcript-full text
+                'my/claude-transcript-folded t
+                'my/claude-transcript-limit limit)))
+
 (defun my/claude-transcript--format-content-block (block)
   "Return a propertized string for a tool_use/tool_result content BLOCK, or nil to skip."
   (pcase (plist-get block :type)
@@ -358,18 +382,18 @@ Like normal Emacs `C-k'.  Kill to end of line and put content in kill-ring."
      (let ((text (plist-get block :text)))
        (and text (not (string-empty-p text)) text)))
     ("tool_use"
-     (concat (propertize (format "→ %s " (plist-get block :name))
+     (concat (propertize (format "→ %s\n" (plist-get block :name))
                           'face 'my/claude-transcript-tool-face)
-             (propertize (truncate-string-to-width
-                          (format "%S" (plist-get block :input)) 120 nil nil "...")
-                         'face 'shadow)))
+             (my/claude-transcript--fold
+              (propertize (my/claude-transcript--format-json (plist-get block :input))
+                          'face 'shadow)
+              my/claude-transcript-tool-use-max)))
     ("tool_result"
-     (let ((content (plist-get block :content)))
-       (propertize (format "← result: %s"
-                            (truncate-string-to-width
-                             (if (stringp content) content (format "%S" content))
-                             200 nil nil "..."))
-                   'face 'my/claude-transcript-tool-face)))
+     (concat (propertize "← result: " 'face 'my/claude-transcript-tool-face)
+             (my/claude-transcript--fold
+              (propertize (my/claude-transcript--format-json (plist-get block :content))
+                          'face 'my/claude-transcript-tool-face)
+              my/claude-transcript-tool-result-max)))
     (_ nil)))
 
 (defun my/claude-transcript--render-line (parsed)
@@ -433,10 +457,58 @@ scrolled back to read history are left alone."
     (when (process-live-p proc)
       (delete-process proc))))
 
+(defun my/claude-transcript--block-bounds (pos)
+  "Return (START . END) of the folded-block property run covering POS."
+  (let ((start pos) (end pos))
+    (while (and (> start (point-min))
+                (get-text-property (1- start) 'my/claude-transcript-full))
+      (setq start (1- start)))
+    (while (and (< end (point-max))
+                (get-text-property end 'my/claude-transcript-full))
+      (setq end (1+ end)))
+    (cons start end)))
+
+(defun my/claude-transcript-toggle-block ()
+  "Expand, or re-fold, the elided transcript block on the current line.
+Folded blocks carry their complete text on a text property, so this never
+has to re-read the transcript file."
+  (interactive)
+  (let ((pos (if (get-text-property (point) 'my/claude-transcript-full)
+                 (point)
+               (let ((next (next-single-property-change
+                            (line-beginning-position) 'my/claude-transcript-full
+                            nil (line-end-position))))
+                 (and next
+                      (get-text-property next 'my/claude-transcript-full)
+                      next)))))
+    (unless pos
+      (user-error "No expandable block on this line"))
+    (let* ((full (get-text-property pos 'my/claude-transcript-full))
+           (folded (get-text-property pos 'my/claude-transcript-folded))
+           (face (get-text-property pos 'face))
+           (limit (get-text-property pos 'my/claude-transcript-limit))
+           (bounds (my/claude-transcript--block-bounds pos))
+           (inhibit-read-only t)
+           (replacement
+            (if folded
+                (propertize full
+                            'face face
+                            'my/claude-transcript-full full
+                            'my/claude-transcript-folded nil
+                            'my/claude-transcript-limit limit)
+              (my/claude-transcript--fold (propertize full 'face face) limit))))
+      (save-excursion
+        (goto-char (car bounds))
+        (delete-region (car bounds) (cdr bounds))
+        (insert replacement)))))
+
 (define-derived-mode my/claude-transcript-mode special-mode "Claude-Transcript"
   "Major mode for the live Claude Code transcript viewer."
   (setq buffer-read-only t)
   (setq-local truncate-lines nil))
+
+(define-key my/claude-transcript-mode-map (kbd "TAB") #'my/claude-transcript-toggle-block)
+(define-key my/claude-transcript-mode-map (kbd "RET") #'my/claude-transcript-toggle-block)
 
 (defun my/claude-code-view-transcript (&optional pick)
   "Open a live-updating view of the current project's Claude Code transcript.
