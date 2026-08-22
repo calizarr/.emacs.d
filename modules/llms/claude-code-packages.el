@@ -11,6 +11,11 @@
 ;;
 ;; Terminal backend — install whichever you prefer (eat is the easier starting point):
 
+;; Defined inside the `claude-code-ide' `use-package' `:config' block below, so
+;; the byte-compiler does not see it as a top-level defun. Declared here so
+;; references from hook lambdas do not warn "not known to be defined".
+(declare-function my/claude-resync-terminal "claude-code-packages" (buf win))
+
 ;; Required by claude-code.el (stevemolitor):
 (use-package inheritenv
   :vc (:url "https://github.com/purcell/inheritenv" :rev :newest))
@@ -124,9 +129,25 @@
 
   :init
   ;; Terminal backend: 'vterm (default), 'eat, or 'ghostel
+  ;;
+  ;; On ghostel as of 2026-08-22. It parses VT with libghostty through a native
+  ;; module instead of eat's pure elisp, which is the difference that matters for
+  ;; a repaint-heavy TUI, and `claude-code-ide--sync-terminal-dimensions' calls
+  ;; the backend-aware `ghostel--window-adjust-process-window-size' for it --
+  ;; ghostel never had the eat resize desync patched around below.
+  ;;
+  ;; The 2026-07-15 reason for leaving ghostel does NOT apply here: it was a
+  ;; guess that ghostel's evil ESC routing ate the resume picker's keys, but
+  ;; `claude-code-ide--apply-ghostel-evil-escape' is guarded by
+  ;; `(bound-and-true-p evil-ghostel-mode)' and there is no evil in this config
+  ;; at all. The likelier cause was that ghostel's native module had never been
+  ;; built, so the backend could not work regardless.
+  ;;
+  ;; Fall back by swapping these two lines; eat stays installed and its config
+  ;; below stays valid.
+  (setq claude-code-ide-terminal-backend 'ghostel)
+  ;; (setq claude-code-ide-terminal-backend 'eat)
   ;; (setq claude-code-ide-terminal-backend 'vterm)
-  (setq claude-code-ide-terminal-backend 'eat)
-  ;; (setq claude-code-ide-terminal-backend 'ghostel)
 
   ;; Side window placement. Options: 'right (default), 'left, 'top, 'bottom
   (setq claude-code-ide-window-side 'right)
@@ -192,6 +213,37 @@
   ;; Debounced on an idle timer: `set-process-window-size' raises SIGWINCH and the
   ;; TUI redraws, so firing it synchronously from a window-configuration hook
   ;; would thrash on every layout change.
+  ;; `claude-code-ide--sync-terminal-dimensions' calls `set-process-window-size'
+  ;; directly on the eat backend. That informs the PTY -- the child gets SIGWINCH
+  ;; and redraws -- but does NOT update eat's own model of the terminal, which is
+  ;; only touched by `eat-term-resize' inside `eat--adjust-process-window-size'.
+  ;; eat places the view with a single `recenter' whose argument is derived from
+  ;; `(eat-term-size)' (eat.el:6531), so a stale height renders as either blank
+  ;; space below the TUI (eat thinks the terminal is shorter than the window) or
+  ;; a cut-off bottom line with the mode indicator scrolled away (thinks it is
+  ;; taller). Routing through eat's own adjuster keeps the model, the PTY and the
+  ;; scroll position in agreement -- mirroring what the ghostel branch of that
+  ;; same function already does for its backend.
+  ;;
+  ;; Passing an explicit single-window list also sidesteps
+  ;; `window-adjust-process-window-size-smallest' (the Emacs default), which
+  ;; otherwise sizes the terminal to the SMALLEST window showing the buffer
+  ;; whenever a session is visible in two places at once.
+  (defun my/claude-resync-terminal (buf win)
+    "Resync BUF's terminal to WIN, keeping eat's model and the PTY in agreement.
+Falls back to `claude-code-ide--sync-terminal-dimensions' for other backends."
+    (when (and (buffer-live-p buf) (window-live-p win))
+      (with-current-buffer buf
+        (if (and (eq claude-code-ide-terminal-backend 'eat)
+                 (fboundp 'eat--adjust-process-window-size)
+                 (bound-and-true-p eat-terminal)
+                 (get-buffer-process buf))
+            (ignore-errors
+              (eat--adjust-process-window-size
+               (get-buffer-process buf) (list win)))
+          (ignore-errors
+            (claude-code-ide--sync-terminal-dimensions buf win))))))
+
   (defun my/claude-clamp-window-width ()
     (dolist (win (window-list))
       (when (and (window-live-p win)
@@ -199,13 +251,10 @@
         (let ((delta (- claude-code-ide-window-width (window-body-width win))))
           (unless (< (abs delta) 2)
             (ignore-errors (window-resize win delta t))
+            ;; The helper guards buffer/window liveness itself, so pass it
+            ;; straight to the timer instead of wrapping it in a lambda.
             (run-with-idle-timer
-             0.2 nil
-             (lambda (buf resized-win)
-               (when (and (buffer-live-p buf) (window-live-p resized-win))
-                 (ignore-errors
-                   (claude-code-ide--sync-terminal-dimensions buf resized-win))))
-             (window-buffer win) win))))))
+             0.2 nil #'my/claude-resync-terminal (window-buffer win) win))))))
   (add-hook 'window-configuration-change-hook #'my/claude-clamp-window-width)
 
   ;; After a frame font change, re-sync the terminal process dimensions.
@@ -217,7 +266,7 @@
                                 (dolist (buf (buffer-list))
                                   (when (string-prefix-p "*claude-code[" (buffer-name buf))
                                     (dolist (win (get-buffer-window-list buf nil t))
-                                      (claude-code-ide--sync-terminal-dimensions buf win))))))))
+                                      (my/claude-resync-terminal buf win))))))))
 
   ;; text-scale-increase/decrease in a terminal buffer changes visual font size
   ;; without updating the process column count, causing garbled line wrapping.
