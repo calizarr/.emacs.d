@@ -61,12 +61,10 @@
   :demand t
   ;; Bind prefix keymap providing all Cape commands under a mnemonic key.
   ;; Press C-c c ? to for help.
+  ;; `cape-prefix-map' already exposes every Cape command (M-p d / h / f ...).
+  ;; The old individual `C-c p ...' bindings are gone: that prefix now holds
+  ;; `project-prefix-map' (see modules/projects/project-conf.el).
   :bind ("M-p" . cape-prefix-map) ;; Alternative key: M-<tab>, M-p, M-+
-  ;; Alternatively bind Cape commands individually.
-  :bind (("C-c p d" . cape-dabbrev)
-         ("C-c p h" . cape-history)
-         ("C-c p f" . cape-file))
-  ;;        ...)
   :init
   ;; Add to the global default value of `completion-at-point-functions' which is
   ;; used by `completion-at-point'.  The order of the functions matters, the

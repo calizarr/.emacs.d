@@ -37,9 +37,14 @@ magithub
 # IDO
 ido.last
 
-# Projectile
+# Projectile (removed 2026-08-22 in favor of built-in project.el; kept so a
+# stale checkout's leftovers stay ignored)
 projectile-bookmarks.eld
 projectile.cache
+projectile-frecency.eld
+
+# project.el
+projects.eld
 
 # Helm
 helm-adaptive-history
@@ -54,7 +59,35 @@ network-security.data
 ac-comphist.dat
 .emacs.desktop
 abbrev_defs
-recentf
+
+# Generated per-machine state -- keep untracked
+.cache/
+.ai.code.files/
+.dap-breakpoints
+.lsp-session-v1
+transient/
+# `recentf-save-file' is ~/.emacs.d/recentf.eld here; the bare `recentf' this
+# replaces was Emacs' older default and no such file exists.
+recentf.eld
+
+# savehist minibuffer history. Never track: it records whatever was typed into
+# any minibuffer prompt, including ai-code prompts, so it can pick up tokens
+# and ids. This repo is PUBLIC.
+history
+
+# Customize output. Loaded by modules/core/custom-stuff.el, so ignoring it
+# means a fresh clone starts with no `package-selected-packages' -- restore
+# packages by hand rather than with `package-install-selected-packages'.
+emacs-custom.el
+
+# Never commit credentials
+.env
+.env.*
+*.pem
+*.key
+*.p12
+credentials.*
+id_rsa*
 
 # For later use
 private.el

@@ -138,8 +138,13 @@
   ;; Show ediff diff view when Claude proposes changes (recommended)
   (setq claude-code-ide-use-ide-diff t)
 
-  ;; Keep Claude window visible alongside ediff
-  (setq claude-code-ide-show-claude-window-in-ediff t)
+  ;; Keep the Claude window OUT of ediff's layout. With this on, ediff's window
+  ;; setup includes the Claude side window, so touching that window while ediff
+  ;; is still setting up can leave `ediff-quit-hook' uninstalled -- and that hook
+  ;; is the only thing that completes the diff's deferred MCP response. The CLI
+  ;; then waits forever and Emacs deadlocks with it (2026-08-19). Off shrinks the
+  ;; race; flip back only if the split is worth re-introducing the hazard.
+  (setq claude-code-ide-show-claude-window-in-ediff nil)
 
   ;; Diagnostics backend: 'auto detects flycheck or flymake automatically
   (setq claude-code-ide-diagnostics-backend 'flycheck)
@@ -173,13 +178,34 @@
 
   ;; Keep Claude side window clamped to configured width after frame/font resizes.
   ;; Side windows expand proportionally when the frame changes; this corrects them.
+  ;;
+  ;; Resizing the window is only half the job: the terminal process must also be
+  ;; told its new column count or the TUI keeps rendering at the old width and the
+  ;; display garbles. `claude-code-ide--sync-terminal-dimensions' has exactly one
+  ;; call site in the package -- `claude-code-ide--display-buffer-in-side-window'
+  ;; -- so nothing resyncs on a plain resize. That gap is why toggling the window
+  ;; off and on "fixed" a mangled display: re-display was the only path that
+  ;; resynced. Toggling during an ediff setup is also what deadlocks the session
+  ;; (the IDE diff is a deferred MCP response completed only from
+  ;; `ediff-quit-hook'), so removing the reason to toggle removes the hazard.
+  ;;
+  ;; Debounced on an idle timer: `set-process-window-size' raises SIGWINCH and the
+  ;; TUI redraws, so firing it synchronously from a window-configuration hook
+  ;; would thrash on every layout change.
   (defun my/claude-clamp-window-width ()
     (dolist (win (window-list))
       (when (and (window-live-p win)
                  (string-prefix-p "*claude-code[" (buffer-name (window-buffer win))))
         (let ((delta (- claude-code-ide-window-width (window-body-width win))))
           (unless (< (abs delta) 2)
-            (ignore-errors (window-resize win delta t)))))))
+            (ignore-errors (window-resize win delta t))
+            (run-with-idle-timer
+             0.2 nil
+             (lambda (buf resized-win)
+               (when (and (buffer-live-p buf) (window-live-p resized-win))
+                 (ignore-errors
+                   (claude-code-ide--sync-terminal-dimensions buf resized-win))))
+             (window-buffer win) win))))))
   (add-hook 'window-configuration-change-hook #'my/claude-clamp-window-width)
 
   ;; After a frame font change, re-sync the terminal process dimensions.
