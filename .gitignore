@@ -59,7 +59,6 @@ network-security.data
 ac-comphist.dat
 .emacs.desktop
 abbrev_defs
-recentf
 
 # Generated per-machine state -- keep untracked
 .cache/
@@ -67,6 +66,8 @@ recentf
 .dap-breakpoints
 .lsp-session-v1
 transient/
+# `recentf-save-file' is ~/.emacs.d/recentf.eld here; the bare `recentf' this
+# replaces was Emacs' older default and no such file exists.
 recentf.eld
 
 # savehist minibuffer history. Never track: it records whatever was typed into
