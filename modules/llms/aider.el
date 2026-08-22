@@ -237,7 +237,7 @@ Creates a global file applicable to all projects. A project-local
     "Create a .aider.model.settings.yml in the current project root.
 Sets num_ctx and edit_format appropriate for local Ollama models."
     (interactive)
-    (let* ((root (or (projectile-project-root) default-directory))
+    (let* ((root (my/project-root))
            (path (expand-file-name ".aider.model.settings.yml" root)))
       (if (file-exists-p path)
           (find-file path)

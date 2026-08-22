@@ -110,10 +110,9 @@
           (completion-category-overrides nil))
       (consult-line)))
 
-  ;; ;; 4. projectile.el (projectile-project-root)
-  (autoload 'projectile-project-root "projectile")
-  (setq consult-project-function (lambda (_) (projectile-project-root)))
-)
+  ;; `consult-project-function' defaults to project.el, so no override is
+  ;; needed -- `consult-ripgrep' and friends scope themselves to the project.
+  )
 
 (use-package consult-dir
   :ensure t
@@ -122,5 +121,3 @@
          ("C-x C-d" . consult-dir)
          ("C-x C-j" . consult-dir-jump-file)))
 
-(use-package consult-projectile
-  :after consult)

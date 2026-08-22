@@ -4,13 +4,8 @@
 ;;; Commentary:
 
 ;;; Code:
-;; Projectile Emacs
-(load "projectile-conf.el")
-;; persp-projectile
-;; (load "persp-projectile.el")
-
-;; Maybe eventually use project.el
-;; (load "project.el")
+;; project.el (built in) -- replaced projectile
+(load "project-conf.el")
 
 
 (provide 'projects-init)
