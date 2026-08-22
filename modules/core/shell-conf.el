@@ -27,6 +27,32 @@
          :map eat-char-mode-map
          ("C-z" . ignore)))
 
+;; Minimal ghostel setup. `claude-code-ide' `require's the backend itself (see
+;; `claude-code-ide--terminal-ensure-backend'), so this exists only to pick the
+;; module-provisioning strategy before first use.
+;;
+;; ghostel is a terminal emulator over libghostty-vt via a native Zig module,
+;; and that module is NOT bundled. `ghostel-module-auto-install' defaults to
+;; `ask', which offers download / compile / skip -- but `compile' shells out to
+;; `zig build' and there is no zig on this machine, so pin it to `download' to
+;; fetch the prebuilt binary from GitHub releases rather than be offered a
+;; choice that would fail.
+;;
+;; No C-z guard is needed here, unlike eat above: ghostel does not forward a
+;; bare C-z to the child. Suspending is an explicit `C-c C-z'
+;; (`ghostel-send-C-z'), so the SIGTSTP-backgrounds-claude hazard does not
+;; exist on this backend.
+(use-package ghostel
+  :ensure t
+  :defer t
+  :init (setq ghostel-module-auto-install 'download))
+
+;; WARNING before enabling the richer block below: its two
+;; `(add-to-list 'project-switch-commands ...)' calls will ERROR as written.
+;; `project-switch-commands' is set to the bare symbol `project-dired' in
+;; modules/projects/project-conf.el (a symbol runs that command immediately and
+;; skips the dispatch menu), and `add-to-list' requires a list. Restore a
+;; menu-style alist value first, or drop those two lines.
 ;; (use-package ghostel
 ;;   :ensure t
 ;;   :bind (("C-x m" . ghostel)

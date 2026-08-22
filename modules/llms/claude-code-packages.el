@@ -129,9 +129,25 @@
 
   :init
   ;; Terminal backend: 'vterm (default), 'eat, or 'ghostel
+  ;;
+  ;; On ghostel as of 2026-08-22. It parses VT with libghostty through a native
+  ;; module instead of eat's pure elisp, which is the difference that matters for
+  ;; a repaint-heavy TUI, and `claude-code-ide--sync-terminal-dimensions' calls
+  ;; the backend-aware `ghostel--window-adjust-process-window-size' for it --
+  ;; ghostel never had the eat resize desync patched around below.
+  ;;
+  ;; The 2026-07-15 reason for leaving ghostel does NOT apply here: it was a
+  ;; guess that ghostel's evil ESC routing ate the resume picker's keys, but
+  ;; `claude-code-ide--apply-ghostel-evil-escape' is guarded by
+  ;; `(bound-and-true-p evil-ghostel-mode)' and there is no evil in this config
+  ;; at all. The likelier cause was that ghostel's native module had never been
+  ;; built, so the backend could not work regardless.
+  ;;
+  ;; Fall back by swapping these two lines; eat stays installed and its config
+  ;; below stays valid.
+  (setq claude-code-ide-terminal-backend 'ghostel)
+  ;; (setq claude-code-ide-terminal-backend 'eat)
   ;; (setq claude-code-ide-terminal-backend 'vterm)
-  (setq claude-code-ide-terminal-backend 'eat)
-  ;; (setq claude-code-ide-terminal-backend 'ghostel)
 
   ;; Side window placement. Options: 'right (default), 'left, 'top, 'bottom
   (setq claude-code-ide-window-side 'right)
