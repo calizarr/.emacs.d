@@ -1,0 +1,82 @@
+#!/usr/bin/env bash
+# emacs-output <buffer-name> <command...>
+#
+# Runs a command and shows its combined output in an Emacs buffer, the way
+# `shell-command' populates *Shell Command Output* -- ANSI colour preserved, so
+# a `pulumi preview' diff stays readable.
+#
+# Targeting: the long-running --fg-daemon owns the default "server" socket and
+# its only frame is a headless tty frame, so displaying a buffer there is
+# invisible. $EMACS_SERVER_NAME (exported by the GUI's init) names the socket of
+# the Emacs you are actually looking at. Without it, this falls back to the
+# daemon and asks it to raise a real frame, which works but opens a new window.
+#
+# Output always goes to stdout as well, so nothing is lost if Emacs is absent.
+
+set -uo pipefail
+
+if [[ $# -lt 2 ]]; then
+    echo "usage: emacs-output <buffer-name> <command> [args...]" >&2
+    exit 64
+fi
+
+buffer_name="$1"
+shift
+
+tmp="$(mktemp -t emacs-output)" || exit 1
+trap 'rm -f "$tmp"' EXIT
+
+# Combined output, streamed to the terminal and captured for Emacs.
+"$@" > >(tee "$tmp") 2> >(tee -a "$tmp" >&2)
+status=$?
+wait
+
+elisp_escape() {
+    # Only backslash and double-quote need escaping inside an elisp string.
+    printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'
+}
+
+buf_escaped="$(elisp_escape "*$buffer_name*")"
+tmp_escaped="$(elisp_escape "$tmp")"
+cmd_escaped="$(elisp_escape "$*")"
+
+read -r -d '' elisp <<ELISP
+(progn
+  (require 'ansi-color)
+  (with-current-buffer (get-buffer-create "$buf_escaped")
+    (let ((inhibit-read-only t))
+      (fundamental-mode)
+      (erase-buffer)
+      (insert "\$ $cmd_escaped\n\n")
+      ;; No REPLACE argument here: insert-file-contents with REPLACE non-nil
+      ;; replaces the whole buffer and silently eats the header above.
+      (goto-char (point-max))
+      (insert-file-contents "$tmp_escaped")
+      (goto-char (point-max))
+      (insert (format "\n\n;; exit status: $status"))
+      ;; Text properties rather than the default overlays: ansi-color's default
+      ;; ansi-color-apply-overlay-face creates one overlay per coloured run, which
+      ;; a few thousand lines of pulumi diff turns into a redisplay problem.
+      (let ((ansi-color-apply-face-function #'ansi-color-apply-text-property-face))
+        (ansi-color-apply-on-region (point-min) (point-max)))
+      (goto-char (point-min)))
+    (special-mode))
+  (display-buffer "$buf_escaped")
+  "displayed")
+ELISP
+
+socket="${EMACS_SERVER_NAME:-}"
+if [[ -n "$socket" ]]; then
+    emacsclient -s "$socket" --eval "$elisp" >/dev/null 2>&1 \
+        && exit "$status"
+    echo "emacs-output: could not reach Emacs server '$socket'" >&2
+fi
+
+# Fall back to the daemon. -c forces a visible frame, because the daemon's
+# default frame is a tty frame nobody can see.
+if emacsclient -c -n --eval "$elisp" >/dev/null 2>&1; then
+    exit "$status"
+fi
+
+echo "emacs-output: no reachable Emacs; output above only" >&2
+exit "$status"
