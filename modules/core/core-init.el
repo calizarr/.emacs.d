@@ -18,6 +18,8 @@
 (load "random-stupid-stuff.el")
 ;; Shell & Eshell Configuration
 (load "shell-conf.el")
+;; Per-instance server socket, so emacsclient reaches this GUI not the daemon
+(load "server-conf.el")
 ;; Version Control Settings
 (load "version-control.el")
 ;; Load in treemacs
