@@ -357,6 +357,26 @@ nil shows every result in full and never folds."
   :type '(choice (const :tag "Never fold" nil) integer)
   :group 'my/claude-transcript)
 
+(defcustom my/claude-transcript-flush-interval 0.2
+  "Seconds to coalesce incoming transcript lines before rendering them.
+The tail process delivers a chunk per write, and while Claude is
+streaming that is many per second.  Rendering each one on arrival costs
+an insertion and a full redisplay apiece, all of it synchronous inside
+the process filter -- which is where the mid-burst freezes came from.
+Batching them into one insertion per interval makes redisplay track
+output volume instead of chunk count.  nil restores the old synchronous
+behavior."
+  :type '(choice (const :tag "Render synchronously" nil) number)
+  :group 'my/claude-transcript)
+
+(defcustom my/claude-transcript-max-chars 400000
+  "Trim the viewer buffer once it grows past this many characters.
+Whole entries are dropped off the top, oldest first, so redisplay cost
+stops tracking session length.  The JSONL file on disk is never touched
+-- read it directly to go back further.  nil keeps everything."
+  :type '(choice (const :tag "Never trim" nil) integer)
+  :group 'my/claude-transcript)
+
 (defface my/claude-transcript-user-face
   '((t :inherit font-lock-keyword-face :weight bold))
   "Face for the \"You:\" label in the Claude transcript viewer.")
@@ -498,25 +518,65 @@ result, so folding is lossless and reversible via
 (defvar-local my/claude-transcript--pending ""
   "Unterminated tail of the last chunk read from the tail process.")
 
-(defun my/claude-transcript--insert-line (line)
-  "Parse LINE and, if it renders to something, append it to the current buffer.
+(defvar-local my/claude-transcript--queue nil
+  "Rendered blocks awaiting insertion, newest first.")
+
+(defvar-local my/claude-transcript--timer nil
+  "Pending flush timer for this buffer, if any.")
+
+(defun my/claude-transcript--trim ()
+  "Drop whole entries off the top until the buffer fits `my/claude-transcript-max-chars'.
+Cuts on a blank line so a partial rendered block is never left behind.
+A window scrolled back into the trimmed region loses its place -- that is
+the cost of not letting the buffer grow without bound."
+  (when (and my/claude-transcript-max-chars
+             (> (buffer-size) my/claude-transcript-max-chars))
+    (let ((inhibit-read-only t))
+      (save-excursion
+        (goto-char (max (point-min) (- (point-max) my/claude-transcript-max-chars)))
+        (let ((cut (or (search-forward "\n\n" nil t) (line-beginning-position 2))))
+          (delete-region (point-min) cut))))))
+
+(defun my/claude-transcript--flush (buffer)
+  "Insert everything queued in BUFFER as a single edit.
+One insertion and one window update per flush however many lines
+arrived, so a burst of output costs one redisplay instead of dozens.
 Windows already scrolled to the end follow the new text; windows
 scrolled back to read history are left alone."
-  (let* ((parsed (my/claude-transcript--parse-line line))
-         (text (and parsed (my/claude-transcript--render-line parsed))))
-    (when (and text (not (string-empty-p text)))
-      (let ((inhibit-read-only t)
-            (old-max (point-max))
-            (windows (get-buffer-window-list (current-buffer) nil t)))
-        (save-excursion
-          (goto-char (point-max))
-          (insert text "\n\n"))
-        (dolist (win windows)
-          (when (= (window-point win) old-max)
+  (when (buffer-live-p buffer)
+    (with-current-buffer buffer
+      (setq my/claude-transcript--timer nil)
+      (when my/claude-transcript--queue
+        (let* ((text (mapconcat #'identity (nreverse my/claude-transcript--queue) "\n\n"))
+               (inhibit-read-only t)
+               (old-max (point-max))
+               (following nil))
+          (setq my/claude-transcript--queue nil)
+          ;; Decide who is following before the edit: `my/claude-transcript--trim'
+          ;; shifts every position, so window-point cannot be compared afterwards.
+          (dolist (win (get-buffer-window-list buffer nil t))
+            (when (= (window-point win) old-max)
+              (push win following)))
+          (save-excursion
+            (goto-char (point-max))
+            (insert text "\n\n"))
+          (my/claude-transcript--trim)
+          (dolist (win following)
             (set-window-point win (point-max))))))))
 
+(defun my/claude-transcript--schedule-flush ()
+  "Ensure a flush of the current buffer's queue is pending."
+  (unless (timerp my/claude-transcript--timer)
+    (setq my/claude-transcript--timer
+          (run-with-timer my/claude-transcript-flush-interval nil
+                          #'my/claude-transcript--flush (current-buffer)))))
+
 (defun my/claude-transcript--filter (proc chunk)
-  "Process filter that buffers partial lines and renders complete ones."
+  "Process filter: buffer partial lines, render complete ones, queue the result.
+Deliberately does not touch the buffer.  A filter runs synchronously
+ahead of redisplay and input, and `read-process-output-max' bounds how
+much can land in one call, so insertion is deferred to
+`my/claude-transcript--flush'."
   (when (buffer-live-p (process-buffer proc))
     (with-current-buffer (process-buffer proc)
       (setq my/claude-transcript--pending (concat my/claude-transcript--pending chunk))
@@ -524,10 +584,20 @@ scrolled back to read history are left alone."
         (setq my/claude-transcript--pending (car (last lines)))
         (dolist (line (butlast lines))
           (unless (string-empty-p line)
-            (my/claude-transcript--insert-line line)))))))
+            (let* ((parsed (my/claude-transcript--parse-line line))
+                   (text (and parsed (my/claude-transcript--render-line parsed))))
+              (when (and text (not (string-empty-p text)))
+                (push text my/claude-transcript--queue))))))
+      (if my/claude-transcript-flush-interval
+          (my/claude-transcript--schedule-flush)
+        (my/claude-transcript--flush (current-buffer))))))
 
 (defun my/claude-transcript--cleanup ()
-  "Kill this buffer's tail process, if any. Meant for `kill-buffer-hook'."
+  "Kill this buffer's tail process and cancel its pending flush.
+Meant for `kill-buffer-hook'."
+  (when (timerp my/claude-transcript--timer)
+    (cancel-timer my/claude-transcript--timer)
+    (setq my/claude-transcript--timer nil))
   (when-let ((proc (get-buffer-process (current-buffer))))
     (when (process-live-p proc)
       (delete-process proc))))
@@ -580,7 +650,15 @@ has to re-read the transcript file."
 (define-derived-mode my/claude-transcript-mode special-mode "Claude-Transcript"
   "Major mode for the live Claude Code transcript viewer."
   (setq buffer-read-only t)
-  (setq-local truncate-lines nil))
+  (setq-local truncate-lines nil)
+  ;; Inherited from `global-display-line-numbers-mode', which turns itself on in
+  ;; every non-minibuffer buffer, this one included.  Nothing here has a line
+  ;; worth numbering, and the gutter makes redisplay recount lines as the buffer
+  ;; grows.  Wrapping stays on deliberately -- horizontal scrolling is worse.
+  (display-line-numbers-mode -1)
+  ;; Nothing here is editable, so undo records are pure allocation -- and they
+  ;; would pin the very text `my/claude-transcript--trim' is trying to drop.
+  (setq buffer-undo-list t))
 
 (define-key my/claude-transcript-mode-map (kbd "TAB") #'my/claude-transcript-toggle-block)
 (define-key my/claude-transcript-mode-map (kbd "RET") #'my/claude-transcript-toggle-block)
