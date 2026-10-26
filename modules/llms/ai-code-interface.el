@@ -46,7 +46,7 @@
   :init
   ;; Terminal backend. eat is already in your config so use that;
   ;; switch to 'vterm or 'ghostel if you prefer.
-  (setq ai-code-backends-infra-terminal-backend 'eat)
+  (setq ai-code-backends-infra-terminal-backend 'ghostel)
 
   ;; Transient menu layout. 'default is the wide multi-column layout,
   ;; 'two-columns is narrower — useful on smaller frames.
