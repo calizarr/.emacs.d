@@ -7,7 +7,8 @@
 
 ;; LLMs!
 (load "claude-code-packages.el")
-(load "codex.el")
+;; Avoid the installed package with the same filename on load-path.
+(load (expand-file-name "modules/llms/codex.el" user-emacs-directory))
 (load "ai-code-interface.el")
 
 ;; (load "aider.el")

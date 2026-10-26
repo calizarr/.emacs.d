@@ -34,6 +34,7 @@
   :init
   ;; Terminal backend. eat is the default and matches your config.
   ;; Switch to 'vterm if you prefer (requires vterm installed).
+  ;; Native codex.el supports Eat/Vterm; ai-code's Ghostel backend is separate.
   (setq codex-terminal-backend 'eat)
 
   ;; Disable alt-screen TUI. This is the recommended setting for Emacs
@@ -70,11 +71,11 @@
   (setq codex-enable-prompt-autosuggestions t)
 
   ;; Unlimited eat scrollback for long Codex sessions.
-  (setq codex-eat-scrollback-size nil)
+  ;; (setq codex-eat-scrollback-size nil)
 
   ;; Suppress eat's blinking cursor timer (reduces frame redraws on macOS
   ;; and is generally less distracting).
-  (setq codex-eat-disable-cursor-blink t)
+  ;; (setq codex-eat-disable-cursor-blink t)
 
   ;; Side window placement — mirror claude-code-packages.el layout.
   (add-to-list 'display-buffer-alist
@@ -91,7 +92,9 @@
   ;; Enable the global minor mode. This writes/repairs ~/.codex/config.toml
   ;; and ~/.codex/hooks.json so Codex CLI hooks reach Emacs via emacsclient.
   ;; Existing user hooks are preserved.
-  (codex-mode 1)
+  ;; The package otherwise resolves its hook wrapper relative to this config.
+  (let ((load-file-name (symbol-file 'codex-mode 'defun)))
+    (codex-mode 1))
 
   ;; ---------- Model defaults ----------
   ;; codex-model nil means "use CLI default" (currently codex-mini).
@@ -147,3 +150,6 @@
   ;; C-c x e  fix error at point | C-c x t  toggle window
   ;; C-c x m  transient menu | C-c x /  slash commands
   ("C-c x" . codex-command-map))
+
+;; Live JSONL transcript viewer: C-c x T / Shift-F8; prefix argument picks a session.
+(load (expand-file-name "modules/llms/codex-transcript.el" user-emacs-directory) nil t)
