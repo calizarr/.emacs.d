@@ -107,15 +107,51 @@ stops tracking session length.  The JSONL file on disk is never touched
 (defvar-local my/codex-transcript--file nil
   "Canonical JSONL file displayed in this viewer.")
 
+(defun my/codex-transcript--process-file ()
+  "Find the main rollout opened by this terminal, including moved sessions.
+Ignore subagent rollouts.  Refuse ambiguous matches rather than guessing."
+  (let* ((proc (or (get-buffer-process (current-buffer))
+                   (and (boundp 'ghostel--process) ghostel--process)))
+         (pid (or (and (derived-mode-p 'ghostel-mode)
+                       (boundp 'ghostel--pid) ghostel--pid)
+                  (and (processp proc) (process-live-p proc)
+                       (process-id proc))))
+         (lsof (executable-find "lsof")))
+    (when (and (integerp pid) lsof)
+      (let ((files
+             (with-temp-buffer
+               (when (zerop (call-process lsof nil '(t nil) nil
+                                          "-a" "-p" (number-to-string pid)
+                                          "-Fn"))
+                 (let (matches)
+                   (dolist (line (split-string (buffer-string) "\n" t))
+                     (when (string-match "\\`n\\(.*/rollout-[^/]+\\.jsonl\\)\\'" line)
+                       (let ((file (match-string 1 line)))
+                         (when (file-readable-p file)
+                           (with-temp-buffer
+                             (insert-file-contents file nil 0 65536)
+                             (let* ((record (my/codex-transcript--parse-line
+                                             (buffer-substring-no-properties
+                                              (point-min) (line-end-position))))
+                                    (meta (plist-get record :payload)))
+                               (when (and (equal (plist-get record :type) "session_meta")
+                                          (equal (plist-get meta :source) "cli"))
+                                 (push file matches))))))))
+                   (delete-dups matches))))))
+        (when (cdr files)
+          (user-error "Multiple main Codex sessions attached; use C-u to select one"))
+        (car files)))))
+
 (defun my/codex-transcript--current-file ()
-  "Resolve the attached Codex session without asking for an id."
+  "Resolve the attached session before falling back to project history."
   (let ((file (or my/codex-transcript--file
-                  (and (fboundp 'codex--current-session-transcript-file)
-                       (codex--current-session-transcript-file))
                   (and (boundp 'codex--session-id)
                        codex--session-id
                        (fboundp 'codex--find-session-transcript)
-                       (codex--find-session-transcript codex--session-id)))))
+                       (codex--find-session-transcript codex--session-id))
+                  (my/codex-transcript--process-file)
+                  (and (fboundp 'codex--current-session-transcript-file)
+                       (codex--current-session-transcript-file)))))
     (and (stringp file) (file-readable-p file) (expand-file-name file))))
 
 (defun my/codex-transcript--parse-line (line)
@@ -376,7 +412,9 @@ With prefix PICK, choose a project session.  No session id is required.
 The full conversation is loaded by default and new records appear live."
   (interactive "P")
   (let* ((root (my/codex-transcript--project-root))
-         (current (my/codex-transcript--current-file))
+         (current (if pick
+                      (ignore-errors (my/codex-transcript--current-file))
+                    (my/codex-transcript--current-file)))
          (sessions (when (or pick (not current))
                      (my/codex-transcript--sessions root)))
          (file
