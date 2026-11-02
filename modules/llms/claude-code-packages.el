@@ -357,6 +357,15 @@ nil shows every result in full and never folds."
   :type '(choice (const :tag "Never fold" nil) integer)
   :group 'my/claude-transcript)
 
+(defcustom my/claude-transcript-compact-summary-max 300
+  "Characters of a compaction summary to show before folding the remainder.
+When a session is compacted, the CLI writes the summary that replaces the
+earlier conversation as a user record flagged `isCompactSummary'.  It runs
+to tens of thousands of characters, so it folds like a tool block: TAB (or
+RET) expands it in place.  nil shows it in full and never folds."
+  :type '(choice (const :tag "Never fold" nil) integer)
+  :group 'my/claude-transcript)
+
 (defcustom my/claude-transcript-flush-interval 0.2
   "Seconds to coalesce incoming transcript lines before rendering them.
 The tail process delivers a chunk per write, and while Claude is
@@ -497,6 +506,18 @@ result, so folding is lossless and reversible via
          (message (plist-get parsed :message))
          (content (and message (plist-get message :content))))
     (cond
+     ;; Checked before the plain user branch: the summary is a user record with
+     ;; string content, which that branch would print in full as "You: ...".
+     ;; The label sits on the summary's first line so TAB works from there.
+     ((and (equal type "user") (plist-get parsed :isCompactSummary))
+      (let ((summary (if (stringp content)
+                         content
+                       (mapconcat #'identity
+                                  (delq nil (mapcar (lambda (block) (plist-get block :text))
+                                                    content))
+                                  "\n"))))
+        (concat (propertize "⟲ Compacted: " 'face 'my/claude-transcript-tool-face)
+                (my/claude-transcript--fold summary my/claude-transcript-compact-summary-max))))
      ((equal type "user")
       (if (stringp content)
           (concat (propertize "You: " 'face 'my/claude-transcript-user-face) content)
@@ -630,9 +651,12 @@ has to re-read the transcript file."
       (user-error "No expandable block on this line"))
     (let* ((full (get-text-property pos 'my/claude-transcript-full))
            (folded (get-text-property pos 'my/claude-transcript-folded))
-           (face (get-text-property pos 'face))
            (limit (get-text-property pos 'my/claude-transcript-limit))
            (bounds (my/claude-transcript--block-bounds pos))
+           ;; Read the face at the block's start, not at point: point may sit on
+           ;; the "…[+N chars — TAB to expand]" tail, whose `warning' face would
+           ;; otherwise paint the whole expanded block.
+           (face (get-text-property (car bounds) 'face))
            (inhibit-read-only t)
            (replacement
             (if folded
